@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <img src="./assets/imgs/chandra.jpg" height="50">
+        </div>
+        <div class="col-6 ">
+            <div class="py-3 text-end">
+                <a href="javascript:;" [hidden]="adminMode" class="btn btn-sm btn-warning">HELP</a>
+                <a href="javascript:;" [hidden]="!adminMode" (click)="adminMode = false" class="btn btn-sm btn-danger">CLOSE ADMIN</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-1 mb-3">
+
+        <div class="col-{{adminMode ? '12':'7'}}">
+            <div class="overflow-auto px-1" style="height: 600px">
+                <div *ngFor="let x of items">
+                    <div class="card shadow-sm p-2 mb-1">
+                        <div>
+                            {{x.description}}
+                            <span [hidden]="!adminMode">
+                                <a class="btn" (click)="fnAddQty(x,1)">+</a>
+                                | <a class="btn" (click)="fnAddQty(x,-1)">-</a>
+                                | <a class="btn" (click)="fnAddQty(x,0)">Del</a>
+                            </span>
+                            <br>
+                            <code>{{x.itemId}} {{x.barcode}}</code>
+                        </div>
+                        <div>
+                            Rp {{x.price|number}} x {{x.itemQty}} = Rp {{x.totalPrice|number}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-5" [hidden]="adminMode" >
+            <div class="border p-2 bg-white">
+                {{noteScanner}}
+                <div [hidden]="error">
+                    <div [hidden]="!item.name">
+                        <div>
+                            {{item.name}}
+                        </div>
+                        <div>
+                            {{item.barcode}}
+                        </div>
+                        <div>
+                            Rp {{item.price | number}}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="my-1">
+                    <Label for="scan"><small>Input Barcode here</small></Label>
+                    <input type="text" class="form-control" id="scan" (change)="scanner();" [(ngModel)]="barcode" pattern="[0-9]" placeholder="Barcode">
+
+                </div>
+                <hr>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-1 mb-1" [hidden]="adminMode">
+        <div class="col-6">
+            <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
+        </div>
+        <div class="col-6">
+            <button type="button" (click)="modal(modalPayment);" class="btn btn-primary btn-block">Payment</button> 
+        </div>
+    </div>
+</div>
+
+
+<ng-template #modalCancel let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Cancel Transaction</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <h1 class="text-center m-5">Canccel Transaction</h1>
+
+        <div class="text-center m-5">
+            <button type="submit" class="btn btn-danger btn-lg" (click)="fnLogoutVisitor();">Cancel</button>
+        </div>
+    </div>
+
+</ng-template>
+
+
+<ng-template #modalPayment let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Summary Transaction</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="overflow-auto px-1" style="height: 70vh">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Qty</th>
+                    <th>Items</th>
+                    <th>Disc</th> 
+                    <th class="text-end">Net Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let x of items">
+                    <td>{{x.itemQty}}</td>
+                    <td>{{x.shortDesc}}</td>
+                    <td></td>
+                    <td class="text-end"> {{x.totalPrice  | number}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr> 
+                    <td colspan="3">Subtotal</td>  <td class="text-end">{{summary.subtotal | number}}</td> 
+                </tr>
+                <tr>
+                    <td colspan="3">Discount</td>  <td class="text-end">{{summary.discount| number}}</td> 
+                </tr>
+                <tr>
+                    <td colspan="3">BKP</td> <td class="text-end">{{summary.BKP| number}}</td> 
+                </tr>
+                <tr>
+                    <td colspan="3">DPP</td>  <td class="text-end">{{summary.DPP | number}}</td> 
+                </tr>
+                <tr>
+                    <td colspan="3">NonBKP</td>   <td class="text-end">{{summary.nonBKP| number}}</td> 
+                </tr>
+                <tr>
+                    <td colspan="3">Total Setelah Pajak</td>   <td class="text-end">{{summary.totalAterTax| number}}</td> 
+                </tr>
+
+
+            </tfoot>
+        </table>
+       </div>
+        <div class="text-center">
+            <a [routerLink]="[ '/payment' ]" class="btn btn-primary btn-block" (click)="modal.dismiss('Cross click')">Next</a>
+        </div>
+    </div>
+
+</ng-template>

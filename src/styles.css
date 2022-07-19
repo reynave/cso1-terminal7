@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    background-color: #EDF2F9;
+}
+
+.bg-corner{
+    background: #fff url(./assets/imgs/corner-4.png);
+    background-size: contain;
+}
+
+.card{
+    border-radius: 10px;
+}

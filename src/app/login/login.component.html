@@ -1,0 +1,32 @@
+<div class="container">
+
+    <div class="card mt-5 bg-corner">
+        <div class="text-center my-5">
+            <img src="./assets/imgs/chandra.jpg" width="100%">
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12" [hidden]="!action.isStart">
+                  <div class="p-5">
+                    <ngx-scanner-qrcode #action="scanner" (data)="output = $event"></ngx-scanner-qrcode>
+                  </div>
+                </div>
+                <div class="col-12">
+                    {{action.isLoading}}
+                    <span>{{output}}</span>
+                </div>
+                <div class="col-5 offset-1"  [hidden]="isStillLogin">
+                    <button type="button" class="btn-primary btn  btn-block" (click)="action.toggleCamera()" [disabled]="action.isLoading">Member {{action.isStart ? 'Cancel' : 'Start'}}</button>
+                </div>
+                <div class="col-5"  [hidden]="isStillLogin">
+                    <button type="button" class="btn-primary btn  btn-block" (click)="loginVisitor();">Visitor</button>
+                </div>
+                <div class="col-12 text-center" [hidden]="!isStillLogin">
+                  
+                    <a [routerLink]="[ '/cart' ]"  [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg btn-warning">Terminal ini masih ada keranjang belanja.</a>
+              
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

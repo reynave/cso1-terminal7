@@ -1,0 +1,28 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col ">
+            <div class="card p-5">
+                {{loading ? "Loading":""}}
+                <form [hidden]="loading">
+                    <div class="form-group mb-3">
+                        <label for="exampleInputEmail1">Store Outlet</label>
+                        <select class="form-control">
+                            <option>Outlet 1</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="exampleInputPassword1">Password</label>
+                        <div class="form-control"> Password CE2001 </div>
+                        <span><code>Ime 200039182323</code></span>
+                    </div>
+
+                   <div>
+                    <button type="button"  class="btn btn-primary" (click)="start();">Login Terminal</button>
+                   </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

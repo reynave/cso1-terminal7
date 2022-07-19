@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: "http://localhost/application/cso/admin/api/",
+  public: "",
+  keygen: "t3XsTuq9aCvNxCkNXPEyvvGejhKBHumxVbv6fJ6aGeCPg83hzVGBYDFd6H8u",
+  base_url: "#/",
 };
 
 /*

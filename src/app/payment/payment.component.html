@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <img src="./assets/imgs/chandra.jpg" height="50">
+        </div>
+        <div class="col-6 ">
+            <div class="py-3 text-end">
+                <a [routerLink]="[ '/cart']" class="btn btn-sm btn-secondary mx-2">BACK</a>
+                <a href="javascript:;" class="btn btn-sm btn-warning">NEED HELP</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-white rounded shadow-sm px-2 border">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td colspan="3">Subtotal</td>
+                            <td class="text-end">{{summary.subtotal | number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Discount</td>
+                            <td class="text-end">{{summary.discount| number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">BKP</td>
+                            <td class="text-end">{{summary.BKP| number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">DPP</td>
+                            <td class="text-end">{{summary.DPP | number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">NonBKP</td>
+                            <td class="text-end">{{summary.nonBKP| number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>Total Setelah Pajak</strong></td>
+                            <td class="text-end"><strong>{{summary.totalAterTax| number}}</strong></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-1 mt-4">
+
+        <div class="col-12 text-center my-3">
+            <h4>Please choose payment methods :</h4>
+        </div>
+        <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
+            <div class="p-1">
+                <a href="javascript:;" (click)="payment(x,content);" class="btn btn-info btn-block">{{x.name}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+
+    <div class="modal-body">
+        <div class="text-center my-5">
+            <h4>Payment Process</h4>
+            <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%">
+            <div>Process</div>
+
+            
+        </div>
+        <div class="row">
+            <div class="col-6 text-center">
+                <div (click)="d('Cross click')">
+                    <small>close</small>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <a href="javascript:;" (click)="fnProcessPayment();">Fake payment process</a>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
