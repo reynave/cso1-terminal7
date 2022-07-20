@@ -18,7 +18,7 @@
                     <tbody>
                         <tr>
                             <td colspan="3">Subtotal</td>
-                            <td class="text-end">{{summary.subtotal | number}}</td>
+                            <td class="text-end">Rp {{summary.subtotal | number}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Discount</td>
@@ -26,19 +26,19 @@
                         </tr>
                         <tr>
                             <td colspan="3">BKP</td>
-                            <td class="text-end">{{summary.BKP| number}}</td>
+                            <td class="text-end">Rp {{summary.BKP| number}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">DPP</td>
-                            <td class="text-end">{{summary.DPP | number}}</td>
+                            <td class="text-end">Rp {{summary.DPP | number}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">NonBKP</td>
-                            <td class="text-end">{{summary.nonBKP| number}}</td>
+                            <td class="text-end">Rp {{summary.nonBKP| number}}</td>
                         </tr>
                         <tr>
                             <td colspan="3"><strong>Total Setelah Pajak</strong></td>
-                            <td class="text-end"><strong>{{summary.totalAterTax| number}}</strong></td>
+                            <td class="text-end"><strong>Rp {{summary.totalAterTax| number}}</strong></td>
                         </tr>
                     </tbody>
 
@@ -66,22 +66,41 @@
 
     <div class="modal-body">
         <div class="text-center my-5">
-            <h4>Payment Process</h4>
-            <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%">
-            <div>Process</div>
 
-            
+
+            <ng-container [ngSwitch]="paymentStatus">
+                <ng-container *ngSwitchCase="1">
+                    <h4>Payment Process</h4>
+                    <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%">
+                    <div>Process</div>
+
+                    <div class="row">
+                        <div class="col-6 text-center">
+                            <div (click)="d('Cross click')">
+                                <small>close</small>
+                            </div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a href="javascript:;" (click)="fnProcessPaymentFake();">Fake payment process</a>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="2">
+                    <h4>Payment Success</h4>
+                    <div class="my-4">{{t1_thank_you_display}}</div>
+                    <button type="button" (click)="finishShopping();" class="btn btn-lg btn-success">Close</button>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="3">
+                    <h4>Payment Fail</h4>
+                    <div></div>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>...</ng-container>
+            </ng-container>
         </div>
-        <div class="row">
-            <div class="col-6 text-center">
-                <div (click)="d('Cross click')">
-                    <small>close</small>
-                </div>
-            </div>
-            <div class="col-6 text-center">
-                <a href="javascript:;" (click)="fnProcessPayment();">Fake payment process</a>
-            </div>
-        </div>
+
     </div>
 
 </ng-template>

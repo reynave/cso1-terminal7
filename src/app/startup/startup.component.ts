@@ -4,6 +4,13 @@ import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/service/config.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/**
+ * THIS IS FOR DEVELOPMENT ONLY, DONT USE FOR PRODUCTION 
+ * please use IME device Android for token!
+ */
+declare var imei : any;
+
+
 @Component({
   selector: 'app-startup',
   templateUrl: './startup.component.html',
@@ -12,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class StartupComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
+  terminal : any;
   constructor(
     private http: HttpClient,
     private configService: ConfigService, 
@@ -21,17 +29,26 @@ export class StartupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  
     this.httpGet();
+    this.saveImei()
+  }
+  saveImei(){ 
+    if(imei != ""){
+      localStorage.setItem('TerminalIMei',imei); 
+      console.log(imei);
+    } 
   }
 
   httpGet(){
     this.loading = true;
-    this.http.get<any>(this.api + 'kioskStartup/account/',
+    this.http.get<any>(this.api + 'kioskStartup/account/?imei='+imei,
       { headers: this.configService.headers() }
     ).subscribe(
       data => { 
         this.loading = false;
-        console.log(data);
+        console.log(data); 
+        this.terminal = data['terminal'];
         data['account'].forEach((row: any) => {
           localStorage.setItem(row['name'],row['value']); 
         });

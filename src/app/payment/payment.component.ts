@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
+declare var imei : any;
+
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
@@ -24,7 +26,10 @@ export class PaymentComponent implements OnInit {
     subtotal: 0,
     totalAterTax: 0
   }
+  paymentStatus : number = 1;
+  paymentTypeId : number = 0;
   storeOutlesPaymentType : any = [];
+  t1_thank_you_display : any;
   constructor(
     private http: HttpClient,
     config: NgbModalConfig, 
@@ -38,7 +43,10 @@ export class PaymentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.t1_thank_you_display  = localStorage.getItem("t1_thank_you_display");
+
     if (localStorage.getItem(this.configService.myUUID())) {
+     
       console.log("SILAKAN BELANJA!");
       this.httpGet();
       this.httpCart();
@@ -49,7 +57,9 @@ export class PaymentComponent implements OnInit {
  
   httpGet() {
     this.loading = true;
-    this.http.get<any>(this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID()),
+    let url = this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID())+"&imei="+imei;
+    console.log(url);
+    this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -87,28 +97,41 @@ export class PaymentComponent implements OnInit {
   }
 
   payment(x:any, content:any) {
+    this.paymentStatus = 1;
     this.loading = true;
-    this.modalService.open(content,{centered:true});
+    this.paymentTypeId = x.paymentTypeId;
+    this.modalService.open(content,{centered:true});  
+  }
+
+  fnProcessPaymentFake(){
     const body = {
-      payment : x,
-      uuid : localStorage.getItem(this.configService.myUUID())
+      paymentTypeId : this.paymentTypeId,
+      kioskUuid : localStorage.getItem(this.configService.myUUID()),
+      imei : imei,
+      memberId : 0,
     }
+    this.loading = true;
+    console.log(body);
     this.http.post<any>(this.api + 'kioskPayment/payment/',body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        console.log(data);
+        localStorage.removeItem(this.configService.myUUID());
         this.loading = false;
-
-        console.log(data); 
+        this.paymentStatus = 2; 
+        this.router.navigate(['cart/finish']);
       },
       e => {
         console.log(e);
       },
     );
+    
   }
 
-  fnProcessPayment(){
-    this.modalService.dismissAll();
-    this.router.navigate(['cart/finish']);
+
+  finishShopping(){
+     this.modalService.dismissAll();
+     this.router.navigate(['login']);
   }
 }
