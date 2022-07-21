@@ -35,7 +35,7 @@ export class StartupComponent implements OnInit {
   }
   saveImei(){ 
     if(imei != ""){
-      localStorage.setItem('TerminalIMei',imei); 
+      localStorage.setItem(this.configService.myTerminalId(),imei); 
       console.log(imei);
     } 
   }

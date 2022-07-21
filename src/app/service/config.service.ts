@@ -9,6 +9,7 @@ import * as CryptoJS from 'crypto-js';
 export class ConfigService {
   secretKeyAccess : string = "QkSDhtCFJQ4n75Xq8Cmy4WExRU3C4r"; 
   uuid : string = "t1_kioskUuid";
+  terminalImei : string = "t1_terminalImei";
 
   varToken: string = "";
   varHeaders: any = [];
@@ -31,6 +32,9 @@ export class ConfigService {
   }
   myUUID(){
     return this.uuid;
+  }
+  myTerminalId(){
+    return this.terminalImei;
   }
   setToken(token: string){
     this.cookies.setCookie(this.tokenName, token, 30); 

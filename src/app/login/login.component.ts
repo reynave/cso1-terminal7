@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
-import { ActivatedRoute, Router } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
@@ -13,26 +13,63 @@ import { ConfigService } from 'src/app/service/config.service';
 })
 export class LoginComponent implements OnInit {
   @ViewChild('action', { static: true }) action: NgxScannerQrcodeComponent | undefined;
-  terminalId : string = "T001";
-  public output: string = "";
-  
+  terminalId: any;
+  public output: any;
+
   loading: boolean = false;
   api: string = environment.api;
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
-    private configService: ConfigService, 
+    private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
   ) { }
-  myUUID : any;
-  isStillLogin : boolean = false;
+  myUUID: any;
+  isStillLogin: boolean = false;
+
+  loop: number = 0;
   ngOnInit(): void {
-    if(localStorage.getItem(this.configService.myUUID()) !== null ){
+    this.terminalId = localStorage.getItem(this.configService.myTerminalId());
+    console.log('action : ' + this.action, " output :" + this.output);
+    if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
     }
+
+
+
   }
+
+  interval: any;
+  memberId: string = "";
+  runQrcode() {
+
+    this.action?.toggleCamera();
+    this.interval = setInterval(() => {
+      this.loop += 1;
+      console.log(this.loop, '  ', this.output);
+      if (this.output != undefined && this.output != '') {
+        this.fnCheckMemberId(this.output);
+        // this.output  = "";
+      }
+    }, 1000);
+  }
+
+  fnCheckMemberId(memberId: string) {
+    console.log(memberId);
+    this.loginMember(memberId);
+    // this.action?.stop();
+    clearInterval(this.interval);
+  }
+
+
+  stopQrcode() {
+    this.action?.stop();
+    clearInterval(this.interval);
+  }
+
+
 
   open(content: any) {
     this.modalService.open(content, { size: 'lg' });
@@ -45,42 +82,47 @@ export class LoginComponent implements OnInit {
   loginVisitor() {
     this.loading = true;
     const body = {
-      terminalId : this.terminalId,
+      terminalId: this.terminalId,
     }
-    this.http.post<any>(this.api + 'kioskLogin/loginVisitor/',body,
+    this.http.post<any>(this.api + 'kioskLogin/loginVisitor/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.loading = false; 
+        this.loading = false;
         localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-        this.router.navigate(['cart'],{queryParams: { kioskUuid: data['insert']['kioskUuid'] },});
+        this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
 
       },
       e => {
         console.log(e);
       },
-    ); 
+    );
   }
 
-  loginMember() {
+  loginMember(memberId: string) {
     this.loading = true;
     const body = {
-      terminalId : this.terminalId,
-      memberId : "1000001",
+      terminalId: this.terminalId,
+      memberId: memberId,
     }
-    this.http.post<any>(this.api + 'kioskLogin/loginMember/',body,
+    this.http.post<any>(this.api + 'kioskLogin/loginMember/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.loading = false; 
-        localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-        this.router.navigate(['cart'],{queryParams: { kioskUuid: data['insert']['kioskUuid'] },});
+        this.loading = false;
+        console.log(data);
+        if (data['error'] == false) {
+          this.action?.stop();
+          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
+          this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
+        }
+
 
       },
       e => {
         console.log(e);
       },
-    ); 
+    );
   }
 
 }
