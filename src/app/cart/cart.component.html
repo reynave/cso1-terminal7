@@ -1,10 +1,13 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <img src="./assets/imgs/chandra.jpg" height="50">
         </div>
-        <div class="col-6 ">
-            <div class="py-3 text-end">
+        <div class="col-4">
+            <code>Member Id : {{member.id}}</code>
+        </div>
+        <div class="col-4 ">
+            <div class="py-1 text-end">
                 <a href="javascript:;" [hidden]="adminMode" class="btn btn-sm btn-warning">HELP</a>
                 <a href="javascript:;" [hidden]="!adminMode" (click)="adminMode = false" class="btn btn-sm btn-danger">CLOSE ADMIN</a>
             </div>
@@ -19,23 +22,48 @@
                 <div *ngFor="let x of items">
                     <div class="card shadow-sm p-2 mb-1">
                         <div>
-                            {{x.description}}
+                            <span>{{x.itemQty}}</span>
+
+                            <span> {{x.description}}</span>
                             <span [hidden]="!adminMode">
                                 <a class="btn" (click)="fnAddQty(x,1)">+</a>
                                 | <a class="btn" (click)="fnAddQty(x,-1)">-</a>
                                 | <a class="btn" (click)="fnAddQty(x,0)">Del</a>
                             </span>
                             <br>
-                            <code>{{x.itemId}} {{x.barcode}}</code>
+                            <code> {{x.barcode}}</code>
                         </div>
                         <div>
-                            Rp {{x.price|number}} x {{x.itemQty}} = Rp {{x.totalPrice|number}}
+
+                            <table class="table">
+                                <tr>
+                                    <td>Qty</td>
+                                    <td>Price</td>
+                                  
+                                    <td>Total Discount</td>
+                                    <td>totalPrice</td>
+                                </tr>
+                                <tr>
+                                    <td>{{x.itemQty}}</td>
+                                    <td> <input type="number" [readonly]="!adminMode" 
+                                        [(ngModel)]="x.price" class="form-control form-control-sm" (change)="fnUpdate(x)"></td>
+                                  
+                                    <td> 
+                                        <input type="number" [readonly]="!adminMode" 
+                                        [(ngModel)]="x.finalDiscount" class="form-control form-control-sm" (change)="fnUpdate(x)">
+                                    </td>
+                                    <td>
+                                        {{x.finalPrice|number}}
+                                    </td>
+                                </tr>
+                            </table>
+                            {{x |json}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-5" [hidden]="adminMode" >
+        <div class="col-5" [hidden]="adminMode">
             <div class="border p-2 bg-white">
                 {{noteScanner}}
                 <div [hidden]="error">
@@ -69,7 +97,7 @@
             <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
         </div>
         <div class="col-6">
-            <button type="button" (click)="modal(modalPayment);" class="btn btn-primary btn-block">Payment</button> 
+            <button type="button" (click)="modal(modalPayment);" class="btn btn-primary btn-block">Payment</button>
         </div>
     </div>
 </div>
@@ -98,47 +126,53 @@
     </div>
     <div class="modal-body">
         <div class="overflow-auto px-1" style="height: 70vh">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Qty</th>
-                    <th>Items</th>
-                    <th>Disc</th> 
-                    <th class="text-end">Net Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let x of items">
-                    <td>{{x.itemQty}}</td>
-                    <td>{{x.shortDesc}}</td>
-                    <td></td>
-                    <td class="text-end"> {{x.totalPrice  | number}}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr> 
-                    <td colspan="3">Subtotal</td>  <td class="text-end">{{summary.subtotal | number}}</td> 
-                </tr>
-                <tr>
-                    <td colspan="3">Discount</td>  <td class="text-end">{{summary.discount| number}}</td> 
-                </tr>
-                <tr>
-                    <td colspan="3">BKP</td> <td class="text-end">{{summary.BKP| number}}</td> 
-                </tr>
-                <tr>
-                    <td colspan="3">DPP</td>  <td class="text-end">{{summary.DPP | number}}</td> 
-                </tr>
-                <tr>
-                    <td colspan="3">NonBKP</td>   <td class="text-end">{{summary.nonBKP| number}}</td> 
-                </tr>
-                <tr>
-                    <td colspan="3">Total Setelah Pajak</td>   <td class="text-end">{{summary.totalAterTax| number}}</td> 
-                </tr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Qty</th>
+                        <th>Items</th>
+                        <th>Disc</th>
+                        <th class="text-end">Net Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let x of items">
+                        <td>{{x.itemQty}}</td>
+                        <td>{{x.shortDesc}}</td>
+                        <td></td>
+                        <td class="text-end"> {{x.totalPrice | number}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Subtotal</td>
+                        <td class="text-end">{{summary.subtotal | number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Discount</td>
+                        <td class="text-end">{{summary.discount| number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">BKP</td>
+                        <td class="text-end">{{summary.BKP| number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">DPP</td>
+                        <td class="text-end">{{summary.DPP | number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">NonBKP</td>
+                        <td class="text-end">{{summary.nonBKP| number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Total Setelah Pajak</td>
+                        <td class="text-end">{{summary.totalAterTax| number}}</td>
+                    </tr>
 
 
-            </tfoot>
-        </table>
-       </div>
+                </tfoot>
+            </table>
+        </div>
         <div class="text-center">
             <a [routerLink]="[ '/payment' ]" class="btn btn-primary btn-block" (click)="modal.dismiss('Cross click')">Next</a>
         </div>

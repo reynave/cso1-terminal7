@@ -26,6 +26,7 @@ export class CartComponent implements OnInit {
     barcode: "",
     price: 0,
   }
+  member: any = [];
   summary: any = {
     BKP: 0,
     DPP: 0,
@@ -51,7 +52,7 @@ export class CartComponent implements OnInit {
 
     }
   }
-  
+
   httpGet() {
     this.loading = true;
     this.http.get<any>(this.api + 'kioskCart/index/?uuid=' + localStorage.getItem(this.configService.myUUID()),
@@ -59,8 +60,9 @@ export class CartComponent implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-        console.log(data);
+      // console.log(data);
         this.items = data['items'];
+        this.member = data['member'];
         this.summary = {
           BKP: data['summary']['BKP'],
           DPP: data['summary']['DPP'],
@@ -116,7 +118,20 @@ export class CartComponent implements OnInit {
       );
     }
   }
-
+  fnUpdate(x:any){
+    const body = {
+      items: x, 
+    }
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnUpdate/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        console.log(data);
+      },
+    );
+  }
   fnAddQty(x: any, qty: number) {
     const body = {
       items: x,
