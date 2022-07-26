@@ -21,10 +21,8 @@
             <div class="overflow-auto px-1" style="height: 600px">
                 <div *ngFor="let x of items">
                     <div class="card shadow-sm p-2 mb-1">
-                        <div>
-                            <span>{{x.itemQty}}</span>
-
-                            <span> {{x.description}}</span>
+                        <div> 
+                            <span> {{x.description}}</span>  <span [hidden]="!x.isPriceEdit">*</span>
                             <span [hidden]="!adminMode">
                                 <a class="btn" (click)="fnAddQty(x,1)">+</a>
                                 | <a class="btn" (click)="fnAddQty(x,-1)">-</a>
@@ -38,9 +36,8 @@
                             <table class="table">
                                 <tr>
                                     <td>Qty</td>
-                                    <td>Price</td>
-                                  
-                                    <td>Total Discount</td>
+                                    <td>Price</td> 
+                                    <td>{{x.isPriceEdit == 1 ? 'Fix':'Total'}} Discount</td>
                                     <td>totalPrice</td>
                                 </tr>
                                 <tr>
@@ -57,7 +54,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            {{x |json}}
+                            <div class="small" style="line-height: 90%;"><code>{{x |json}}</code></div>
                         </div>
                     </div>
                 </div>
