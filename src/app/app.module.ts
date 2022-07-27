@@ -15,6 +15,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CartComponent } from './cart/cart.component';
 import { PaymentComponent } from './payment/payment.component';
 import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
+import { PhotoComponent } from './photo/photo.component';
+import { WebcamModule } from 'ngx-webcam';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
     HomeComponent,
     CartComponent,
     PaymentComponent,
-    CartFinishComponent
+    CartFinishComponent,
+    PhotoComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,8 @@ import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
     NgbModule, 
     FormsModule,
     HttpClientModule,
-    NgxScannerQrcodeModule
+    NgxScannerQrcodeModule,
+    WebcamModule
   ],
   providers: [],
   bootstrap: [AppComponent]

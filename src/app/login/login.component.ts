@@ -18,6 +18,14 @@ export class LoginComponent implements OnInit {
 
   loading: boolean = false;
   api: string = environment.api;
+  myUUID: any;
+  isStillLogin: boolean = false;
+  interval: any;
+  memberId: string = "";
+  loop: number = 0;
+  notes : string = "";
+  kioskMessage  : any;
+
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
@@ -25,52 +33,50 @@ export class LoginComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
   ) { }
-  myUUID: any;
-  isStillLogin: boolean = false;
 
-  loop: number = 0;
   ngOnInit(): void {
+    this.kioskMessage   = {
+      member_not_found_display : localStorage.getItem("t1_member_not_found_display"),
+      visitor_login_display : localStorage.getItem("t1_visitor_login_display"),
+      welcome_screen : localStorage.getItem("t1_welcome_screen"),
+      customerphoto :  localStorage.getItem("t1_customerphoto") ?  localStorage.getItem("t1_customerphoto") : 0 ,
+    }
+
     this.terminalId = localStorage.getItem(this.configService.myTerminalId());
     console.log('action : ' + this.action, " output :" + this.output);
     if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
     }
+  } 
 
-
-
-  }
-
-  interval: any;
-  memberId: string = "";
   runQrcode() {
-
+    this.notes  = "";
     this.action?.toggleCamera();
+    let loop = 0;
     this.interval = setInterval(() => {
-      this.loop += 1;
-      console.log(this.loop, '  ', this.output);
+      loop += 1;
+      console.log(loop, '  ', this.output);
+     
       if (this.output != undefined && this.output != '') {
-        this.fnCheckMemberId(this.output);
+       // this.fnCheckMemberId(this.output);
+        this.loginMember(this.output);
         // this.output  = "";
       }
+
+      if(loop > 50 ){
+        console.log("Stop loop");
+        this.stopQrcode();
+      }
+
     }, 1000);
   }
-
-  fnCheckMemberId(memberId: string) {
-    console.log(memberId);
-    this.loginMember(memberId);
-    // this.action?.stop();
-    clearInterval(this.interval);
-  }
-
-
+ 
   stopQrcode() {
     this.action?.stop();
     clearInterval(this.interval);
   }
-
-
-
+ 
   open(content: any) {
     this.modalService.open(content, { size: 'lg' });
   }
@@ -80,6 +86,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginVisitor() {
+    this.stopQrcode();
     this.loading = true;
     const body = {
       terminalId: this.terminalId,
@@ -89,9 +96,7 @@ export class LoginComponent implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-        localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-        this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
-
+        this.goToCart(data); 
       },
       e => {
         console.log(e);
@@ -111,10 +116,15 @@ export class LoginComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
-        if (data['error'] == false) {
-          this.action?.stop();
-          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-          this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
+        clearInterval(this.interval); 
+        this.action?.stop(); 
+
+        if (data['error'] == false) { 
+          this.goToCart(data); 
+        }else{ 
+          this.output = "";
+          this.notes =  this.kioskMessage.member_not_found_display;
+          console.log("MEMBER ID NOT FOUND");
         }
 
 
@@ -123,6 +133,16 @@ export class LoginComponent implements OnInit {
         console.log(e);
       },
     );
+  }
+
+  goToCart(data:any){
+    localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
+    if(data['photoRequred'] == 1){
+      this.router.navigate(['photo'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
+    }else{
+      this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
+    }
+   
   }
 
 }

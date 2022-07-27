@@ -90,11 +90,12 @@
     </div>
 
     <div class="row g-1 mb-1" [hidden]="adminMode">
+      
         <div class="col-6">
             <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
         </div>
-        <div class="col-6">
-            <button type="button" (click)="modal(modalPayment);" class="btn btn-primary btn-block">Payment</button>
+        <div class="col-6"> 
+            <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1"  class="btn btn-primary btn-block">Payment</button>
         </div>
     </div>
 </div>
@@ -109,7 +110,7 @@
         <h1 class="text-center m-5">Canccel Transaction</h1>
 
         <div class="text-center m-5">
-            <button type="submit" class="btn btn-danger btn-lg" (click)="fnLogoutVisitor();">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-lg"  (click)="fnLogoutVisitor();">Cancel</button>
         </div>
     </div>
 

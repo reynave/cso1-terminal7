@@ -118,6 +118,7 @@ export class CartComponent implements OnInit {
       );
     }
   }
+
   fnUpdate(x:any){
     const body = {
       items: x, 
@@ -132,6 +133,7 @@ export class CartComponent implements OnInit {
       },
     );
   }
+
   fnAddQty(x: any, qty: number) {
     const body = {
       items: x,
@@ -153,9 +155,11 @@ export class CartComponent implements OnInit {
   modal(content: any) {
     this.modalService.open(content, { size: 'xl' });
   }
+
   fnLogoutVisitor() {
     this.modalService.dismissAll();
     localStorage.removeItem(this.configService.myUUID());
     this.router.navigate(['login']);
   }
+  
 }

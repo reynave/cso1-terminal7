@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PaymentComponent } from './payment/payment.component';
+import { PhotoComponent } from './photo/photo.component';
 import { StartupComponent } from './startup/startup.component';
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: "startup", component: StartupComponent, data: { active: "startup" }, },
   { path: "cart", component: CartComponent, data: { active: "cart" }, },
   { path: "cart/finish", component: CartFinishComponent, data: { active: "cart" }, },
+  { path: "photo", component: PhotoComponent, data: { active: "photo" }, },
   
   { path: "payment", component: PaymentComponent, data: { active: "payment" }, },
   
