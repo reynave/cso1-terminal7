@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { ConfigService } from 'src/app/service/config.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit { 
   loading: boolean = false;
   api: string = environment.api;
   barcode: string = "";
@@ -46,10 +46,9 @@ export class CartComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem(this.configService.myUUID())) {
       console.log("SILAKAN BELANJA!");
-      this.httpGet();
+      this.httpGet(); 
     } else {
-      this.router.navigate(['login']);
-
+      this.router.navigate(['login']); 
     }
   }
 
@@ -60,7 +59,7 @@ export class CartComponent implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-      // console.log(data);
+        console.log(data);
         this.items = data['items'];
         this.member = data['member'];
         this.summary = {

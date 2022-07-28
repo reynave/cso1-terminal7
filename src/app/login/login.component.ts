@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
       visitor_login_display : localStorage.getItem("t1_visitor_login_display"),
       welcome_screen : localStorage.getItem("t1_welcome_screen"),
       customerphoto :  localStorage.getItem("t1_customerphoto") ?  localStorage.getItem("t1_customerphoto") : 0 ,
+      configurationimages : environment.api+'uploads/configuration/'+localStorage.getItem("t1_configurationimages"),
     }
 
     this.terminalId = localStorage.getItem(this.configService.myTerminalId());
@@ -85,7 +86,7 @@ export class LoginComponent implements OnInit {
     alert(e);
   }
 
-  loginVisitor() {
+  loginVisitor(loginVisitor:any) {
     this.stopQrcode();
     this.loading = true;
     const body = {
@@ -95,6 +96,8 @@ export class LoginComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+       // this.modalService.open(loginVisitor);
+
         this.loading = false;
         this.goToCart(data); 
       },

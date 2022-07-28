@@ -2,7 +2,7 @@
 
     <div class="card mt-2 bg-corner">
         <div class="text-center my-1">
-            <img src="./assets/imgs/chandra.jpg" width="100%">
+            <img [src]="kioskMessage.configurationimages" width="100%">
         </div>
         <div class="card-body">
             <div class="row">
@@ -32,7 +32,7 @@
                         <button type="button" [hidden]="!action.isStart" class="btn-primary btn  btn-block" (click)="stopQrcode();">stop Qrcode</button>
                     </div>
                     <div class="col-5">
-                        <button type="button" class="btn-primary btn  btn-block" (click)="loginVisitor();">Visitor</button>
+                        <button type="button" class="btn-primary btn  btn-block" (click)="loginVisitor(modalWelcome);">Visitor</button>
                     </div>
                 </div>
 
@@ -45,3 +45,14 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #modalWelcome let-modal>
+    <div class="modal-header"> 
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <p>Selamat datang tamu yang kami hormati di tempat kami.</p>
+      <p>Semoga anda menikmati lanyanan self Checkout kami.</p>
+    </div> 
+</ng-template>
