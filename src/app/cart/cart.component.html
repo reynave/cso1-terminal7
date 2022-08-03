@@ -19,44 +19,63 @@
 
         <div class="col-{{adminMode ? '12':'7'}}">
             <div class="overflow-auto px-1" style="height: 600px">
-                <div *ngFor="let x of items">
-                    <div class="card shadow-sm p-2 mb-1">
-                        <div> 
-                            <span> {{x.description}}</span>  <span [hidden]="!x.isPriceEdit">*</span>
-                            <span [hidden]="!adminMode">
-                                <a class="btn" (click)="fnAddQty(x,1)">+</a>
-                                | <a class="btn" (click)="fnAddQty(x,-1)">-</a>
-                                | <a class="btn" (click)="fnAddQty(x,0)">Del</a>
-                            </span>
-                            <br>
-                            <code> {{x.barcode}}</code>
-                        </div>
-                        <div>
+                <div [hidden]="adminMode">
+                    <div *ngFor="let x of items">
+                        <div class="card shadow-sm p-1 mb-1">
+                            <div>
+                                <span> {{x.description}}</span> <span [hidden]="!x.isPriceEdit">*</span> 
+                                <code> {{x.barcode}}</code>
+                            </div>
+                            <div>
+                                <table class="table table-sm small">
+                                    <tr>
+                                        <td>Qty</td>
+                                        <td>Total Price</td>
+                                        <td>{{x.isPriceEdit == 1 ? 'Fix':'Total'}} Discount</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{x.qty}}</td>
+                                        <td> Rp {{x.totalPrice | number}}</td>
+                                        <td> Rp {{x.totalDiscount | number}} </td>
+                                    </tr>
 
-                            <table class="table">
-                                <tr>
-                                    <td>Qty</td>
-                                    <td>Price</td> 
-                                    <td>{{x.isPriceEdit == 1 ? 'Fix':'Total'}} Discount</td>
-                                    <td>totalPrice</td>
-                                </tr>
-                                <tr>
-                                    <td>{{x.itemQty}}</td>
-                                    <td> <input type="number" [readonly]="!adminMode" 
-                                        [(ngModel)]="x.price" class="form-control form-control-sm" (change)="fnUpdate(x)"></td>
-                                  
-                                    <td> 
-                                        <input type="number" [readonly]="!adminMode" 
-                                        [(ngModel)]="x.finalDiscount" class="form-control form-control-sm" (change)="fnUpdate(x)">
-                                    </td>
-                                    <td>
-                                        {{x.finalPrice|number}}
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="small" style="line-height: 90%;"><code>{{x |json}}</code></div>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="small" style="line-height: 90%;"><code>{{x |json}}</code></div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div [hidden]="!adminMode" class="bg-white">
+                    
+                    <table class="table table-sm ">
+                        <tr>
+                            <th>No</th>
+                            <th>Desciption</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th></th>
+                            
+                        </tr>
+                        <tr *ngFor="let x of itemsList ; let i = index">
+                            <td>    {{i+1}}  </td>
+                            <td>   {{x.description}}  </td>
+                            <td>
+                                <input type="number" [readonly]="!adminMode" [(ngModel)]="x.price" class="form-control form-control-sm" (change)="fnUpdate(x)">
+                            </td>
+                            <td>
+                                <input type="number" [readonly]="!adminMode" [(ngModel)]="x.discount" class="form-control form-control-sm" (change)="fnUpdate(x)">
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-danger" (click)="fnVoid(x);">DEL</a>
+                            </td>
+
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -85,17 +104,18 @@
                 </div>
                 <hr>
 
+                <!-- <a href="javascript:;" (click)="fnPromotionFreeItem();">Check Free Item(TEST ONLY)</a> -->
             </div>
         </div>
     </div>
 
     <div class="row g-1 mb-1" [hidden]="adminMode">
-   
+
         <div class="col-6">
             <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
         </div>
-        <div class="col-6"> 
-            <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1"  class="btn btn-primary btn-block">Payment</button>
+        <div class="col-6">
+            <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1" class="btn btn-primary btn-block">Payment</button>
         </div>
     </div>
 </div>
@@ -111,7 +131,7 @@
         <h1 class="text-center m-5">Canccel Transaction</h1>
 
         <div class="text-center m-5">
-            <button type="submit" class="btn btn-danger btn-lg"  (click)="fnLogoutVisitor();">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-lg" (click)="fnLogoutVisitor();">Cancel</button>
         </div>
     </div>
 
@@ -119,13 +139,12 @@
 
 
 <ng-template #modalPayment let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Summary Transaction</h4>
+    <div class="modal-header"> 
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <div class="overflow-auto px-1" style="height: 70vh">
-            <table class="table">
+        <div class="overflow-auto px-1">
+            <!-- <table class="table">
                 <thead>
                     <tr>
                         <th>Qty</th>
@@ -170,10 +189,19 @@
 
 
                 </tfoot>
-            </table>
+            </table> -->
+            <p>
+                <strong>Are you sure finish transaction?</strong>
+            </p>
         </div>
-        <div class="text-center">
-            <a [routerLink]="[ '/payment' ]" class="btn btn-primary btn-block" (click)="modal.dismiss('Cross click')">Next</a>
+    
+        <div class="row g-1">
+            <div class="col-6">
+                <button    class="btn btn-block btn-warning" (click)="modal.dismiss('Cross click')">Back</button>
+            </div>
+            <div class="col-6">
+                <button  (click)="fnCloseCart();" class="btn btn-primary btn-block" (click)="modal.dismiss('Cross click')">Yes</button>
+            </div>
         </div>
     </div>
 

@@ -86,8 +86,9 @@ export class PhotoComponent implements OnInit {
 
   }
 
-  public triggerSnapshot(): void {
+  public triggerSnapshot(): void { 
     this.trigger.next();
+
   }
 
   public showCamera(): void {
@@ -112,7 +113,7 @@ export class PhotoComponent implements OnInit {
   }
 
   public handleImage(webcamImage: WebcamImage): void {
-    // console.log('received webcam image', webcamImage);
+    console.log('received webcam image', webcamImage);
     //console.log("_imageAsDataUrl",webcamImage.imageAsDataUrl);
     this.webcamImage = webcamImage;
     this.uploadPhoto(webcamImage);
@@ -120,6 +121,7 @@ export class PhotoComponent implements OnInit {
   }
 
   uploadPhoto(webcamImage: any) {
+    console.log('uploadPhoto');
     if (webcamImage.imageAsDataUrl) {
       console.log("SAVE PHP");
       const body = {

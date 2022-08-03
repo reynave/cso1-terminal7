@@ -11,7 +11,7 @@ import { ConfigService } from 'src/app/service/config.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit { 
+export class CartComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
   barcode: string = "";
@@ -26,6 +26,7 @@ export class CartComponent implements OnInit {
     barcode: "",
     price: 0,
   }
+  itemsList: any = [];
   member: any = [];
   summary: any = {
     BKP: 0,
@@ -42,14 +43,27 @@ export class CartComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
   ) { }
-
+  callServer: any;
   ngOnInit(): void {
     if (localStorage.getItem(this.configService.myUUID())) {
       console.log("SILAKAN BELANJA!");
-      this.httpGet(); 
+      this.httpGet();
+    //  this.callHttpServer();
     } else {
-      this.router.navigate(['login']); 
+      this.router.navigate(['login']);
     }
+  }
+
+  callHttpServer() {
+    this.callServer = setInterval(() => {
+      const d = new Date();
+      console.log(d);
+      this.httpGet();
+    }, 3000)
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.callServer);
   }
 
   httpGet() {
@@ -61,6 +75,7 @@ export class CartComponent implements OnInit {
         this.loading = false;
         console.log(data);
         this.items = data['items'];
+        this.itemsList = data['itemsList'];
         this.member = data['member'];
         this.summary = {
           BKP: data['summary']['BKP'],
@@ -73,6 +88,18 @@ export class CartComponent implements OnInit {
       },
       e => {
         console.log(e);
+      },
+    );
+  }
+
+  fnVoid(x: any) {
+    this.http.post<any>(this.api + 'kioskCart/fnVoid/', x,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        this.loading = false;
+        console.log(data);
       },
     );
   }
@@ -112,15 +139,15 @@ export class CartComponent implements OnInit {
             this.noteScanner = data['note'];
             this.error = true;
           }
-          console.log(data);
+          //console.log(data['promo'][0]);
         },
       );
     }
   }
 
-  fnUpdate(x:any){
+  fnUpdate(x: any) {
     const body = {
-      items: x, 
+      items: x,
     }
     console.log(body);
     this.http.post<any>(this.api + 'kioskCart/fnUpdate/', body,
@@ -128,6 +155,35 @@ export class CartComponent implements OnInit {
     ).subscribe(
       data => {
         this.httpGet();
+        console.log(data);
+      },
+    );
+  }
+
+  fnPromotionFreeItem() {
+    const body = {
+      uuid: localStorage.getItem(this.configService.myUUID()),
+    }
+
+    this.http.post<any>(this.api + 'kioskCart/fnPromotionFreeItem/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        console.log(data);
+      },
+    );
+  }
+  fnCloseCart() {
+    const body = {
+      uuid: localStorage.getItem(this.configService.myUUID()),
+    }
+
+    this.http.post<any>(this.api + 'kioskCart/fnPromotionFreeItem/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.router.navigate(['bill']);
         console.log(data);
       },
     );
@@ -160,5 +216,9 @@ export class CartComponent implements OnInit {
     localStorage.removeItem(this.configService.myUUID());
     this.router.navigate(['login']);
   }
-  
+
 }
+function ngOnDestroy() {
+  throw new Error('Function not implemented.');
+}
+

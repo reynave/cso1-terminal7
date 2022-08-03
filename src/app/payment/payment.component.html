@@ -5,7 +5,7 @@
         </div>
         <div class="col-6 ">
             <div class="py-3 text-end">
-                <a [routerLink]="[ '/cart']" class="btn btn-sm btn-secondary mx-2">BACK</a>
+                <a [routerLink]="[ '/bill']" class="btn btn-sm btn-secondary mx-2">BACK</a>
                 <a href="javascript:;" class="btn btn-sm btn-warning">NEED HELP</a>
             </div>
         </div>
@@ -13,36 +13,9 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="bg-white rounded shadow-sm px-2 border">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td colspan="3">Subtotal</td>
-                            <td class="text-end">Rp {{summary.subtotal | number}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Discount</td>
-                            <td class="text-end">{{summary.discount| number}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">BKP</td>
-                            <td class="text-end">Rp {{summary.BKP| number}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">DPP</td>
-                            <td class="text-end">Rp {{summary.DPP | number}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">NonBKP</td>
-                            <td class="text-end">Rp {{summary.nonBKP| number}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"><strong>Total Setelah Pajak</strong></td>
-                            <td class="text-end"><strong>Rp {{summary.totalAterTax| number}}</strong></td>
-                        </tr>
-                    </tbody>
-
-                </table>
+            <div class="text-center">
+                 <p>Total Payment</p>
+                 <H3>Rp {{final | number}}</H3>
             </div>
         </div>
 
@@ -51,7 +24,7 @@
     <div class="row g-1 mt-4">
 
         <div class="col-12 text-center my-3">
-            <h4>Please choose payment methods :</h4>
+            <strong>Please choose payment methods :</strong>
         </div>
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1">

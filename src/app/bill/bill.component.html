@@ -1,0 +1,70 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <strong> Bill </strong>
+            <div class="bg-white p-1 shadow-md border">
+                <table class="table table-sm text-monospace">
+                    <thead>
+                        <tr>
+                            <th>Qty</th>
+                            <th>Desciption</th> 
+                            <th class="text-end">Discount</th>
+                            <th class="text-end">Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let x of items">
+                            <td>{{x.qty}}</td>
+                            <td>{{x.description}}
+                                <span [hidden]="x.totalPrice > 0">*<p>(Free Item)</p></span>
+                            </td>
+                            <td class="text-end"><span [hidden]="x.totalDiscount<=0">-</span> {{x.totalDiscount |number}}</td>
+                          
+                            <td class="text-end">{{x.totalPrice |number}}</td>
+                          
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">   SubTotal </td>  <td class="text-end"> {{summary.total | number}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   Discount </td>  <td  class="text-end"> {{summary.discount | number}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   Discount Member </td>  <td  class="text-end">  {{summary.memberDiscount | number}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   Voucher </td>  <td  class="text-end">{{summary.voucer | number}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   BKP </td>  <td  class="text-end"> {{summary.bkp | number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   DPP </td>  <td  class="text-end"> {{summary.dpp | number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   PPN </td>  <td  class="text-end"> {{summary.ppn | number}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   Non BKP </td>  <td  class="text-end">{{summary.nonBkp | number}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">   Total Setelah Pajak </td>  <td  class="text-end"> {{summary.final | number}}</td>
+                        </tr>
+                        
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3 g-1">
+        <div class="col-sm-6  ">
+            <a class="btn btn-block btn-secondary" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}">Back</a>
+        </div>
+        <div class="col-6  ">
+            <a class="btn btn-block btn-success" [routerLink]="[ '/payment', ]">Payment</a>
+        </div>
+    </div>
+</div>

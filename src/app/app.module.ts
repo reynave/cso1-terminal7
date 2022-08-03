@@ -17,6 +17,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
 import { PhotoComponent } from './photo/photo.component';
 import { WebcamModule } from 'ngx-webcam';
+import { BillComponent } from './bill/bill.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { WebcamModule } from 'ngx-webcam';
     CartComponent,
     PaymentComponent,
     CartFinishComponent,
-    PhotoComponent
+    PhotoComponent,
+    BillComponent
   ],
   imports: [
     BrowserModule,

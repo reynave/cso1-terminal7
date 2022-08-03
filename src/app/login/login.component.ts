@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
+declare function haha() :any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -49,7 +51,12 @@ export class LoginComponent implements OnInit {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
     }
+    
   } 
+
+  haha(){
+    haha();
+  }
 
   runQrcode() {
     this.notes  = "";

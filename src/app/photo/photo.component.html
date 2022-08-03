@@ -22,6 +22,7 @@
             </div>  
         </div>
         <div class="col-12 mt-3">
+          
             <button class="btn btn-sm btn-secondary mx-1" [hidden]="takePhoto" (click)="triggerSnapshot();">Take A Snapshot</button>
             <button class="btn btn-sm btn-secondary mx-1" [hidden]="!takePhoto" (click)="showCamera();">Take new photo</button>
             <button class="btn btn-sm btn-secondary mx-1" (click)="goToCart();" [hidden]="!takePhoto">Next</button>

@@ -18,14 +18,7 @@ export class PaymentComponent implements OnInit {
   api: string = environment.api;
   items: any = [];
   error: boolean = false;
-  summary: any = {
-    BKP: 0,
-    DPP: 0,
-    nonBKP: 0,
-    discount: 0,
-    subtotal: 0,
-    totalAterTax: 0
-  }
+  final : number = 0;
   paymentStatus : number = 1;
   paymentTypeId : number = 0;
   storeOutlesPaymentType : any = [];
@@ -65,6 +58,7 @@ export class PaymentComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
+        this.final =  data['summary']['final'];
         this.storeOutlesPaymentType = data['storeOutlesPaymentType'];
       },
       e => {
@@ -81,14 +75,7 @@ export class PaymentComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
-        this.summary = {
-          BKP: data['summary']['BKP'],
-          DPP: data['summary']['DPP'],
-          nonBKP: data['summary']['nonBKP'],
-          discount: data['summary']['discount'],
-          subtotal: data['summary']['subtotal'],
-          totalAterTax: data['summary']['totalAterTax'],
-        }
+      
       },
       e => {
         console.log(e);

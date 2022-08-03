@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BillComponent } from './bill/bill.component';
 import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
 import { CartComponent } from './cart/cart.component';
 import { ForbidenComponent } from './forbiden/forbiden.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: "cart", component: CartComponent, data: { active: "cart" }, },
   { path: "cart/finish", component: CartFinishComponent, data: { active: "cart" }, },
   { path: "photo", component: PhotoComponent, data: { active: "photo" }, },
+  { path: "bill", component: BillComponent, data: { active: "bill" }, },
   
   { path: "payment", component: PaymentComponent, data: { active: "payment" }, },
   

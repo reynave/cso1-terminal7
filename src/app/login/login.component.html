@@ -14,22 +14,22 @@
                         <ngx-scanner-qrcode #action="scanner" (data)="output = $event"></ngx-scanner-qrcode>
                     </div>
                 </div>
-                <div class="col-12 text-center">
+                <div class="col-12 text-center mb-2">
                     <code>
                         {{action.isLoading}}
                         Memberid : {{memberId}}
                         <div><span>{{output}}</span></div>
                    </code>
-                    {{notes}}
+                    <div>
+                        {{notes}}
+                    </div>
                 </div>
 
 
                 <div class="row" [hidden]="isStillLogin">
-                    <div class="col-5 offset-1">
-                        <!-- <button type="button" class="btn-primary btn  btn-block" (click)="action.toggleCamera()" [disabled]="action.isLoading">Member {{action.isStart ? 'Cancel' : 'Start'}}</button>
-                 -->
-                        <button type="button" [hidden]="action.isStart" class="btn-primary btn  btn-block" (click)="runQrcode();">run Qrcode</button>
-                        <button type="button" [hidden]="!action.isStart" class="btn-primary btn  btn-block" (click)="stopQrcode();">stop Qrcode</button>
+                    <div class="col-5 offset-1">  
+                        <button type="button" [hidden]="action.isStart" class="btn-primary btn  btn-block" (click)="runQrcode();">Open Qrcode</button>
+                        <button type="button" [hidden]="!action.isStart" class="btn-primary btn  btn-block" (click)="stopQrcode();">Stop Qrcode</button>
                     </div>
                     <div class="col-5">
                         <button type="button" class="btn-primary btn  btn-block" (click)="loginVisitor(modalWelcome);">Visitor</button>
@@ -39,9 +39,12 @@
 
                 <div class="col-12 text-center" [hidden]="!isStillLogin">
                     <a [routerLink]="[ '/cart' ]" [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg btn-warning">Terminal ini masih ada keranjang belanja.</a>
-
                 </div>
             </div>
+
+            <!-- <div class="row">
+                <button type="button" class="mt-3 btn btn-sm btn-dark" (click)="haha()">Test Native Cam</button>
+            </div> -->
         </div>
     </div>
 </div>
