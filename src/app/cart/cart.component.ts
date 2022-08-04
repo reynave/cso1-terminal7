@@ -136,10 +136,11 @@ export class CartComponent implements OnInit {
             }
 
           } else {
-            this.noteScanner = data['note'];
+          
             this.error = true;
           }
-          //console.log(data['promo'][0]);
+          this.noteScanner = data['note'];
+          console.log(data);
         },
       );
     }
@@ -160,7 +161,7 @@ export class CartComponent implements OnInit {
     );
   }
 
-  fnPromotionFreeItem() {
+  fnPromotionFreeItemDELETE() {
     const body = {
       uuid: localStorage.getItem(this.configService.myUUID()),
     }
@@ -177,13 +178,12 @@ export class CartComponent implements OnInit {
   fnCloseCart() {
     const body = {
       uuid: localStorage.getItem(this.configService.myUUID()),
-    }
-
-    this.http.post<any>(this.api + 'kioskCart/fnPromotionFreeItem/', body,
+    } 
+    this.http.post<any>(this.api + 'kioskCart/fnCloseCart/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.router.navigate(['bill']);
+       this.router.navigate(['bill']);
         console.log(data);
       },
     );
@@ -208,7 +208,7 @@ export class CartComponent implements OnInit {
   }
 
   modal(content: any) {
-    this.modalService.open(content, { size: 'xl' });
+    this.modalService.open(content, { size: 'xl',centered: true  });
   }
 
   fnLogoutVisitor() {

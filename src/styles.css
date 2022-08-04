@@ -1,13 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
-body{
-    background-color: #EDF2F9;
-}
+ 
 
 .bg-corner{
     background: #fff url(./assets/imgs/corner-4.png);
     background-size: contain;
 }
+ 
+.page-content{
+    padding-top: 80px;
+}
+table th{
+    font-size: 12px;
+    text-transform: uppercase;
+    
+}
+.fixFooter{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: auto;
+}
 
-.card{
-    border-radius: 10px;
+table td{
+    font-size: 12px;
 }
