@@ -4,11 +4,11 @@
         <div class="top-header">
             <div class="header-bar d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <a href="#" class="logo-icon me-3">
+                    <a href="#" class="me-3">
                         <img src="./assets/imgs/chandra.jpg" height="40">
                     </a>
                     <a href="javascript:void(0)">
-                        Hi, {{member.id}}
+                        Hi Visitor
                     </a>
 
                 </div>
@@ -38,7 +38,8 @@
                             <div class="border p-2 bg-white">
 
                                 <div>
-                                    <code>  {{noteScanner}} {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code>
+                                    <code>{{noteScanner}} </code>
+                                    <code [hidden]="!item.barcode">  {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code>
                                 </div>
 
                                 <div class="my-1">
@@ -134,7 +135,9 @@
 </div>
 
 <div class="fixFooter">
-    
+    <div class="footerweb">
+
+
         <div class="container-fluid">
             <div class="row g-1 mb-2" [hidden]="adminMode">
 
@@ -146,7 +149,7 @@
                 </div>
             </div>
         </div> 
-
+    </div>
 </div>
 
 

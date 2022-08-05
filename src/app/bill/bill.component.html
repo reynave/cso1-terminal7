@@ -49,7 +49,7 @@
                             <td class="text-end">0</td>
 
                         </tr>
- 
+
                     </tbody>
                     <tfoot>
                         <tr>
@@ -106,14 +106,15 @@
 
 
 <div class="fixFooter">
-
-    <div class="container-fluid">
-        <div class="row my-3 g-1">
-            <div class="col-sm-6  ">
-                <a class="btn btn-block btn-secondary" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}">Back</a>
-            </div>
-            <div class="col-6  ">
-                <a class="btn btn-block btn-success" [routerLink]="[ '/payment', ]">Payment</a>
+    <div class="footerweb">
+        <div class="container-fluid">
+            <div class="row my-3 g-1">
+                <div class="col-sm-6  ">
+                    <a class="btn btn-block btn-secondary" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}">Back</a>
+                </div>
+                <div class="col-6  ">
+                    <a class="btn btn-block btn-success" [routerLink]="[ '/payment', ]">Payment</a>
+                </div>
             </div>
         </div>
     </div>

@@ -28,3 +28,20 @@ table th{
 table td{
     font-size: 12px;
 }
+
+
+.web{
+    max-width: 500px;
+    margin: auto;
+}
+.web .floatingTop{
+    max-width: 500px;
+    margin: auto;
+}
+.web .fixFooter{
+    max-width: 100%; 
+}
+.web .fixFooter .footerweb{
+    max-width: 500px;
+    margin: auto;
+}

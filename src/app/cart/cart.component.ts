@@ -210,7 +210,7 @@ export class CartComponent implements OnInit {
   }
 
   modal(content: any) {
-    this.modalService.open(content, { size: 'xl',centered: true  });
+    this.modalService.open(content, { centered: true  });
   }
 
   fnLogoutVisitor() {
