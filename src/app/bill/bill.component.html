@@ -25,6 +25,16 @@
 
                             <td class="text-end">{{x.totalPrice |number}}</td>
 
+                        </tr> 
+                        <tr *ngFor="let x of freeItem"  [hidden]="x.printOnBill <= 0">
+                            <td>{{x.qty}}</td>
+                            <td>{{x.description}}
+                                <span>(Free Items)</span>
+                            </td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0</td>
+                              
                         </tr>
                     </tbody>
                     <tfoot>
@@ -67,6 +77,13 @@
 
                     </tfoot>
                 </table>
+
+                <div class="text-monospace small p-1">
+                    <div [hidden]="freeItem.length < 1">Free Items </div>
+                    <span class="me-2" *ngFor="let x of freeItem"  [hidden]="x.printOnBill > 0">
+                       {{x.description}}  ({{x.qty}})
+                    </span> 
+                </div>
             </div>
         </div>
     </div>

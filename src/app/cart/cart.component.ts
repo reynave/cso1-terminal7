@@ -26,6 +26,7 @@ export class CartComponent implements OnInit {
     barcode: "",
     price: 0,
   }
+  freeItem : any = [];
   itemsList: any = [];
   member: any = [];
   summary: any = {
@@ -76,6 +77,7 @@ export class CartComponent implements OnInit {
         console.log(data);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
+        this.freeItem = data['freeItem'];
         this.member = data['member'];
         this.summary = {
           BKP: data['summary']['BKP'],

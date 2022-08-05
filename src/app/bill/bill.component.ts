@@ -15,6 +15,7 @@ export class BillComponent implements OnInit {
   barcode: string = "";
   items: any = [];
   itemsList: any = [];
+  freeItem : any = [];
   uuid : any;
   summary: any = {
     Final: 0,
@@ -54,6 +55,7 @@ export class BillComponent implements OnInit {
         console.log(data);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
+        this.freeItem =  data['freeItem'];
         this.summary = {
           final: data['summary']['final'],
           nonBkp: data['summary']['nonBkp'],

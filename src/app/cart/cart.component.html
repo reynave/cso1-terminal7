@@ -37,10 +37,8 @@
 
                             <div class="border p-2 bg-white">
 
-                                <div>
-
-                                    <code>  {{noteScanner}} {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code>
-
+                                <div> 
+                                    <code>  {{noteScanner}} {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code> 
                                 </div>
 
                                 <div class="my-1">
@@ -80,6 +78,15 @@
                                             </td>
                                             <td>{{x.price | number}} </td>
                                             <td>{{x.totalPrice | number}}</td>
+                                        </tr>
+                                        <tr *ngFor="let x of freeItem">
+                                            <td>{{x.qty}}</td>
+                                            <td>{{x.description}}
+                                                <span>(Free Items)</span>
+                                            </td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            
                                         </tr>
                                     </tbody>
                                 </table>
