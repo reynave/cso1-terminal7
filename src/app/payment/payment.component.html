@@ -6,7 +6,7 @@
         <div class="col-6 ">
             <div class="py-3 text-end">
                 <a [routerLink]="[ '/bill']" class="btn btn-sm btn-secondary mx-2">BACK</a>
-                <a href="javascript:;" class="btn btn-sm btn-warning">NEED HELP</a>
+                <a href="javascript:;" class="btn btn-sm btn-warning"> <i class="ti ti-bell"></i> NEED HELP</a>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="row g-1 mt-4">
 
         <div class="col-12 text-center my-3">
-            <strong>Please choose payment methods :</strong>
+            <strong>PLEASE CHOOSE PAYMENT METHODS :</strong>
         </div>
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1">
@@ -42,19 +42,20 @@
 
 
             <ng-container [ngSwitch]="paymentStatus">
-                <ng-container *ngSwitchCase="1">
-                    <h4>Payment Process</h4>
-                    <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%">
-                    <div>Process</div>
+                <ng-container *ngSwitchCase="1"> 
+                    <div class="py-1"> 
+                        <h4>Payment Process</h4>
+                        <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%"> 
+                    </div>
 
-                    <div class="row">
+                    <div class="row g-1">
                         <div class="col-6 text-center">
-                            <div (click)="d('Cross click')">
-                                <small>close</small>
-                            </div>
+                            <a (click)="d('Cross click')" class="btn btn-block btn-warning">
+                                 Cancel
+                            </a>
                         </div>
                         <div class="col-6 text-center">
-                            <a href="javascript:;" (click)="fnProcessPaymentFake();">Fake payment process</a>
+                            <a href="javascript:;" class="btn btn-block btn-blue" (click)="fnProcessPaymentFake();">Fake payment process</a>
                         </div>
                     </div>
                 </ng-container>

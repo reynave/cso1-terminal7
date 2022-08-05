@@ -5,11 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.css']
+  selector: 'app-print-detail',
+  templateUrl: './print-detail.component.html',
+  styleUrls: ['./print-detail.component.css']
 })
-export class BillComponent implements OnInit {
+export class PrintDetailComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
   barcode: string = "";
@@ -36,19 +36,14 @@ export class BillComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit(): void {
-    this.uuid = localStorage.getItem(this.configService.myUUID());
-    if (localStorage.getItem(this.configService.myUUID())) {
-      console.log("SILAKAN BELANJA!");
-      this.httpGet();
-    } else {
-      this.router.navigate(['login']);
-    }
+  ngOnInit(): void { 
+    this.httpGet(); 
+    console.log(this.activatedRoute.snapshot.params['id'])
   }
 
   httpGet() {
     this.loading = true;
-    this.http.get<any>(this.api + 'kioskBill/index/?uuid=' + localStorage.getItem(this.configService.myUUID()),
+    this.http.get<any>(this.api + 'KioskPrint/printDetail/?id=' +this.activatedRoute.snapshot.params['id'] ,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -58,20 +53,24 @@ export class BillComponent implements OnInit {
         this.itemsList = data['itemsList'];
         this.freeItem =  data['freeItem'];
         this.summary = {
+          subTotal: data['summary']['subTotal'],
           final: data['summary']['final'],
           nonBkp: data['summary']['nonBkp'],
           bkp: data['summary']['bkp'],
           discount: data['summary']['discount'],
           dpp: data['summary']['dpp'],
-          memberDiscount: data['summary']['memberDiscount'],
-          ppn: data['summary']['ppn'],
-          total: data['summary']['total'],
-          voucer: data['summary']['voucer'],
+          discountMember: data['summary']['discountMember'],
+          ppn: data['summary']['ppn'], 
+          voucher: data['summary']['voucher'],
         }
       },
       e => {
         console.log(e);
       },
     );
+  }
+
+  back(){
+    window.history.back();
   }
 }

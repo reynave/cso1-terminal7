@@ -1,6 +1,6 @@
 <div class="page-wrapper landrick-theme">
 
-    <main class="page-content bg-light">
+    <main class="page-content ">
         <div class="top-header">
             <div class="header-bar d-flex justify-content-between">
                 <div class="d-flex align-items-center">
@@ -15,14 +15,14 @@
 
                 <ul class="list-unstyled mb-0">
                     <li class="list-inline-item mb-0">
-                        <a href="javascript:void(0)" [hidden]="adminMode">
-                            <div class="btn btn-icon btn-warning"><i class="ti ti-bell"></i></div>
+                        <a href="javascript:void(0)" [hidden]="adminMode" class="btn btn-sm btn-warning">
+                            <i class="ti ti-bell"></i> NEED HELP
                         </a>
                     </li>
 
                     <li class="list-inline-item mb-0">
-                        <a href="javascript:void(0)" [hidden]="!adminMode" (click)="adminMode = false">
-                            <div class="btn btn-icon btn-danger"><i class="ti ti-logout"></i> </div>
+                        <a href="javascript:void(0)" [hidden]="!adminMode" (click)="adminMode = false"  class="btn btn-danger">
+                            <i class="ti ti-logout"></i>  
                         </a>
                     </li>
 
@@ -37,8 +37,8 @@
 
                             <div class="border p-2 bg-white">
 
-                                <div> 
-                                    <code>  {{noteScanner}} {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code> 
+                                <div>
+                                    <code>  {{noteScanner}} {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code>
                                 </div>
 
                                 <div class="my-1">
@@ -86,7 +86,7 @@
                                             </td>
                                             <td>-</td>
                                             <td>-</td>
-                                            
+
                                         </tr>
                                     </tbody>
                                 </table>
@@ -134,17 +134,18 @@
 </div>
 
 <div class="fixFooter">
-    <div class="container-fluid">
-        <div class="row g-1 mb-2" [hidden]="adminMode">
+    
+        <div class="container-fluid">
+            <div class="row g-1 mb-2" [hidden]="adminMode">
 
-            <div class="col-6">
-                <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
+                <div class="col-6">
+                    <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1" class="btn btn-primary btn-block">Payment</button>
+                </div>
             </div>
-            <div class="col-6">
-                <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1" class="btn btn-primary btn-block">Payment</button>
-            </div>
-        </div>
-    </div>
+        </div> 
 
 </div>
 

@@ -18,6 +18,9 @@ import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
 import { PhotoComponent } from './photo/photo.component';
 import { WebcamModule } from 'ngx-webcam';
 import { BillComponent } from './bill/bill.component';
+import { PrintComponent } from './print/print.component';
+import { PrintDetailComponent } from './print/print-detail/print-detail.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { BillComponent } from './bill/bill.component';
     PaymentComponent,
     CartFinishComponent,
     PhotoComponent,
-    BillComponent
+    BillComponent,
+    PrintComponent,
+    PrintDetailComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

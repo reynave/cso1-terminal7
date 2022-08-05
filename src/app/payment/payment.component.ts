@@ -99,7 +99,7 @@ export class PaymentComponent implements OnInit {
     }
     this.loading = true;
     console.log(body);
-    this.http.post<any>(this.api + 'kioskPayment/payment/',body,
+    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentFake/',body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {

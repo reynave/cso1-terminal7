@@ -1,0 +1,37 @@
+<div class="container-fluid py-2">
+    <div class="row">
+        <div class="col-6">
+            <small> SUPERVISOR MODE </small>
+            <div>History Transaction</div>
+        </div>
+        <div class="col-6 text-end">
+            <a href="javascript:window.history.back();" class="btn btn-sm py-1 btn-warning">
+                <i class="ti ti-logout"></i> Close
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="border p-1 shadow-sm bg-white">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Date Transaction</th>
+                            <th>ID Transaction</th>
+                            <th>ID member</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        <tr *ngFor="let x of items"  [routerLink]="[ '/print/detail', x.id ]" style="cursor: pointer;">
+                            <td>{{x.startDate | date:'medium'}}</td>
+                            <td>{{x.id}}</td>
+                            <Td>{{x.memberId}}</Td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

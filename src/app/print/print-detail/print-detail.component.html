@@ -1,14 +1,20 @@
 <div class="container-fluid py-2">
     <div class="row">
         <div class="col-6">
-            <strong> BILL </strong>
+            <small> SUPERVISOR MODE </small>
+            <div>History Transaction</div>
         </div>
         <div class="col-6 text-end">
-            <a href="javascript:void(0)" [hidden]="adminMode" class="btn btn-sm py-1 btn-warning">
-                <i class="ti ti-bell"></i> NEED HELP
+            <a href="javascript:void(0)" (click)="back()" class="btn btn-sm py-1 btn-warning mx-1">
+                <i class="ti ti-logout"></i> Back
+            </a>
+
+            <a href="javascript:void(0)" class="btn btn-sm py-1 btn-blue">
+                <i class="ti ti-printer"></i> Print
             </a>
         </div>
     </div>
+
 </div>
 
 <div class="container-fluid mb-5 pb-4">
@@ -54,7 +60,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="4"> SubTotal </td>
-                            <td class="text-end"> {{summary.total | number}} </td>
+                            <td class="text-end"> {{summary.subTotal | number}} </td>
                         </tr>
                         <tr>
                             <td colspan="4"> Discount </td>
@@ -62,11 +68,11 @@
                         </tr>
                         <tr>
                             <td colspan="4"> Discount Member </td>
-                            <td class="text-end"> <span [hidden]="!summary.memberDiscount">-</span>{{summary.memberDiscount | number}} </td>
+                            <td class="text-end"> <span [hidden]="!summary.discountMember">-</span>{{summary.discountMember | number}} </td>
                         </tr>
                         <tr>
                             <td colspan="4"> Voucher </td>
-                            <td class="text-end">{{summary.voucer | number}} </td>
+                            <td class="text-end">{{summary.voucher | number}} </td>
                         </tr>
                         <tr>
                             <td colspan="4"> BKP </td>
@@ -91,29 +97,15 @@
 
                     </tfoot>
                 </table>
-
+               
+           
                 <div class="text-monospace small p-1">
+                   
                     <div [hidden]="freeItem.length < 1">Free Items </div>
                     <span class="me-2" *ngFor="let x of freeItem" [hidden]="x.printOnBill > 0">
                         {{x.description}} ({{x.qty}})
                     </span>
                 </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-<div class="fixFooter">
-
-    <div class="container-fluid">
-        <div class="row my-3 g-1">
-            <div class="col-sm-6  ">
-                <a class="btn btn-block btn-secondary" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}">Back</a>
-            </div>
-            <div class="col-6  ">
-                <a class="btn btn-block btn-success" [routerLink]="[ '/payment', ]">Payment</a>
             </div>
         </div>
     </div>
