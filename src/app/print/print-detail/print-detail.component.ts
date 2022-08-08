@@ -17,7 +17,9 @@ export class PrintDetailComponent implements OnInit {
   itemsList: any = [];
   freeItem : any = [];
   uuid : any;
+  freeItemWaitingScanFail : any = [];
   adminMode : boolean = false;
+  id : string= "";
   summary: any = {
     Final: 0,
     NonBkp: 0,
@@ -41,19 +43,35 @@ export class PrintDetailComponent implements OnInit {
     console.log(this.activatedRoute.snapshot.params['id'])
   }
 
+  date : string = "";
+  template : any = {
+    companyName : '',
+    companyAddress : '',
+    companyPhone : '',
+    footer : '',
+  }
   httpGet() {
     this.loading = true;
     this.http.get<any>(this.api + 'KioskPrint/printDetail/?id=' +this.activatedRoute.snapshot.params['id'] ,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.id = data['id'];
+        this.date = data['date'];
+        this.template = {
+          companyName : data['template']['companyName'],
+          companyAddress : data['template']['companyAddress'],
+          companyPhone : data['template']['companyPhone'],
+          footer : data['template']['footer'], 
+        }
         this.loading = false;
         console.log(data);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem =  data['freeItem'];
+        this.freeItemWaitingScanFail = data['freeItemWaitingScanFail'];
         this.summary = {
-          subTotal: data['summary']['subTotal'],
+          total: data['summary']['total'],
           final: data['summary']['final'],
           nonBkp: data['summary']['nonBkp'],
           bkp: data['summary']['bkp'],

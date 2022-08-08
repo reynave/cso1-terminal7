@@ -45,3 +45,9 @@ table td{
     max-width: 500px;
     margin: auto;
 }
+
+
+.printbill{
+    font-size: 12px;
+    text-transform: uppercase;
+}
