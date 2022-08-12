@@ -32,6 +32,9 @@
                             <td>{{x.qty}}</td>
                             <td>{{x.description}}
                                 <div [hidden]="x.isSpecialPrice == 0">*Special price</div>
+                                <div [hidden]="x.isFreeItem == 0">*Free Items</div>
+
+                                
                             </td>
                             <td class="text-end">{{x.price |number}}</td>
                             <td class="text-end"><span [hidden]="x.totalDiscount<=0">-</span>{{x.totalDiscount |number}} </td>
@@ -93,7 +96,7 @@
                 </table>
 
                 <div class="text-monospace small p-1">
-                    <div [hidden]="freeItem.length < 1">FREE ITEMS : </div>
+                    <div [hidden]="freeItemLabel < 1">FREE ITEMS : </div>
                     <span class="me-2" *ngFor="let x of freeItem" [hidden]="x.printOnBill > 0">
                         {{x.description}} ({{x.qty}})
                     </span>

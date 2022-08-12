@@ -18,6 +18,7 @@ export class BillComponent implements OnInit {
   freeItem : any = [];
   uuid : any;
   freeItemWaitingScan : any = [];
+  freeItemLabel : number = 0;
   adminMode : boolean = false;
   summary: any = {
     Final: 0,
@@ -58,6 +59,7 @@ export class BillComponent implements OnInit {
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem =  data['freeItem'];
+        this.freeItemLabel = data['freeItemLabel'];
         this.freeItemWaitingScan = data['freeItemWaitingScan'];
         this.summary = {
           final: data['summary']['final'],

@@ -163,20 +163,7 @@ export class CartComponent implements OnInit {
     );
   }
 
-  fnPromotionFreeItemDELETE() {
-    const body = {
-      uuid: localStorage.getItem(this.configService.myUUID()),
-    }
-
-    this.http.post<any>(this.api + 'kioskCart/fnPromotionFreeItem/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        this.httpGet();
-        console.log(data);
-      },
-    );
-  }
+  
   fnCloseCart() {
     const body = {
       uuid: localStorage.getItem(this.configService.myUUID()),
@@ -191,23 +178,23 @@ export class CartComponent implements OnInit {
     );
   }
 
-  fnAddQty(x: any, qty: number) {
-    const body = {
-      items: x,
-      qty: qty,
-      userId: this.userId,
-      uuid: localStorage.getItem(this.configService.myUUID()),
-    }
-    console.log(body);
-    this.http.post<any>(this.api + 'kioskCart/fnAddQty/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        this.httpGet();
-        console.log(data);
-      },
-    );
-  }
+  // fnAddQty(x: any, qty: number) {
+  //   const body = {
+  //     items: x,
+  //     qty: qty,
+  //     userId: this.userId,
+  //     uuid: localStorage.getItem(this.configService.myUUID()),
+  //   }
+  //   console.log(body);
+  //   this.http.post<any>(this.api + 'kioskCart/fnAddQty/', body,
+  //     { headers: this.configService.headers() }
+  //   ).subscribe(
+  //     data => {
+  //       this.httpGet();
+  //       console.log(data);
+  //     },
+  //   );
+  // }
 
   modal(content: any) {
     this.modalService.open(content, { centered: true  });
@@ -220,6 +207,8 @@ export class CartComponent implements OnInit {
   }
 
 }
+
+
 function ngOnDestroy() {
   throw new Error('Function not implemented.');
 }
