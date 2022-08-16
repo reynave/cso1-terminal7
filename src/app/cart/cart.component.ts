@@ -201,9 +201,20 @@ export class CartComponent implements OnInit {
   }
 
   fnLogoutVisitor() {
-    this.modalService.dismissAll();
-    localStorage.removeItem(this.configService.myUUID());
-    this.router.navigate(['login']);
+    const body = {  
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+    }
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
+      },
+    );
+    
   }
 
 }
