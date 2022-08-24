@@ -18,6 +18,7 @@ export class CartComponent implements OnInit {
   items: any = [];
   adminMode: boolean = false;
   userId: string = "";
+  addItem : boolean = false;
   // Demo 0000022
   error: boolean = false;
   noteScanner: string = "";
@@ -79,13 +80,10 @@ export class CartComponent implements OnInit {
         this.itemsList = data['itemsList'];
         this.freeItem = data['freeItem'];
         this.member = data['member'];
-        this.summary = {
-          BKP: data['summary']['BKP'],
-          DPP: data['summary']['DPP'],
-          nonBKP: data['summary']['nonBKP'],
+        this.summary = { 
+          final: data['summary']['final'], 
           discount: data['summary']['discount'],
-          subtotal: data['summary']['subtotal'],
-          totalAterTax: data['summary']['totalAterTax'],
+          total: data['summary']['total'] == null ? 0 : data['summary']['total'] , 
         }
       },
       e => {
@@ -114,7 +112,7 @@ export class CartComponent implements OnInit {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
     }
     if (this.barcode != "") {
-
+      this.addItem = true;
 
       this.http.post<any>(this.api + 'kioskCart/scanner/', body,
         { headers: this.configService.headers() }

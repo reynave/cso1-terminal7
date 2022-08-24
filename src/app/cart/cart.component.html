@@ -1,189 +1,207 @@
-<div class="page-wrapper landrick-theme">
+<div class="sticky-top mt-2 bg-light">
+    <div class="container-fluid ">
 
-    <main class="page-content ">
-        <div class="top-header">
-            <div class="header-bar d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <a href="#" class="me-3">
-                        <img src="./assets/imgs/chandra.jpg" height="40">
-                    </a>
-                    <a href="javascript:void(0)">
-                        Hi Visitor
-                    </a>
+        <div class="row g-1 mb-4">
+            <div class="col-6">
 
+                <a href="javascript:void(0)" class="btn  p-1 " [hidden]="adminMode">
+                    <img src="./assets/imgs/icons8-slightly-smiling-face-64.png" width="30">
+                </a>
+
+                <strong [hidden]="adminMode">Hi, Visitor </strong>
+
+                <div [hidden]="!adminMode">
+                    <a href="javascript:void(0)" (click)="adminMode = false;  noteScanner =''; addItem=false; " class="btn mx-1">
+                        <img src="./assets/imgs/icons8-go-back-64.png" width="30"> 
+                        <strong>  Back  </strong>
+                    </a>
                 </div>
 
-                <ul class="list-unstyled mb-0">
-                    <li class="list-inline-item mb-0">
-                        <a href="javascript:void(0)" [hidden]="adminMode" class="btn btn-sm btn-warning">
-                            <i class="ti ti-bell"></i> NEED HELP
-                        </a>
-                    </li>
-
-                    <li class="list-inline-item mb-0">
-                        <a href="javascript:void(0)" [hidden]="!adminMode" (click)="adminMode = false"  class="btn btn-danger">
-                            <i class="ti ti-logout"></i>  
-                        </a>
-                    </li>
-
-
-                </ul>
             </div>
 
-            <div class="floatingTop mt-2" [hidden]="adminMode">
-                <div class="container-fluid">
-                    <div class="row g-1">
-                        <div class="col-12 ">
+            <div class="col-6 text-end">
+                <a href="javascript:void(0)" [hidden]="adminMode" (click)="modal(modalCancel);" class="btn   p-1   mx-1">
+                    <img src="./assets/imgs/icons8-close-64.png" width="30">
+                </a>
+                <a href="javascript:void(0)" [hidden]="adminMode" class="btn bg-warning p-1 border mx-1">
+                    <img src="./assets/imgs/icons8-bell-64.png" width="30">
+                </a>
 
-                            <div class="border p-2 bg-white">
-
-                                <div>
-                                    <code>{{noteScanner}} </code>
-                                    <code [hidden]="!item.barcode">  {{item.name}}, {{item.barcode}}, Rp {{item.price | number}}</code>
-                                </div>
-
-                                <div class="my-1">
-                                    <input type="text" class="form-control" id="scan" (change)="scanner();" [(ngModel)]="barcode" pattern="[0-9]" placeholder="Input Barcode here">
-                                </div>
-                                <!-- <a href="javascript:;" (click)="fnPromotionFreeItem();">Check Free Item(TEST ONLY)</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="container-fluid">
-
-            <div class="row g-1 mb-3">
-
-                <div class="col-12">
-                    <div class="overflow-auto " style="height: 80vh">
-                        <div [hidden]="adminMode" style="margin-top: 100px">
-                            <div class="card shadow-sm p-1 mb-1">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Qty</th>
-                                            <th>Desciption</th>
-                                            <th>Price</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let x of items">
-                                            <td>{{x.qty}}</td>
-                                            <td>{{x.description}}
-                                                <div class="small" style="line-height: 90%;"><code>{{x |json}}</code></div>
-                                            </td>
-                                            <td>{{x.price | number}} </td>
-                                            <td>{{x.totalPrice | number}}</td>
-                                        </tr>
-                                        <tr *ngFor="let x of freeItem">
-                                            <td>{{x.qty}}</td>
-                                            <td>{{x.description}}
-                                                <span>(Free Items)</span>
-                                            </td>
-                                            <td>-</td>
-                                            <td>-</td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div [hidden]="!adminMode" class="bg-white">
-                            <div class="table-responsive bg-white shadow-sm rounded">
-                                <table class="table ">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Desciption</th>
-                                            <th>Price</th>
-                                            <th>Discount</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let x of itemsList ; let i = index">
-                                            <td> {{i+1}} </td>
-                                            <td> {{x.description}} </td>
-                                            <td>
-                                                <input type="number" [readonly]="!adminMode" [(ngModel)]="x.price" class="form-control form-control-sm" (change)="fnUpdate(x)">
-                                            </td>
-                                            <td>
-                                                <input type="number" [readonly]="!adminMode" [(ngModel)]="x.discount" class="form-control form-control-sm" (change)="fnUpdate(x)">
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-danger" (click)="fnVoid(x);">DEL</a>
-                                            </td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-    </main>
+        <div class="row g-1" [hidden]="adminMode">
+            <div class="col-12 ">
+                <div class="rounded shadow-sm p-2 bg-white mb-3">
+                    <div class=" mb-2">
+                        <h4><img src="./assets/imgs/icons8-fast-shopping-64.png" class="mx-1" width="25"> Now Scanning</h4>
+                        <input type="text" class="form-control bg-white" id="scan" (change)="scanner();" [(ngModel)]="barcode" pattern="[0-9]" placeholder="Scan Barcode">
 
+                    </div>
+
+                    <div class="row g-3 " [hidden]="!addItem">
+                        <div class="col-3">
+                            <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
+                        </div>
+                        <div class="col-9">
+                            <div>
+                                <h5> {{item.barcode}}</h5>
+                            </div>
+                            <div>
+                                <strong> {{item.name}}</strong>
+                            </div>
+                            <div>
+                                Rp {{item.price | number}}
+                            </div>
+                            <small>{{noteScanner}}</small>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row  my-2">
+            <div class="col-8">
+                <h4 class="">Scanned Items</h4>
+            </div>
+            <div class="col-4 text-end">
+                <div class=" me-2">{{items.length + freeItem.length}} Items</div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="fixFooter">
-    <div class="footerweb"> 
-        <div class="container-fluid">
-            <div class="row g-1 mb-2" [hidden]="adminMode"> 
-                <div class="col-6">
-                    <button type="button" (click)="modal(modalCancel);" class="btn btn-danger btn-block">Cancel</button>
-                </div>
-                <div class="col-6">
-                    <button type="button" (click)="modal(modalPayment);" [disabled]="items.length<1" class="btn btn-primary btn-block">Payment</button>
+<div class="container-fluid mb-6">
+    <!-- VISITOR -->
+    <div class="row" [hidden]="adminMode">
+
+        <div class="col-12 ">
+
+            <div class=" rounded shadow-sm p-2 bg-white mb-3" *ngFor="let x of items">
+                <div class="row g-3">
+                    <div class="col-2">
+                        <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
+                    </div>
+                    <div class="col-6 col-lg-7">
+                        <div>
+                            <strong>{{x.description}}</strong>
+                        </div>
+                        <div>
+                            <span class="box-qty bg-light">{{x.qty}}</span> Rp {{x.price | number}}
+                        </div>
+
+                    </div>
+                    <div class="col-4 col-lg-3 text-end ">
+                        <div class="mt-3 me-2">
+                            <strong>Rp {{x.totalPrice | number}}</strong>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div> 
+
+            <div class=" rounded shadow-sm p-2 bg-white mb-3" *ngFor="let x of freeItem">
+                <div class="row g-3">
+                    <div class="col-2">
+                        <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
+                    </div>
+                    <div class="col-7">
+                        <div>
+                            <strong>{{x.description}} *</strong>
+                        </div>
+                        <div>
+                            <span class="box-qty bg-light">{{x.qty}}</span> Free Item
+                        </div>
+
+                    </div>
+                    <div class="col-3 text-end ">
+                        <div class="mt-3 me-2">
+                            <strong>Rp 0</strong>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-4">
+                <small>No more items</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN MODE -->
+    <div class="row g-1 mb-3">
+        <div class="col-12">
+
+            <div [hidden]="!adminMode" class="bg-white border shadow-sm rounded">
+                <div class="table-responsive ">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Desciption</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Discount</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let x of itemsList ; let i = index">
+                                <td> {{i+1}} </td>
+                                <td> {{x.description}} </td>
+                                <td>
+                                    <input type="number" [readonly]="!adminMode" [(ngModel)]="x.price" class="form-control form-control-sm text-end" (change)="fnUpdate(x)">
+                                </td>
+                                <td>
+                                    <input type="number" [readonly]="!adminMode" [(ngModel)]="x.discount" class="form-control form-control-sm text-end" (change)="fnUpdate(x)">
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger" (click)="fnVoid(x);">DEL</a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fixFooter" [hidden]="adminMode">
+    <div class="footerweb bg-gray rounded-top-c1 py-4 shadow-sm">
+        <div class="container-fluid">
+            <div class="row" [hidden]="adminMode">
+                <div class="col-6 text-white">
+                    <div class="mx-3">
+                        <div>Gross Total</div>
+                        <h2>Rp {{summary.total | number}}</h2>
+                    </div>
+                </div>
+                <div class="col-6 ">
+                    <div class="mx-3 d-grid">
+                        <button type="button" (click)="fnCloseCart();" [disabled]="items.length<1" class="btn btn-info text-white py-3 rounded">CHECKOUT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 <ng-template #modalCancel let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Cancel Transaction</h4>
+        <h4 class="modal-title" id="modal-basic-title">Alert</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <h1 class="text-center m-5">Cancel Transaction</h1>
+        <h1 class="text-center m-5">Do You Want to Cancel Transaction ? </h1>
 
-        <div class="text-center m-5">
-            <button type="submit" class="btn btn-danger btn-lg" (click)="fnLogoutVisitor();">Cancel</button>
-        </div>
-    </div>
-
-</ng-template>
-
-
-<ng-template #modalPayment let-modal>
-    <div class="modal-header">
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-        <div class="overflow-auto px-1 text-center">
-            <p>
-                <strong>Are you sure finish transaction?</strong>
-            </p>
-        </div>
-
-        <div class="row g-1">
-            <div class="col-6">
-                <button class="btn btn-block btn-warning" (click)="modal.dismiss('Cross click')">Back</button>
-            </div>
-            <div class="col-6">
-                <button (click)="fnCloseCart();" class="btn btn-primary btn-block" (click)="modal.dismiss('Cross click')">Yes</button>
-            </div>
+        <div class="text-center m-5 d-grid">
+            <button type="submit" class="btn btn-danger btn-lg rounded" (click)="fnLogoutVisitor();">Yes</button>
         </div>
     </div>
 

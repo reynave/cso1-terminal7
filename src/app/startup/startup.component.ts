@@ -19,7 +19,21 @@ declare var imei : any;
 export class StartupComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
-  terminal : any;
+  terminal : any = { 
+    id: "", 
+    name: "", 
+    storeOutlesId: "", 
+    keyLisence: "", 
+    token: "", 
+    status:0, 
+    presence: 0, 
+    inputBy: 0,
+    inputDate: 0, 
+    updateDate: 0, 
+    updateBy: 0
+  }
+
+  
   constructor(
     private http: HttpClient,
     private configService: ConfigService, 

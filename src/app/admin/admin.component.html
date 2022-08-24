@@ -1,31 +1,20 @@
-<div class="page-wrapper landrick-theme">
-
-    <main class="page-content ">
-        <div class="top-header">
-            <div class="header-bar d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <small> ADMIN MODE</small>
-                </div>
-                <ul class="list-unstyled mb-0">
-                    <li class="list-inline-item mb-0">
-                        <a href="javascript:window.history.back();" class="btn btn-sm py-1 btn-warning">
-                            <i class="ti ti-logout"></i> Exit
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-6">
+            <small> ADMIN MODE</small>
         </div>
-    </main>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <a [routerLink]="[ '/print' ]" class="btn btn-sm btn-block btn-secondary my-1">Printing</a>
-            </div>
-            <div class="col-12">
-                <a href="javascript:;" (click)="logout()" class="btn btn-sm btn-block btn-danger my-1">Logout Terminal</a>
-            </div>
+        <div class="col-6 text-end">
+            <a href="javascript:window.history.back();" class="btn btn-sm py-1 btn-warning">
+                <i class="ti ti-logout"></i> Exit
+            </a>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12 d-grid">
+            <a [routerLink]="[ '/print' ]" class="btn btn-sm btn-block btn-secondary my-1">Printing</a>
+        </div>
+        <div class="col-12 d-grid">
+            <a href="javascript:;" (click)="logout()" class="btn btn-sm btn-block btn-danger my-1">Logout Terminal</a>
         </div>
     </div>
 </div>

@@ -105,8 +105,12 @@ export class PaymentComponent implements OnInit {
       data => {
         console.log(data);
         localStorage.removeItem(this.configService.myUUID());
+        this.modalService.dismissAll();
         this.loading = false;
-        this.paymentStatus = 2; 
+        /**
+         * status payment disini
+         */
+        // this.paymentStatus = 2; 
         this.router.navigate(['cart/finish']);
       },
       e => {

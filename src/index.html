@@ -7,18 +7,9 @@
   <base href="./">
   <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="./assets/bootstrap.min.css" rel="stylesheet">
-  <link href="./assets/style1.css" rel="stylesheet">
-
-  <link href="./assets/css/simplebar.css" rel="stylesheet" type="text/css" />
-  <!-- Icons -->
-  <link href="./assets/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
-  <link href="./assets/css/tabler-icons.min.css" rel="stylesheet" type="text/css" />
-  <link href="https://unicons.iconscout.com/release/v3.0.6/css/line.css" rel="stylesheet">
-  <!-- Css -->
-  <link href="./assets/css/style.css" rel="stylesheet" type="text/css" id="theme-opt" />
-
+  <link rel="icon" type="image/x-icon" href="favicon.ico"> 
+  
+  <link href="./assets/font/fonts.css" rel="stylesheet">
 
   <script>
     /**
@@ -34,19 +25,17 @@
   </script>
 </head>
 
-<body class=" bg-light">
+<body class="bg-light">
   <div class="web"> 
     <app-root>
-      <!-- Loader -->
-      <div id="preloader">
-        <div id="status">
-          <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
+        <div class="row">
+          <div class="col-12 text-center my-5">
+            <img src="./assets/gif/Double-Ring-1s-200px.gif">
+            <div>
+              <small>Loading...</small>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Loader -->
     </app-root>
   </div>
   <script>
@@ -71,11 +60,7 @@
     })();
   </script>
 
-  <script type="text/javascript" src="cordova.js"></script>
-  <!-- javascript -->
-  <script src="./assets/js/bootstrap.bundle.min.js"></script>
-  <!-- simplebar -->
-  <script src="./assets/js/simplebar.min.js"></script>
+  <script type="text/javascript" src="cordova.js"></script> 
   <!-- <script type="text/javascript">
     document.addEventListener('deviceready', onDeviceReady, false);
     function onDeviceReady() {

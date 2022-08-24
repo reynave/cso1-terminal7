@@ -1,34 +1,47 @@
+<div class="sticky-top bg-light">
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col-6">
+                <a href="javascript:void(0)" [routerLink]="[ '/bill']"  class="btn p-1  mx-1">
+                    <img src="./assets/imgs/icons8-back-67.png" width="30">
+                </a>
+
+            </div>
+            <div class="col-6 text-end">
+                <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
+                    <img src="./assets/imgs/icons8-bell-64.png" width="30">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <div class="container-fluid">
+    
     <div class="row">
-        <div class="col-6">
-            <img src="./assets/imgs/chandra.jpg" height="50">
-        </div>
-        <div class="col-6 ">
-            <div class="py-3 text-end">
-                <a [routerLink]="[ '/bill']" class="btn btn-sm btn-secondary mx-2">BACK</a>
-                <a href="javascript:;" class="btn btn-sm btn-warning"> <i class="ti ti-bell"></i> NEED HELP</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
+        <div class="col-12 mt-3">
             <div class="text-center">
-                 <p>Total Payment</p>
-                 <H3>Rp {{final | number}}</H3>
+                 <h4>Total Payment</h4>
+                 <h2>Rp {{final | number}}</h2>
             </div>
         </div>
 
     </div>
 
-    <div class="row g-1 mt-4">
+    <div class="row g-2 my-4">
 
-        <div class="col-12 text-center my-3">
-            <strong>PLEASE CHOOSE PAYMENT METHODS :</strong>
+        <div class="col-12 text-center">
+            <h4>Select Payment Methods :</h4>
         </div>
-        <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
-            <div class="p-1">
-                <a href="javascript:;" (click)="payment(x,content);" class="btn btn-info btn-block">{{x.name}}</a>
+        <div class="col-6" *ngFor="let x of storeOutlesPaymentType">
+            <div class="p-1 d-grid mb-1">
+                <a href="javascript:;" (click)="payment(x,content);" class="btn bg-white btn-block py-3 rounded shadow-sm border">
+                  <img src="https://dummyimage.com/300x300/000/fff&text={{x.name}}" width="50">  
+                  <div>
+                    <strong>{{x.name}}</strong>
+                  </div>
+                </a>
             </div>
         </div>
     </div>
@@ -48,14 +61,15 @@
                         <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%"> 
                     </div>
 
-                    <div class="row g-1">
-                        <div class="col-6 text-center">
-                            <a (click)="d('Cross click')" class="btn btn-block btn-warning">
+                    <div class="row g-2 ">
+                        
+                        <div class="col-12 d-grid">
+                            <a href="javascript:;" class="btn btn-block btn-blue border" (click)="fnProcessPaymentFake();">Fake payment process</a>
+                        </div>
+                        <div class="col-12 d-grid mt-2">
+                            <a href="javascript:;" (click)="d('Cross click')" class="text-danger" >
                                  Cancel
                             </a>
-                        </div>
-                        <div class="col-6 text-center">
-                            <a href="javascript:;" class="btn btn-block btn-blue" (click)="fnProcessPaymentFake();">Fake payment process</a>
                         </div>
                     </div>
                 </ng-container>
@@ -68,7 +82,7 @@
 
                 <ng-container *ngSwitchCase="3">
                     <h4>Payment Fail</h4>
-                    <div></div>
+                    <div>Please try again!</div>
                 </ng-container>
 
                 <ng-container *ngSwitchDefault>...</ng-container>

@@ -1,5 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+h1{
+    font-family: 'Manrope-Bold';
+    font-size: 30px;
+}
  
+h2{
+    font-family: 'Manrope-Bold';
+}
+h4{
+    font-family: 'Manrope-Bold';
+    font-size: 20px;
+}
+.rounded{
+    -webkit-border-radius: 10px !important;
+-moz-border-radius: 10px !important;
+border-radius: 10px !important;
+}
+.bg-gray{
+    background-color: #2C393F;
+}
+.mb-6{
+    margin-bottom: 110px;
+}
+
+*{
+    font-family: 'Roboto';
+} 
+code{
+    color: rgb(79, 79, 79);
+}
+strong{
+     font-family: 'Roboto-Bold';
+}
+button{
+    font-family: 'Manrope-Medium'; 
+    letter-spacing: 0.5px;
+}
 
 .bg-corner{
     background: #fff url(./assets/imgs/corner-4.png);
@@ -17,6 +53,15 @@ table th{
 .small{
     font-size: 12px;
 }
+.rounded-top-c1{
+    -webkit-border-top-left-radius: 20px;
+-webkit-border-top-right-radius: 20px;
+-moz-border-radius-topleft: 20px;
+-moz-border-radius-topright: 20px;
+border-top-left-radius: 20px;
+border-top-right-radius: 20px;
+}
+
 .fixFooter{
     position: fixed;
     bottom: 0px;
@@ -33,6 +78,7 @@ table td{
 .web{
     max-width: 500px;
     margin: auto;
+    /*border: 1px solid #ccc;*/
 }
 .web .floatingTop{
     max-width: 500px;

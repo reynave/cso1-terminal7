@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
-declare function haha() :any;
+declare function haha(): any;
 
 @Component({
   selector: 'app-login',
@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
   interval: any;
   memberId: string = "";
   loop: number = 0;
-  notes : string = "";
-  kioskMessage  : any;
+  notes: string = "";
+  kioskMessage: any;
 
   constructor(
     private modalService: NgbModal,
@@ -37,12 +37,13 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.kioskMessage   = {
-      member_not_found_display : localStorage.getItem("t1_member_not_found_display"),
-      visitor_login_display : localStorage.getItem("t1_visitor_login_display"),
-      welcome_screen : localStorage.getItem("t1_welcome_screen"),
-      customerphoto :  localStorage.getItem("t1_customerphoto") ?  localStorage.getItem("t1_customerphoto") : 0 ,
-      configurationimages : environment.api+'uploads/configuration/'+localStorage.getItem("t1_configurationimages"),
+
+    this.kioskMessage = {
+      member_not_found_display: localStorage.getItem("t1_member_not_found_display"),
+      visitor_login_display: localStorage.getItem("t1_visitor_login_display"),
+      welcome_screen: localStorage.getItem("t1_welcome_screen"),
+      customerphoto: localStorage.getItem("t1_customerphoto") ? localStorage.getItem("t1_customerphoto") : 0,
+      configurationimages: environment.api + 'uploads/configuration/' + localStorage.getItem("t1_configurationimages"),
     }
 
     this.terminalId = localStorage.getItem(this.configService.myTerminalId());
@@ -51,40 +52,57 @@ export class LoginComponent implements OnInit {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
     }
-    
-  } 
 
-  haha(){
+    this.httpGet();
+  }
+  httpGet() {
+
+    this.http.get<any>(this.api + 'kioskLogin/checkSession/?t=' + this.myUUID,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        if(data['error'] == true){
+          localStorage.removeItem(this.configService.myUUID());
+  
+        }
+        console.log(data);
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+  haha() {
     haha();
   }
 
   runQrcode() {
-    this.notes  = "";
+    this.notes = "";
     this.action?.toggleCamera();
     let loop = 0;
     this.interval = setInterval(() => {
       loop += 1;
       console.log(loop, '  ', this.output);
-     
+
       if (this.output != undefined && this.output != '') {
-       // this.fnCheckMemberId(this.output);
+        // this.fnCheckMemberId(this.output);
         this.loginMember(this.output);
         // this.output  = "";
       }
 
-      if(loop > 50 ){
+      if (loop > 50) {
         console.log("Stop loop");
         this.stopQrcode();
       }
 
     }, 1000);
   }
- 
+
   stopQrcode() {
     this.action?.stop();
     clearInterval(this.interval);
   }
- 
+
   open(content: any) {
     this.modalService.open(content, { size: 'lg' });
   }
@@ -93,7 +111,7 @@ export class LoginComponent implements OnInit {
     alert(e);
   }
 
-  loginVisitor(loginVisitor:any) {
+  loginVisitor(loginVisitor: any) {
     this.stopQrcode();
     this.loading = true;
     const body = {
@@ -103,10 +121,10 @@ export class LoginComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-       // this.modalService.open(loginVisitor);
+        // this.modalService.open(loginVisitor);
 
         this.loading = false;
-        this.goToCart(data); 
+        this.goToCart(data);
       },
       e => {
         console.log(e);
@@ -126,14 +144,14 @@ export class LoginComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
-        clearInterval(this.interval); 
-        this.action?.stop(); 
+        clearInterval(this.interval);
+        this.action?.stop();
 
-        if (data['error'] == false) { 
-          this.goToCart(data); 
-        }else{ 
+        if (data['error'] == false) {
+          this.goToCart(data);
+        } else {
           this.output = "";
-          this.notes =  this.kioskMessage.member_not_found_display;
+          this.notes = this.kioskMessage.member_not_found_display;
           console.log("MEMBER ID NOT FOUND");
         }
 
@@ -145,14 +163,14 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  goToCart(data:any){
+  goToCart(data: any) {
     localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-    if(data['photoRequred'] == 1){
+    if (data['photoRequred'] == 1) {
       this.router.navigate(['photo'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
-    }else{
+    } else {
       this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
     }
-   
+
   }
 
 }

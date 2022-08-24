@@ -1,61 +1,72 @@
 <div class="container">
 
-    <div class="card mt-2 bg-corner">
-        <div class="text-center my-1">
-            <img [src]="kioskMessage.configurationimages" width="100%">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mt-5">
+                <!-- <img [src]="kioskMessage.configurationimages" width="100%"> -->
+                <img src="./assets/galleries/g01.png" class="intro-images">
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12 text-center">
-                    {{kioskMessage.welcome_screen}}
-                </div>
-                <div class="col-12" [hidden]="!action.isStart">
-                    <div class="p-5">
-                        <ngx-scanner-qrcode #action="scanner" (data)="output = $event"></ngx-scanner-qrcode>
-                    </div>
-                </div>
-                <div class="col-12 text-center mb-2">
-                    <code>
+      
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 text-center my-4">
+            <h1>{{kioskMessage.welcome_screen}}</h1>
+        </div>
+        <div class="col-12" [hidden]="!action.isStart">
+            <div class="p-5">
+                <ngx-scanner-qrcode #action="scanner" (data)="output = $event"></ngx-scanner-qrcode>
+            </div>
+        </div>
+        <!-- <div class="col-12 text-center mb-2">
+            <code>
                         {{action.isLoading}}
                         Memberid : {{memberId}}
                         <div><span>{{output}}</span></div>
                    </code>
-                    <div>
-                        {{notes}}
-                    </div>
-                </div>
-
-
-                <div class="row" [hidden]="isStillLogin">
-                    <div class="col-5 offset-1">  
-                        <button type="button" [hidden]="action.isStart" class="btn-primary btn  btn-block" (click)="runQrcode();">Open Qrcode</button>
-                        <button type="button" [hidden]="!action.isStart" class="btn-primary btn  btn-block" (click)="stopQrcode();">Stop Qrcode</button>
-                    </div>
-                    <div class="col-5">
-                        <button type="button" class="btn-primary btn  btn-block" (click)="loginVisitor(modalWelcome);">Visitor</button>
-                    </div>
-                </div>
-
-
-                <div class="col-12 text-center" [hidden]="!isStillLogin">
-                    <a [routerLink]="[ '/cart' ]" [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg btn-warning">Terminal ini masih ada keranjang belanja.</a>
-                </div>
+            <div>
+                {{notes}}
             </div>
+        </div> -->
+        <div class="col-12 text-center" [hidden]="!isStillLogin">
+            <a [routerLink]="[ '/cart' ]" [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg bg-white border rounded">BACK TO CART</a>
+        </div>
+ 
+        <div class="col-12 d-grid"  >
+            <button type="button" [hidden]="isStillLogin" class=" btn  btn-lg btn-info text-white rounded py-3" (click)="loginVisitor(modalWelcome);">VISITOR</button>
+        </div>
+    </div>
 
-            <!-- <div class="row">
+   
+
+    <!-- <div class="row">
                 <button type="button" class="mt-3 btn btn-sm btn-dark" (click)="haha()">Test Native Cam</button>
             </div> -->
+
+</div>
+<div class="fix-bottom-area">
+    <div class="container">
+        <div class="row " [hidden]="isStillLogin">
+            <!-- <div class="col-6  d-grid ">
+                <button type="button" [hidden]="action.isStart" class="btn-info btn  btn-block rounded" (click)="runQrcode();">Open Qrcode</button>
+                <button type="button" [hidden]="!action.isStart" class="btn-info btn  btn-block rounded" (click)="stopQrcode();">Stop Qrcode</button>
+            </div> -->
+            <!-- <div class="col-12 d-grid  ">
+                <button type="button" class="btn-warning btn  btn-block rounded" (click)="loginVisitor(modalWelcome);">Visitor</button>
+            </div> -->
         </div>
+    
     </div>
 </div>
 
-
 <ng-template #modalWelcome let-modal>
-    <div class="modal-header"> 
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <div class="modal-header">
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-      <p>Selamat datang tamu yang kami hormati di tempat kami.</p>
-      <p>Semoga anda menikmati lanyanan self Checkout kami.</p>
-    </div> 
+        <p>Selamat datang tamu yang kami hormati di tempat kami.</p>
+        <p>Semoga anda menikmati lanyanan self Checkout kami.</p>
+    </div>
 </ng-template>

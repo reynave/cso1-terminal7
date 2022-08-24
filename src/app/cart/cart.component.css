@@ -1,0 +1,6 @@
+.box-qty{
+    border: 1px solid #eee;
+    width: 30px;
+    text-align: center; 
+    display: inline-block;
+}
