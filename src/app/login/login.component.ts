@@ -37,7 +37,14 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.configService.sytemOff().subscribe(
+      data => {
+        if(data['error'] == 400){
+          this.router.navigate(['offline']);
+        }
+      
+      }
+    );
     this.kioskMessage = {
       member_not_found_display: localStorage.getItem("t1_member_not_found_display"),
       visitor_login_display: localStorage.getItem("t1_visitor_login_display"),
@@ -62,10 +69,11 @@ export class LoginComponent implements OnInit {
     ).subscribe(
       data => {
         if(data['error'] == true){
-          localStorage.removeItem(this.configService.myUUID());
-  
+          localStorage.removeItem(this.configService.myUUID()); 
         }
         console.log(data);
+
+        
       },
       e => {
         console.log(e);

@@ -13,9 +13,12 @@ import { PhotoComponent } from './photo/photo.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
 import { PrintComponent } from './print/print.component';
 import { StartupComponent } from './startup/startup.component';
+import { SystemOfflineComponent } from './system-offline/system-offline.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, data: { active: "home" }, },
+  { path: "offline", component: SystemOfflineComponent, data: { active: "offline" }, },
+  
   { path: "home", component: HomeComponent, data: { active: "home" }, },
   { path: "login", component: LoginComponent, data: { active: "home" }, },
   { path: "startup", component: StartupComponent, data: { active: "startup" }, },

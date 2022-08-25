@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookiesService } from './cookies.service';
-import * as CryptoJS from 'crypto-js';   
+import * as CryptoJS from 'crypto-js';    
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,15 @@ export class ConfigService {
   secretKeyAccess : string = "QkSDhtCFJQ4n75Xq8Cmy4WExRU3C4r"; 
   uuid : string = "t1_kioskUuid";
   terminalImei : string = "t1_terminalImei";
-
   varToken: string = "";
   varHeaders: any = [];
+  api: string = environment.api;
   rules: any;
   varData: any = [];
   tokenName : string  = "cso1AdminToken";
   constructor( 
     private cookies: CookiesService, 
+    private http: HttpClient, 
     
   ) { 
     if (this.cookies.getCookie(this.tokenName) == null) { 
@@ -97,6 +99,10 @@ export class ConfigService {
       return JSON.parse(obj);
     }
    
+  }
+
+  sytemOff(){
+    return this.http.get<any>(this.api+'kioskLogin/index/'); 
   }
 
   _access(){ 
