@@ -29,6 +29,7 @@ export class CartComponent implements OnInit {
   }
   freeItem : any = [];
   itemsList: any = [];
+  itemsListfreeItem : any = [];
   member: any = [];
   summary: any = {
     BKP: 0,
@@ -77,8 +78,11 @@ export class CartComponent implements OnInit {
         this.loading = false;
         console.log(data);
         this.items = data['items'];
-        this.itemsList = data['itemsList'];
         this.freeItem = data['freeItem'];
+
+        this.itemsList = data['itemsList'];
+        this.itemsListfreeItem = data['itemsListfreeItem'];
+
         this.member = data['member'];
         this.summary = { 
           final: data['summary']['final'], 
@@ -103,14 +107,27 @@ export class CartComponent implements OnInit {
       },
     );
   }
+  fnVoidFreeItem(x: any) {
+    this.http.post<any>(this.api + 'kioskCart/fnVoidFreeItem/', x,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        this.loading = false;
+        console.log(data);
+      },
+    );
+  }
 
   scanner() {
     this.loading = true;
     this.noteScanner = "";
     const body = {
-      itemId: this.barcode,
+      barcode: this.barcode,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      memberId : 0,
     }
+    console.log(body);
     if (this.barcode != "") {
       this.addItem = true;
 

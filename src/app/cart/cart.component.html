@@ -163,6 +163,21 @@
                                 </td>
 
                             </tr>
+
+                            <tr *ngFor="let x of itemsListfreeItem ; let i = index">
+                                <td> {{itemsList.length +i +1}} </td>
+                                <td> {{x.description}} </td>
+                                <td>
+                                    <div class="form-control form-control-sm text-end  bg-light">Free Item</div>
+                                </td>
+                                <td>
+                                    <div class="form-control form-control-sm text-end bg-light">0</div>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger" (click)="fnVoidFreeItem(x);">DEL</a>
+                                </td>
+
+                            </tr>
                         </tbody>
                     </table>
                 </div>
