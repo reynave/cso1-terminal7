@@ -55,7 +55,7 @@ export class BillComponent implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-        console.log(data);
+        console.log(data['summary']);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem =  data['freeItem'];
@@ -69,6 +69,8 @@ export class BillComponent implements OnInit {
           dpp: data['summary']['dpp'],
           memberDiscount: data['summary']['memberDiscount'],
           ppn: data['summary']['ppn'],
+          ppnGross: data['summary']['ppnGross'],
+          
           total: data['summary']['total'],
           voucer: data['summary']['voucer'],
         }

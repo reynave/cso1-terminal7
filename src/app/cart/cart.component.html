@@ -38,10 +38,10 @@
                         <input type="text" class="form-control bg-white" id="scan" (change)="scanner();" [(ngModel)]="barcode" pattern="[0-9]" placeholder="Scan Barcode">
 
                     </div>
-
+                 
                     <div class="row g-3 " [hidden]="!addItem">
                         <div class="col-3">
-                            <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
+                            <img [src]="item.images ? item.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
                         </div>
                         <div class="col-9">
                             <div>
@@ -83,7 +83,7 @@
             <div class=" rounded shadow-sm p-2 bg-white mb-3" *ngFor="let x of items">
                 <div class="row g-3">
                     <div class="col-2">
-                        <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
+                        <img [src]="x.images ? x.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
                     </div>
                     <div class="col-6 col-lg-7">
                         <div>
@@ -193,7 +193,7 @@
                 <div class="col-6 text-white">
                     <div class="mx-3">
                         <div>Gross Total</div>
-                        <h2>Rp {{summary.total | number}}</h2>
+                        <h3>Rp {{summary.total | number}}</h3>
                     </div>
                 </div>
                 <div class="col-6 ">

@@ -145,6 +145,7 @@ export class CartComponent implements OnInit {
                 name: data['items']['description'],
                 barcode: data['items']['barcode'],
                 price: data['items']['price'],
+                images :data['items']['images'],
               }
             } else {
               this.noteScanner = data['note'];

@@ -86,7 +86,7 @@
                         </tr>
                         <tr>
                             <td colspan="4"> PPN </td>
-                            <td class="text-end"> {{summary.ppn | number}}</td>
+                            <td class="text-end"> {{(summary.ppnGross  + summary.ppn) | number}}</td>
                         </tr>
                         <tr>
                             <td colspan="4"> Non BKP </td>
@@ -127,7 +127,7 @@
                 <div class="col-6 text-white">
                     <div class="mx-3">
                         <div>Final Total</div>
-                        <h2>Rp {{summary.final | number}}</h2>
+                        <h3>Rp {{summary.final | number}}</h3>
                     </div>
                 </div>
                 <div class="col-6 ">
