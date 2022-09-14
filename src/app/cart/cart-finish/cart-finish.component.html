@@ -1,14 +1,31 @@
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12 text-center">
-            <img src="./assets/galleries/g02.png" width="80%">
-        </div>
+<div class="printdisable">
+    <div class="container" style="margin-top: 30%">
+        <div class="row">
+            <div class="col-12 text-center">
+                <img src="./assets/galleries/g02.png" width="50%">
+            </div>
 
-        <div class="col-12 text-center mt-5">
-            <h4>Payment Successfull</h4>
-            <p>
-                {{t1_thank_you_display}}
-            </p>
+            <div class="col-12 text-center mt-5">
+                <h1 class="display-4">{{t1_thank_you_display}}</h1>
+            </div>
         </div>
     </div>
+
+    <div class="container mt-5">
+        <div class="row ">
+            <div class="col-12 text-center">
+                <h2 class="my-4">Do you want to print bill?</h2>
+            </div>
+            <div class="col-6 d-grid">
+                <button type="button" (click)="home()" class="btn btn-lg py-5 btn-warning font-btn rounded">NO</button>
+            </div>
+            <div class="col-6  d-grid">
+                <button type="button" (click)="printBill()" class="btn btn-lg py-5 btn-info font-btn rounded">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<div class="printable">
+    <app-print-detail></app-print-detail>
 </div>

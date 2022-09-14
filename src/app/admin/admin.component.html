@@ -1,20 +1,20 @@
-<div class="container-fluid mt-4">
+<div class="container mt-4">
     <div class="row">
         <div class="col-6">
-            <small> ADMIN MODE</small>
+            <h2> ADMIN MODE </h2>
         </div>
         <div class="col-6 text-end">
             <a href="javascript:window.history.back();" class="btn btn-sm py-1 btn-warning">
-                <i class="ti ti-logout"></i> Exit
+                <i class="ti ti-logout"></i> Exit ADMIN
             </a>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-12 d-grid">
-            <a [routerLink]="[ '/print' ]" class="btn btn-sm btn-block btn-secondary my-1">Printing</a>
+            <a [routerLink]="[ '/print' ]" class="btn btn-sm btn-block btn-secondary my-1 py-4 font-btn">Printing</a>
         </div>
         <div class="col-12 d-grid">
-            <a href="javascript:;" (click)="logout()" class="btn btn-sm btn-block btn-danger my-1">Logout Terminal</a>
+            <a href="javascript:;" (click)="logout()" class="btn btn-sm btn-block btn-danger my-1  py-4 font-btn">Logout Terminal</a>
         </div>
     </div>
 </div>

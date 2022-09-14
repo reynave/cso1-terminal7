@@ -1,26 +1,28 @@
-<div class="sticky-top bg-light">
-    <div class="container-fluid py-2">
+<div class="sticky-top   py-4  bg-white">
+    <div class="container  py-4">
         <div class="row">
-            <div class="col-6">
+            <div class="col">
                 <a href="javascript:void(0)" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}" class="btn p-1  mx-1">
-                    <img src="./assets/imgs/icons8-back-67.png" width="30">
-                </a>
-
+                    <img src="./assets/imgs/icons8-back-67.png" width="60">
+                </a> 
             </div>
-            <div class="col-6 text-end">
+            <div class="col text-center">
+                <h2 class="px-2 mt-3">Checkout</h2>
+            </div>
+            <div class="col text-end">
                 <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
-                    <img src="./assets/imgs/icons8-bell-64.png" width="30">
+                    <img src="./assets/imgs/icons8-bell-64.png" width="60">
                 </a>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid mb-5 pb-4">
+<div class="container mt-3 pb-4">
 
     <div class="row">
         <div class="col-12">
-            <h4 class="px-2 mt-3">Checkout</h4>
-            <div class="bg-white p-3 shadow-md border printbill rounded">
+           
+            <div class="bg-white p-3 shadow-md border printbill  rounded">
                 <table class="table table-sm text-monospace">
                     <thead>
                         <tr>
@@ -126,13 +128,13 @@
             <div class="row">
                 <div class="col-6 text-white">
                     <div class="mx-3">
-                        <div>Final Total</div>
-                        <h3>Rp {{summary.final | number}}</h3>
+                        <h1>Final Total</h1>
+                        <h1 class="display-2">Rp {{summary.final | number}}</h1>
                     </div>
                 </div>
                 <div class="col-6 ">
                     <div class="mx-3 d-grid">
-                        <button type="button" [routerLink]="[ '/payment', ]" class="btn btn-info text-white py-3 rounded">PAYMENT</button>
+                        <button type="button" [routerLink]="[ '/payment', ]" class="btn btn-info font-btn text-white py-5 rounded">PAYMENT</button>
                     </div>
                 </div>
             </div>

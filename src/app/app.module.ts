@@ -21,7 +21,7 @@ import { BillComponent } from './bill/bill.component';
 import { PrintComponent } from './print/print.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
 import { AdminComponent } from './admin/admin.component';
-import { SystemOfflineComponent } from './system-offline/system-offline.component';
+import { SystemOfflineComponent } from './system-offline/system-offline.component'; 
 
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import { SystemOfflineComponent } from './system-offline/system-offline.componen
     PrintComponent,
     PrintDetailComponent,
     AdminComponent,
-    SystemOfflineComponent
+    SystemOfflineComponent, 
   ],
   imports: [
     BrowserModule,

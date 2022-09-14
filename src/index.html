@@ -3,13 +3,15 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Terminal1</title>
+  <title>Terminal</title>
   <base href="./">
   <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico"> 
-  
-  <link href="./assets/font/fonts.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link href="./assets/font/fonts.css" rel="stylesheet"> 
+   <link href="./assets/webbase.css" rel="stylesheet">
+
 
   <script>
     /**
@@ -25,48 +27,38 @@
   </script>
 </head>
 
-<body class="bg-light">
-  <div class="web"> 
+<body>
+  <div>
     <app-root>
-        <div class="row">
-          <div class="col-12 text-center my-5">
-            <img src="./assets/gif/Double-Ring-1s-200px.gif">
-            <div>
-              <small>Loading...</small>
-            </div>
+      <div class="row" style="margin-top: 200px">
+        <div class="col-12 text-center my-5">
+          <img src="./assets/gif/Double-Ring-1s-200px.gif">
+          <div class="mt-3">
+            <h2>Loading...</h2>
           </div>
         </div>
+      </div>
     </app-root>
   </div>
   <script>
     (function () {
-      'use strict';
-
+      'use strict'; 
       window.addEventListener = function () {
         EventTarget.prototype.addEventListener.apply(this, arguments);
-      };
-
+      }; 
       window.removeEventListener = function () {
         EventTarget.prototype.removeEventListener.apply(this, arguments);
-      };
-
+      }; 
       document.addEventListener = function () {
         EventTarget.prototype.addEventListener.apply(this, arguments);
-      };
-
+      }; 
       document.removeEventListener = function () {
         EventTarget.prototype.removeEventListener.apply(this, arguments);
       };
     })();
   </script>
 
-  <script type="text/javascript" src="cordova.js"></script> 
-  <!-- <script type="text/javascript">
-    document.addEventListener('deviceready', onDeviceReady, false);
-    function onDeviceReady() {
-      console.log('Running cordova');
-    } 
-  </script> -->
+  <script type="text/javascript" src="cordova.js"></script>
 </body>
 
 </html>

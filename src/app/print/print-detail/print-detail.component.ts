@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { ConfigService } from 'src/app/service/config.service';
   templateUrl: './print-detail.component.html',
   styleUrls: ['./print-detail.component.css']
 })
-export class PrintDetailComponent implements OnInit {
+export class PrintDetailComponent implements OnInit, AfterViewChecked {
   loading: boolean = false;
   api: string = environment.api;
   barcode: string = "";
@@ -31,6 +31,7 @@ export class PrintDetailComponent implements OnInit {
     total: 0,
     voucer: 0,
   }
+  printable : boolean = false;
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
@@ -39,10 +40,18 @@ export class PrintDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void { 
-    this.httpGet(); 
+    this.httpGet();  
     console.log(this.activatedRoute.snapshot.params['id'])
   }
 
+  ngAfterViewChecked() : void{
+    console.log('ngAfterViewChecked');
+    this.printable = true;
+  }
+
+  print(){
+    window.print();
+  }
   date : string = "";
   template : any = {
     companyName : '',

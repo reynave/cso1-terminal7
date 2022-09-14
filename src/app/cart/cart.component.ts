@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,9 +11,11 @@ import { ConfigService } from 'src/app/service/config.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+  @ViewChild('formRow') rows: ElementRef | any;
+  resultbox : boolean = false;
   loading: boolean = false;
-  api: string = environment.api;
+  api: string = environment.api; 
   barcode: string = "";
   items: any = [];
   adminMode: boolean = false;
@@ -46,27 +48,28 @@ export class CartComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
   ) { }
-  callServer: any;
+
+
   ngOnInit(): void {
     if (localStorage.getItem(this.configService.myUUID())) {
       console.log("SILAKAN BELANJA!");
       this.httpGet();
-    //  this.callHttpServer();
+      this.callHttpServer();
     } else {
       this.router.navigate(['login']);
     }
   }
 
-  callHttpServer() {
-    this.callServer = setInterval(() => {
-      const d = new Date();
-      console.log(d);
-      this.httpGet();
-    }, 3000)
-  }
 
+  callServer: any; 
+  callHttpServer() {
+    this.callServer = setInterval(() => { 
+      this.rows.nativeElement.focus(); 
+    }, 300);
+  } 
   ngOnDestroy() {
     clearInterval(this.callServer);
+    console.log("DESTRT");
   }
 
   httpGet() {
@@ -119,9 +122,11 @@ export class CartComponent implements OnInit {
     );
   }
 
+  
   scanner() {
     this.loading = true;
     this.noteScanner = "";
+    this.resultbox = true;
     const body = {
       barcode: this.barcode,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
@@ -137,8 +142,7 @@ export class CartComponent implements OnInit {
         data => {
           this.loading = false;
           if (data['error'] == false) {
-            this.httpGet();
-            this.barcode = "";
+            this.httpGet(); 
             this.error = false;
             if (data['admin'] == false) {
               this.item = {
@@ -148,15 +152,17 @@ export class CartComponent implements OnInit {
                 images :data['items']['images'],
               }
             } else {
-              this.noteScanner = data['note'];
+              this.noteScanner = this.barcode+" "+data['note'];
               this.adminMode = true;
               this.userId = data['userId'];
             }
-
+          
           } else {
           
             this.error = true;
           }
+          this.barcode = "";
+
           this.noteScanner = data['note'];
           console.log(data);
         },
@@ -193,25 +199,7 @@ export class CartComponent implements OnInit {
       },
     );
   }
-
-  // fnAddQty(x: any, qty: number) {
-  //   const body = {
-  //     items: x,
-  //     qty: qty,
-  //     userId: this.userId,
-  //     uuid: localStorage.getItem(this.configService.myUUID()),
-  //   }
-  //   console.log(body);
-  //   this.http.post<any>(this.api + 'kioskCart/fnAddQty/', body,
-  //     { headers: this.configService.headers() }
-  //   ).subscribe(
-  //     data => {
-  //       this.httpGet();
-  //       console.log(data);
-  //     },
-  //   );
-  // }
-
+  
   modal(content: any) {
     this.modalService.open(content, { centered: true  });
   }
@@ -233,10 +221,6 @@ export class CartComponent implements OnInit {
     
   }
 
+
 }
-
-
-function ngOnDestroy() {
-  throw new Error('Function not implemented.');
-}
-
+ 

@@ -111,7 +111,7 @@ export class PaymentComponent implements OnInit {
          * status payment disini
          */
         // this.paymentStatus = 2; 
-        this.router.navigate(['cart/finish']);
+        this.router.navigate(['cart/finish/',data['id']]);
       },
       e => {
         console.log(e);

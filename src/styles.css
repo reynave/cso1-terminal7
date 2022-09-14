@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 h1{
     font-family: 'Manrope-Bold';
-    font-size: 30px;
+  
 }
  
 h2{
@@ -9,7 +9,7 @@ h2{
 }
 h4{
     font-family: 'Manrope-Bold';
-    font-size: 20px;
+ 
 }
 .rounded{
     -webkit-border-radius: 10px !important;
@@ -24,7 +24,7 @@ border-radius: 10px !important;
 }
 
 *{
-    font-family: 'Roboto';
+    font-family: 'Roboto'; 
 } 
 code{
     color: rgb(79, 79, 79);
@@ -46,12 +46,12 @@ button{
     padding-top: 80px;
 }
 table th{
-    font-size: 12px;
+    
     text-transform: uppercase;
     
 }
 .small{
-    font-size: 12px;
+  
 }
 .rounded-top-c1{
     -webkit-border-top-left-radius: 20px;
@@ -71,7 +71,7 @@ border-top-right-radius: 20px;
 }
 
 table td{
-    font-size: 12px;
+    
 }
 
 
@@ -94,6 +94,30 @@ table td{
 
 
 .printbill{
-    font-size: 12px;
+   
     text-transform: uppercase;
+}
+
+.font-btn{
+    font-size: 40px;
+    font-family: 'Manrope-Bold';
+}
+
+.printable {
+     /* hide the printing component from @media screen test 2022000000047 */
+    display: none;
+  }
+@media print {
+    /* invert the display (show/hide) properties of the main */
+    /* aplication component and the printing component       */
+    .disablePrintArea{
+        display: none;
+    }
+    .printable {
+      display: block;
+    }
+  
+    .printdisable {
+      display: none;
+    }
 }

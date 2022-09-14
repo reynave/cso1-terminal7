@@ -26,7 +26,7 @@ const routes: Routes = [
 
 
   { path: "cart", component: CartComponent, data: { active: "cart" }, },
-  { path: "cart/finish", component: CartFinishComponent, data: { active: "cart" }, },
+  { path: "cart/finish/:id", component: CartFinishComponent, data: { active: "cart" }, },
   { path: "photo", component: PhotoComponent, data: { active: "photo" }, },
   { path: "bill", component: BillComponent, data: { active: "bill" }, },
   { path: "print", component: PrintComponent, data: { active: "print" }, },

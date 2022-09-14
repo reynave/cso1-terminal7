@@ -1,15 +1,15 @@
-<div class="sticky-top bg-light">
-    <div class="container-fluid py-2">
+<div class="sticky-top   py-4  bg-white">
+    <div class="container  py-4">
         <div class="row">
             <div class="col-6">
                 <a href="javascript:void(0)" [routerLink]="[ '/bill']"  class="btn p-1  mx-1">
-                    <img src="./assets/imgs/icons8-back-67.png" width="30">
+                    <img src="./assets/imgs/icons8-back-67.png" width="60">
                 </a>
 
             </div>
             <div class="col-6 text-end">
                 <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
-                    <img src="./assets/imgs/icons8-bell-64.png" width="30">
+                    <img src="./assets/imgs/icons8-bell-64.png" width="60">
                 </a>
             </div>
         </div>
@@ -17,29 +17,29 @@
 
 </div>
 
-<div class="container-fluid">
+<div class="container">
     
     <div class="row">
         <div class="col-12 mt-3">
             <div class="text-center">
-                 <h4>Total Payment</h4>
-                 <h2>Rp {{final | number}}</h2>
+                 <h1>Total Payment</h1>
+                 <h1 class="display-1">Rp {{final | number}}</h1>
             </div>
         </div>
 
     </div>
 
-    <div class="row g-2 my-4">
+    <div class="row g-2 my-5">
 
-        <div class="col-12 text-center">
-            <h4>Select Payment Methods :</h4>
+        <div class="col-12 text-center mb-4">
+            <h1>Select Payment Methods :</h1>
         </div>
-        <div class="col-6" *ngFor="let x of storeOutlesPaymentType">
-            <div class="p-1 d-grid mb-1">
-                <a href="javascript:;" (click)="payment(x,content);" class="btn bg-white btn-block py-3 rounded shadow-sm border">
+        <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
+            <div class="p-1 d-grid mb-2">
+                <a href="javascript:;" (click)="payment(x,content);" class="btn bg-light btn-block py-3 rounded shadow-sm border">
                   <img src="https://dummyimage.com/300x300/000/fff&text={{x.name}}" width="50">  
                   <div>
-                    <strong>{{x.name}}</strong>
+                    <h1>{{x.name}}</h1>
                   </div>
                 </a>
             </div>
