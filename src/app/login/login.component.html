@@ -3,8 +3,7 @@
     <div class="row">
         <div class="col-12">
             <div class="text-center mt-5">
-                <img [src]="kioskMessage.configurationimages" class="intro-images">
-                <!-- <img src="./assets/galleries/g01.png" > -->
+                <img [src]="this.api+'uploads/account/'+kioskMessage[7]['value']" class="intro-images"> 
             </div>
         </div>
 
@@ -12,8 +11,9 @@
 
 
     <div class="row">
+      
         <div class="col-12 text-center my-4">
-            <h1 [innerHTML]="kioskMessage.welcome_screen"></h1>
+            <h1 [innerHTML]="kioskMessage[13]['value']"></h1>
         </div> 
         <div class="col-12 text-center" [hidden]="!isStillLogin">
             <a [routerLink]="[ '/cart' ]" [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg bg-light border rounded font-btn">BACK TO CART</a>
@@ -25,10 +25,33 @@
             <button type="button" class=" btn  btn-lg btn-info text-white rounded py-3 font-btn" (click)="loginVisitor(modalWelcome);">VISITOR</button>
         </div>
         <div class="col-6 d-grid">
-            <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn"(click)="loginMember(modalWelcome)">MEMBER</button>
+            <!-- <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn"(click)="loginMember(modalWelcome)">MEMBER</button> -->
+
+            <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn"(click)="loginMemberManual(modalLoginMemberManual)">MEMBER</button>
         </div>
     </div> 
 </div>
+
+<ng-template #modalLoginMemberManual let-modal>
+    <div class="modal-header">
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body ">
+        <div class="p-4">
+            <p>Selamat datang tamu yang kami hormati di tempat kami.</p>
+            <p>Silakan masukin member ID anda</p>
+             <div>
+                <p class="text-danger">{{this.notes }}</p>
+             </div>
+             <input type="text" class="form-control form-control-lg font-monospace" [(ngModel)]="memberId" >
+            
+             <div class="mt-5 d-grid">
+                <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">SUBMIT</button>
+             </div>
+        </div>
+        
+    </div>
+</ng-template>
 
 
 <ng-template #modalWelcome let-modal>

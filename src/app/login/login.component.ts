@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   memberId: string = "";
   loop: number = 0;
   notes: string = "";
-  kioskMessage: any;
+  kioskMessage: any = [];
 
   constructor(
     private modalService: NgbModal,
@@ -45,35 +45,30 @@ export class LoginComponent implements OnInit {
         }
 
       }
-    );
-    this.kioskMessage = {
-      member_not_found_display: localStorage.getItem("t1_member_not_found_display"),
-      visitor_login_display: localStorage.getItem("t1_visitor_login_display"),
-      welcome_screen: localStorage.getItem("t1_welcome_screen"),
-      customerphoto: localStorage.getItem("t1_customerphoto") ? localStorage.getItem("t1_customerphoto") : 0,
-      visitorphoto: localStorage.getItem("t1_visitorphoto") ? localStorage.getItem("t1_visitorphoto") : 0,
-      configurationimages: environment.api + 'uploads/configuration/' + localStorage.getItem("t1_configurationimages"),
-    }
-    console.log(this.kioskMessage);
+    ); 
     this.terminalId = localStorage.getItem(this.configService.myTerminalId()); 
     if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
     }
     this.httpGet();
+    this.configService.httpAccount().subscribe(
+      data => { 
+          this.kioskMessage = data['account'];
+          console.log( this.kioskMessage); 
+      }
+    )
   }
 
   httpGet() {
     this.http.get<any>(this.api + 'kioskLogin/checkSession/?t=' + this.myUUID,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => {
+      data => { 
         if (data['error'] == true) {
           localStorage.removeItem(this.configService.myUUID());
         }
-        console.log(data);
-
-
+        console.log(data); 
       },
       e => {
         console.log(e);
@@ -209,14 +204,45 @@ export class LoginComponent implements OnInit {
     
   }
 
+  loginMemberManual(content :any) {
+    this.loading = true;
+    this.modalService.open(content, { size:'xl'});
+
+  }
+  fnSubmitMemberIdManual(){
+    
+    const body = {
+      terminalId: this.terminalId,
+      memberId: this.memberId,
+    }
+    this.http.post<any>(this.api + 'kioskLogin/loginMember/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.loading = false; 
+        if (data['error'] == false) {
+          //localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
+          //self.modalService.open(content, { size: 'lg' });
+          this.goToCart(data);
+          this.modalService.dismissAll();
+        } else { 
+          this.notes = this.kioskMessage[17]['value'];
+          console.log("MEMBER ID NOT FOUND");
+        }
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+
   goToCart(data: any) {
     localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
     this.router.navigate(['cart'], { queryParams: { kioskUuid: data['insert']['kioskUuid'] }, });
 
   }
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.  
+  ngOnDestroy(): void { 
+    this.modalService.dismissAll();
     console.log('ngOnDestroy');
   }
 

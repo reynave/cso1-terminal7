@@ -53,20 +53,19 @@ export class StartupComponent implements OnInit {
       console.log(imei);
     } 
   }
-
+  error  : boolean = true;
+  note : string = "";
   httpGet(){
     this.loading = true;
     this.http.get<any>(this.api + 'kioskStartup/account/?imei='+imei,
       { headers: this.configService.headers() }
     ).subscribe(
       data => { 
+        this.error = data['error'];
         this.loading = false;
         console.log(data); 
-        this.terminal = data['terminal'];
-        data['account'].forEach((row: any) => {
-          localStorage.setItem(row['name'],row['value']); 
-        });
-        
+        this.note = data['note'];
+        this.terminal = data['terminal'];  
       },
       e => {
         console.log(e);

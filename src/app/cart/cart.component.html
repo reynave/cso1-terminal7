@@ -3,8 +3,9 @@
 
         <div class="row g-1 mb-4">
             <div class="col-6">
+              
                 <a href="javascript:void(0)" class="btn  p-1 " [hidden]="adminMode"> 
-                    <h2 [hidden]="adminMode">Hi, Visitor </h2>
+                    <h2 [hidden]="adminMode">Hi, {{member['firstName']}} {{member['lastName']}} </h2>
                 </a>
  
                 <div [hidden]="!adminMode">
@@ -89,14 +90,14 @@
                     <div class="col-2">
                         <img [src]="x.images ? x.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
                     </div>
-                    <div class="col-6 col-lg-7"> 
+                    <div class="col-6 col-lg-6"> 
                         <h2>{{x.description}}</h2> 
                         <h2>
-                            <span class="box-qty bg-light mx-3">{{x.qty}}</span> Rp {{x.price | number}}
+                            <span class="box-qty bg-white mx-3 border">{{x.qty}}</span> Rp {{x.price | number}}
                         </h2> 
                     </div>
-                    <div class="col-4 col-lg-3 text-end ">
-                        <div class="  me-2">
+                    <div class="col-4 col-lg-4 text-end ">
+                        <div class="me-2">
                             <h1>Rp {{x.totalPrice | number}}</h1>
                         </div>
 

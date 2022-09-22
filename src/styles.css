@@ -91,7 +91,12 @@ table td{
     max-width: 500px;
     margin: auto;
 }
-
+.modal-body{
+    font-size: 40px;
+}
+.modal-body .form-control-lg{
+    font-size: 80px;
+}
 
 .printbill{
    
