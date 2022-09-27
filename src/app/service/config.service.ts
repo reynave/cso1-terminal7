@@ -93,9 +93,10 @@ export class ConfigService {
 
 
   httpAccount() {
-    return this.http.get<any>(this.api + 'Kiosks/index/',
+    return this.http.get<any>(this.api + 'Kiosks/index/?outletId='+localStorage.getItem("storeOutlesId"),
       { headers: this.headers() }
     );
+    
   }
 
 }

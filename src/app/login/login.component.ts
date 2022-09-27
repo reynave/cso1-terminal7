@@ -36,17 +36,14 @@ export class LoginComponent implements OnInit {
     limit : "", 
     visitorDisplay : "",
     timer : 5,
-  };
-
-
+    notFound : '',
+  }; 
   member : any = [];
   myTimeout : any;
   loginSuccess : boolean = false;
   kioskUuid : string = '';
-  intervalTime : any;
-  
-  countdown : number  = 0;
-
+  intervalTime : any; 
+  countdown : number  = 0;  
   today : any =  new Date();
   constructor(
     private modalService: NgbModal,
@@ -85,12 +82,15 @@ export class LoginComponent implements OnInit {
         this.kioskMessage = {
             logo : data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  14 ))]['value'],
             welcome : data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1001 ))]['value'],
-            limit: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1002 ))]['value'],
+            limit: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1002 ))]['value'].replace("$item",data['limitItemsWarning']),
             customerStatement: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1003 ))]['value'],
             memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1005 ))]['value'],
             visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1006 ))]['value'],
-            timer:  data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1008 ))]['value'],
+            timer:  data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1008 ))]['value'], 
         }
+
+   
+        
         console.log(this.kioskMessage);
         this.countdown = this.kioskMessage['timer'];
       }
@@ -101,8 +101,7 @@ export class LoginComponent implements OnInit {
     this.http.get<any>(this.api + 'kioskLogin/checkSession/?t=' + this.myUUID,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => {
-       
+      data => { 
         if (data['error'] == true) {
           localStorage.removeItem(this.configService.myUUID());
         }  
@@ -220,7 +219,7 @@ export class LoginComponent implements OnInit {
               //self.modalService.open(content, { size: 'lg' });
               self.goToCart();
             } else {
-              self.notes = self.kioskMessage.member_not_found_display;
+              self.notes = self.kioskMessage['memberNotFound'];
               console.log("MEMBER ID NOT FOUND");
             }
           },
@@ -252,10 +251,7 @@ export class LoginComponent implements OnInit {
 
 
   }
-
-
-
-
+ 
   runCountdown(){
     let self = this;
     this.intervalTime = setInterval(function(){
