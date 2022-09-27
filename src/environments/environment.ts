@@ -9,6 +9,7 @@ export const environment = {
   public: "",
   keygen: "t3XsTuq9aCvNxCkNXPEyvvGejhKBHumxVbv6fJ6aGeCPg83hzVGBYDFd6H8u",
   base_url: "#/",
+  version : "1.1b",
 };
 
 /*

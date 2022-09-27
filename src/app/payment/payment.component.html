@@ -37,8 +37,8 @@
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1 d-grid mb-2">
                 <a href="javascript:;" (click)="payment(x,content);" class="btn bg-light btn-block py-3 rounded shadow-sm border">
-                  <img src="https://dummyimage.com/300x300/000/fff&text={{x.name}}" width="50">  
-                  <div>
+                  <img [src]="x.image" width="90%">  
+                  <div class="mt-4">
                     <h1>{{x.name}}</h1>
                   </div>
                 </a>

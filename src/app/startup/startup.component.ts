@@ -66,6 +66,9 @@ export class StartupComponent implements OnInit {
         console.log(data); 
         this.note = data['note'];
         this.terminal = data['terminal'];  
+        localStorage.setItem("terminalId",data['terminal']['id']); 
+        localStorage.setItem("storeOutlesId",data['terminal']['storeOutlesId']); 
+        
       },
       e => {
         console.log(e);

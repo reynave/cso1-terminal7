@@ -2,18 +2,13 @@
     <div class="container py-4 ">
 
         <div class="row g-1 mb-4">
+
+
             <div class="col-6">
-              
-                <a href="javascript:void(0)" class="btn  p-1 " [hidden]="adminMode"> 
+
+                <a href="javascript:void(0)" class="btn  p-1 " [hidden]="adminMode">
                     <h2 [hidden]="adminMode">Hi, {{member['firstName']}} {{member['lastName']}} </h2>
                 </a>
- 
-                <div [hidden]="!adminMode">
-                    <a href="javascript:void(0)" (click)="adminMode = false;  noteScanner =''; addItem=false; " class="btn mx-2">
-                        <img src="./assets/imgs/icons8-go-back-64.png" width="60">
-                        <strong> Back </strong>
-                    </a>
-                </div>
 
             </div>
 
@@ -28,21 +23,28 @@
             </div>
         </div>
 
+        <div class="row" [hidden]="!adminMode">
+
+            <div class="col-12 text-center">
+                <h1 class="py-2">SUPERVISOR MODE</h1>
+            </div>
+        </div>
+
         <div class="row" [hidden]="adminMode">
-            <div class="offset-3 col-6">
-                <div  class="text-center">
+            <div class="col-12 d-grid">
+                <div class="text-center">
                     <!-- BARCODE SCAN HERE -->
                     <h1><img src="./assets/imgs/icons8-fast-shopping-64.png" class="mx-1" width="40"> Scan Item Here</h1>
-                    
-                    <input type="text" class="form-control bg-light my-4 inputScan" #formRow  id="scan" (change)="scanner();"
-                    [(ngModel)]="barcode" pattern="[0-9]" placeholder="Scan Barcode"   autofocus>
+
+                    <input type="text" class="form-control form-control-lg bg-light my-4 inputScan" #formRow id="scan" (change)="scanner();" [(ngModel)]="barcode" pattern="[0-9]" placeholder="Scan Barcode" autofocus>
 
                 </div>
             </div>
- 
+
             <div class="col-12 " [hidden]="!resultbox">
+                 
                 <div class="rounded border shadow-sm  p-4  bg-light mb-3">
-                   
+
 
                     <div class="row" [hidden]="!addItem">
                         <div class="col-3" [hidden]="error == true">
@@ -50,15 +52,15 @@
                         </div>
                         <div class="col-9" [hidden]="error == true">
 
-                            <h1 class="mb-2">{{item.barcode}}</h1> 
-                            <h1 class="display-5">{{item.name}}</h1> 
+                            <h1 class="mb-2">{{item.barcode}}</h1>
+                            <h1 class="display-5">{{item.name}}</h1>
                             <h1 class="display-6">
                                 Rp {{item.price | number}}
                             </h1>
 
                         </div>
-                    </div> 
-                    
+                    </div>
+
                     <div class="row" [hidden]="error != true">
                         <div class="col-12 text-center">
                             <h1 class="py-5">{{noteScanner}}</h1>
@@ -77,10 +79,12 @@
                 <h4 class=" me-2">{{items.length + freeItem.length}} Items</h4>
             </div>
         </div>
+
+
     </div>
 </div>
 
-<div class="container mb-6" >
+<div class="container mb-6">
     <!-- VISITOR -->
     <div class="row" [hidden]="adminMode">
         <div class="col-12 ">
@@ -90,11 +94,11 @@
                     <div class="col-2">
                         <img [src]="x.images ? x.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
                     </div>
-                    <div class="col-6 col-lg-6"> 
-                        <h2>{{x.description}}</h2> 
+                    <div class="col-6 col-lg-6">
+                        <h2>{{x.description}}</h2>
                         <h2>
                             <span class="box-qty bg-white mx-3 border">{{x.qty}}</span> Rp {{x.price | number}}
-                        </h2> 
+                        </h2>
                     </div>
                     <div class="col-4 col-lg-4 text-end ">
                         <div class="me-2">
@@ -186,6 +190,14 @@
     </div>
 </div>
 
+<div class="row" [hidden]="!adminMode">
+    <div class="col-12 text-center">
+        <a href="javascript:void(0)" (click)="adminMode = false;  noteScanner =''; addItem=false; resultbox =false;" class="btn">
+            <img src="./assets/imgs/icons8-go-back-64.png" width="60"> Close Superivisor mode
+        </a>
+    </div>
+</div>
+
 <div class="fixFooter" [hidden]="adminMode">
     <div class="footerweb bg-gray rounded-top-c1 py-4 shadow-sm">
         <div class="container-fluid">
@@ -209,7 +221,7 @@
 
 <ng-template #modalCancel let-modal>
     <div class="modal-header">
-      
+
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
