@@ -16,6 +16,7 @@ export class BillComponent implements OnInit {
   items: any = [];
   itemsList: any = [];
   freeItem : any = [];
+
   uuid : any;
   freeItemWaitingScan : any = [];
   freeItemLabel : number = 0;
@@ -31,6 +32,10 @@ export class BillComponent implements OnInit {
     total: 0,
     voucer: 0,
   }
+  storeOutlesId : any = localStorage.getItem("storeOutlesId");
+  uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
+  terminalId : any  = localStorage.getItem('terminalId');
+  
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
@@ -55,7 +60,7 @@ export class BillComponent implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-        console.log(data['summary']);
+        console.log(data);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem =  data['freeItem'];

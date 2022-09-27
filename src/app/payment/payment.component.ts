@@ -35,6 +35,11 @@ export class PaymentComponent implements OnInit {
     config.keyboard = false; 
   }
 
+  storeOutlesId : any = localStorage.getItem("storeOutlesId");
+  uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
+  terminalId : any  = localStorage.getItem('terminalId');
+  
+
   ngOnInit(): void {
     this.t1_thank_you_display  = localStorage.getItem("t1_thank_you_display");
 

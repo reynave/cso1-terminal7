@@ -19,7 +19,8 @@
 
 
     <div class="row">
-
+        <div class="col-12">
+        </div>
         <div class="col-12 text-center my-4">
             <h1 [innerHTML]="kioskMessage['welcome']"></h1>
         </div>
@@ -32,6 +33,7 @@
     </div>
 
     <div class="row" [hidden]="isStillLogin">
+
         <div class="col-6 d-grid">
             <button type="button" class=" btn  btn-lg btn-info text-white rounded py-3 font-btn" (click)="loginVisitor(modalWelcome);">VISITOR</button>
         </div>
@@ -67,13 +69,11 @@
     </div>
     <div class="modal-body ">
         <div class="p-4 ">
-
             <div>
                 <div class="text-center">
                     <p>Silakan masukin member ID anda</p>
                     <p class="text-danger my-5" [innerHTML]="this.notes"></p>
                 </div>
-
                 <div [hidden]="member.length < 1">
                     <table style="width: 100%" class="my-5">
                         <tr>
@@ -92,8 +92,14 @@
 
                 <div [hidden]="loginSuccess">
 
-                    <input type="text" class="form-control form-control-lg font-monospace" [(ngModel)]="memberId">
+                    <div class="text-center">
+                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h1>{{countdown}}</h1>
+                    </div>
 
+                    <input type="text" class="form-control form-control-lg font-monospace" [(ngModel)]="memberId">
                     <div class="mt-5 d-grid">
                         <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">SUBMIT</button>
                     </div>
@@ -111,8 +117,13 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <p class="text-center" [innerHTML]="kioskMessage['visitorDisplay']"> </p> 
-         
+        <p class="text-center" [innerHTML]="kioskMessage['visitorDisplay']"> </p>
+        <div class="text-center">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h1>{{countdown}}</h1>
+        </div>
         <div class="mt-5 d-grid">
             <a [routerLink]="[ '/cart' ]" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">NEXT</a>
         </div>

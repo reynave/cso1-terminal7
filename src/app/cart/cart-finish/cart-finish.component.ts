@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
+import { ConfigService } from 'src/app/service/config.service';
 
 @Component({
   selector: 'app-cart-finish',
@@ -7,29 +10,63 @@ import { Router } from '@angular/router';
   styleUrls: ['./cart-finish.component.css']
 })
 export class CartFinishComponent implements OnInit {
-  t1_timer_setting_for_refresh : any = localStorage.getItem("t1_timer_setting_for_refresh");
-  t1_thank_you_display: any;
+
+  kioskMessage: any = {
+    thanks: '',
+    timer: 10,
+  };
+  api: string = environment.api;
+
+  intervalTime: any;
+
+  countdown: number = 0;
   constructor(
     private router: Router,
+    private configService: ConfigService,
   ) { }
 
   ngOnInit(): void {
-    let n = this.t1_timer_setting_for_refresh ?  this.t1_timer_setting_for_refresh : 10;
+    this.httpGet();
+  }
+  httpGet() {
+    this.configService.httpAccount().subscribe(
+      data => {
+        console.log(data['account']);
+        this.kioskMessage = {
+          thanks: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1004))]['value'],
+          timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
+        }
+        console.log(this.kioskMessage);
+        let n = parseInt(this.kioskMessage['timer']) < 1 ? 1 : parseInt(this.kioskMessage['timer']);
+        this.countdown = n;
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        },
+          n * 1000);
 
-    this.t1_thank_you_display = localStorage.getItem("t1_thank_you_display");
+        this.runCountdown();
+      }
 
-     setTimeout(() => {
-      this.router.navigate(['/login']);
-    },
-      n*1000);
+    );
   }
 
-
-  home(){
+  home() {
     this.router.navigate(['/login']);
   }
-  printBill(){
+
+  printBill() {
     window.print();
   }
 
+  runCountdown() {
+    let self = this;
+    this.intervalTime = setInterval(function () {
+      self.countdown--;
+    }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy');
+    clearInterval(this.intervalTime);
+  }
 }

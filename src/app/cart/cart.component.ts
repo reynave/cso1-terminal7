@@ -41,6 +41,10 @@ export class CartComponent implements OnInit, OnDestroy {
     subtotal: 0,
     totalAterTax: 0
   }
+  uuidKios : any  = localStorage.getItem(this.configService.myUUID());
+  storeOutlesId : any  = localStorage.getItem('storeOutlesId');
+  terminalId : any  = localStorage.getItem('terminalId');
+  
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,

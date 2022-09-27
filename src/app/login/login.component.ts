@@ -38,6 +38,15 @@ export class LoginComponent implements OnInit {
     timer : 5,
   };
 
+
+  member : any = [];
+  myTimeout : any;
+  loginSuccess : boolean = false;
+  kioskUuid : string = '';
+  intervalTime : any;
+  
+  countdown : number  = 0;
+
   today : any =  new Date();
   constructor(
     private modalService: NgbModal,
@@ -83,6 +92,7 @@ export class LoginComponent implements OnInit {
             timer:  data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1008 ))]['value'],
         }
         console.log(this.kioskMessage);
+        this.countdown = this.kioskMessage['timer'];
       }
     ); 
   }
@@ -92,7 +102,7 @@ export class LoginComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        
+       
         if (data['error'] == true) {
           localStorage.removeItem(this.configService.myUUID());
         }  
@@ -158,7 +168,7 @@ export class LoginComponent implements OnInit {
       ).subscribe(
         data => {
           this.modalService.open(loginVisitor,{ size: 'xl' });
-
+          this.runCountdown();
          let self = this;
          this.myTimeout = setTimeout(function(){
             self.goToCart();
@@ -244,10 +254,14 @@ export class LoginComponent implements OnInit {
   }
 
 
-  member : any = [];
-  myTimeout : any;
-  loginSuccess : boolean = false;
-  kioskUuid : string = '';
+
+
+  runCountdown(){
+    let self = this;
+    this.intervalTime = setInterval(function(){
+      self.countdown--;
+    }, 1000);
+  }
 
   loginMemberManual(content: any) {
     this.loading = true;
@@ -272,6 +286,7 @@ export class LoginComponent implements OnInit {
          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
          this.kioskUuid = data['insert']['kioskUuid'];
          let self = this;
+         this.runCountdown();
          this.myTimeout = setTimeout(function(){
             self.goToCart();
             self.modalService.dismissAll();
@@ -292,15 +307,14 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  goToCart() {
-    
-    this.router.navigate(['cart'], { queryParams: { kioskUuid:  this.kioskUuid  }, });
-
+  goToCart() { 
+    this.router.navigate(['cart'], { queryParams: { kioskUuid:  this.kioskUuid  }, }); 
   }
   ngOnDestroy(): void {
     this.modalService.dismissAll();
     console.log('ngOnDestroy');
     clearTimeout(this.myTimeout);
+    clearInterval(this.intervalTime);
   }
 
 }
