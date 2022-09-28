@@ -41,6 +41,10 @@ export class CartComponent implements OnInit, OnDestroy {
     subtotal: 0,
     totalAterTax: 0
   }
+  supervisor : any = {
+    name : "",
+    id : 0,
+  }
   uuidKios : any  = localStorage.getItem(this.configService.myUUID());
   storeOutlesId : any  = localStorage.getItem('storeOutlesId');
   terminalId : any  = localStorage.getItem('terminalId');
@@ -104,18 +108,11 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   fnVoid(x: any) {
-    this.http.post<any>(this.api + 'kioskCart/fnVoid/', x,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        this.httpGet();
-        this.loading = false;
-        console.log(data);
-      },
-    );
-  }
-  fnVoidFreeItem(x: any) {
-    this.http.post<any>(this.api + 'kioskCart/fnVoidFreeItem/', x,
+    const body = {
+      items: x,
+      userId : this.supervisor['id'],
+    }
+    this.http.post<any>(this.api + 'kioskCart/fnVoid/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -126,7 +123,22 @@ export class CartComponent implements OnInit, OnDestroy {
     );
   }
 
-  
+  fnVoidFreeItem(x: any) {
+    const body = {
+      items: x,
+      userId : this.supervisor['id'],
+    }
+    this.http.post<any>(this.api + 'kioskCart/fnVoidFreeItem/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        this.loading = false;
+        console.log(data);
+      },
+    );
+  }
+ 
   scanner() {
     this.loading = true;
     this.noteScanner = "";
@@ -154,11 +166,12 @@ export class CartComponent implements OnInit, OnDestroy {
                 barcode: data['items']['barcode'],
                 price: data['items']['price'],
                 images :data['items']['images'],
-              }
+              } 
             } else {
               this.noteScanner = this.barcode+" "+data['note'];
               this.adminMode = true;
               this.userId = data['userId'];
+              this.supervisor = data['supervisor'];
             }
           
           } else {
@@ -177,6 +190,7 @@ export class CartComponent implements OnInit, OnDestroy {
   fnUpdate(x: any) {
     const body = {
       items: x,
+      userId : this.supervisor['id'],
     }
     console.log(body);
     this.http.post<any>(this.api + 'kioskCart/fnUpdate/', body,

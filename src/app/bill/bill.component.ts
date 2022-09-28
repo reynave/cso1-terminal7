@@ -73,9 +73,7 @@ export class BillComponent implements OnInit {
           discount: data['summary']['discount'],
           dpp: data['summary']['dpp'],
           memberDiscount: data['summary']['memberDiscount'],
-          ppn: data['summary']['ppn'],
-          ppnGross: data['summary']['ppnGross'],
-          
+          ppn: data['summary']['ppn'], 
           total: data['summary']['total'],
           voucer: data['summary']['voucer'],
         }

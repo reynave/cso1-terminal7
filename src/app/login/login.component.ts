@@ -88,9 +88,7 @@ export class LoginComponent implements OnInit {
             visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1006 ))]['value'],
             timer:  data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1008 ))]['value'], 
         }
-
-   
-        
+ 
         console.log(this.kioskMessage);
         this.countdown = this.kioskMessage['timer'];
       }
