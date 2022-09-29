@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-bill',
@@ -38,6 +39,7 @@ export class BillComponent implements OnInit {
   
   constructor(
     private http: HttpClient,
+    private modalService: NgbModal,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -82,5 +84,26 @@ export class BillComponent implements OnInit {
         console.log(e);
       },
     );
+  }
+
+  modal(content: any) {
+    this.modalService.open(content, { centered: true });
+  }
+
+  fnLogoutVisitor() {
+    const body = {
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+    }
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
+      },
+    );
+
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'; 
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'; 
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -18,6 +18,7 @@ declare let Camera: any;
   providers: [NgbModalConfig, NgbModal]
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('formRow',  {static: false} ) formRow: ElementRef | any;
   terminalId: any;
   outletId : any;
   loading: boolean = false;
@@ -58,6 +59,7 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit(): void {
+
     this.terminalId = localStorage.getItem('terminalId');
     this.outletId = localStorage.getItem('storeOutlesId');
 
@@ -94,6 +96,21 @@ export class LoginComponent implements OnInit {
       }
     ); 
   }
+  scannerMember(){
+
+  }
+
+  
+
+  autoFocus: any; 
+  fnAutoFocus() {
+    this.autoFocus = setInterval(() => { 
+    this.formRow.nativeElement.focus(); 
+      console.log("fnAutoFocus");
+    }, 1000);
+  } 
+  
+
 
   httpGet() {
     this.http.get<any>(this.api + 'kioskLogin/checkSession/?t=' + this.myUUID,
@@ -260,6 +277,7 @@ export class LoginComponent implements OnInit {
   loginMemberManual(content: any) {
     this.loading = true;
     this.modalService.open(content, { size: 'xl' });
+    
   }
   fnSubmitMemberIdManual() { 
     const body = {
@@ -309,6 +327,7 @@ export class LoginComponent implements OnInit {
     console.log('ngOnDestroy');
     clearTimeout(this.myTimeout);
     clearInterval(this.intervalTime);
+    clearInterval(this.autoFocus); 
   }
 
 }

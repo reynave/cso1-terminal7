@@ -49,8 +49,10 @@
             <h1 [innerHTML]="kioskMessage['limit']"></h1>
         </div>
     </div>
-</div>
 
+
+</div>
+ 
 
 <footer>
     <div class="row g-1">
@@ -89,17 +91,20 @@
                         <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
                     </div>
                 </div>
+ 
+                <div >
 
-                <div [hidden]="loginSuccess">
-
-                    <div class="text-center">
+                    <div class="text-center" [hidden]="!loginSuccess">
                         <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <h1>{{countdown}}</h1>
                     </div>
 
-                    <input type="text" class="form-control form-control-lg font-monospace" [(ngModel)]="memberId">
+                    <input type="text" class="form-control form-control-lg font-monospace inputScan" 
+                    #formRow    [(ngModel)]="memberId" (change)="scannerMember();"  placeholder="Scan Barcode" autofocus>
+                    
+                    
                     <div class="mt-5 d-grid">
                         <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">SUBMIT</button>
                     </div>

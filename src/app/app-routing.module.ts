@@ -8,6 +8,7 @@ import { ForbidenComponent } from './forbiden/forbiden.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { PaymentComponent } from './payment/payment.component';
 import { PhotoComponent } from './photo/photo.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: "print/detail/:id", component: PrintDetailComponent, data: { active: "print" }, },
   
   { path: "payment", component: PaymentComponent, data: { active: "payment" }, },
+  { path: "payment/qristelkom/:id", component: PaymentQrisTelkomComponent, data: { active: "payment" }, },
   
   { path: "forbiden", component: ForbidenComponent, data: { active: "home" }, },
   { path: "nofound", component: NotFoundComponent, data: { active: "home" }, },

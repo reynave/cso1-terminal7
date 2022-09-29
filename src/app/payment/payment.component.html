@@ -50,7 +50,7 @@
         </div>
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1 d-grid mb-2">
-                <a href="javascript:;" (click)="payment(x,content);" class="btn bg-light btn-block py-3 rounded shadow-sm border">
+                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn bg-light btn-block py-3 rounded shadow-sm border">
                   <img [src]="x.image" width="90%">  
                   <div class="mt-4">
                     <h1>{{x.name}}</h1>
@@ -62,7 +62,7 @@
 </div>
 
 
-<ng-template #content let-c="close" let-d="dismiss">
+<ng-template #fakePayment let-c="close" let-d="dismiss">
 
     <div class="modal-body">
         <div class="text-center my-5">

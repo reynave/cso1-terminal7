@@ -1,0 +1,59 @@
+<div class="sticky-top   pt-2  bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Bill : {{uuidKios}}</p>
+            </div>
+            <div class="col text-center">
+                <p>Store Outles ID : {{storeOutlesId}}</p>
+            </div>
+            <div class="col text-end">
+                <p>Terminal ID : {{terminalId}}</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="container  py-4">
+        <div class="row">
+            <div class="col-6">
+                <a href="javascript:void(0)" [routerLink]="[ '/payment']"  class="btn p-1  mx-1">
+                    <img src="./assets/imgs/icons8-back-67.png" width="60">
+                </a>
+
+            </div>
+            <div class="col-6 text-end">
+                <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
+                    <img src="./assets/imgs/icons8-bell-64.png" width="60">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 mt-3">
+            <div class="text-center">
+                 <h1 class="mb-3">Total Payment</h1>
+                 <h1 class="display-1 mb-3">Rp {{summary['final'] | number}}</h1>
+                 <h2 class="mb-3">{{uuidKios}}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-12 mt-3">
+            <div class="text-center">
+                 <h1 class="mb-4">QRIS</h1>
+                  <h4  [hidden]="!loading">Generate QRIS</h4> 
+                  <qrcode [qrdata]="'qrcode'" [width]="800" [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
+        </div>
+
+    </div>
+
+   
+</div>

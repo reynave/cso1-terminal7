@@ -89,10 +89,16 @@ export class PaymentComponent implements OnInit {
   }
 
   payment(x:any, content:any) {
-    this.paymentStatus = 1;
-    this.loading = true;
-    this.paymentTypeId = x.paymentTypeId;
-    this.modalService.open(content,{centered:true});  
+    if(x.paymentTypeId == 'QRT001'){
+      this.router.navigate(['payment/qristelkom/',x.paymentTypeId]);
+    }else{
+      console.log(x);
+      this.paymentStatus = 1;
+      this.loading = true;
+      this.paymentTypeId = x.paymentTypeId;
+      this.modalService.open(content,{centered:true});  
+    }
+   
   }
 
   fnProcessPaymentFake(){

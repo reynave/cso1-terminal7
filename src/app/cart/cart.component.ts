@@ -13,14 +13,14 @@ import { ConfigService } from 'src/app/service/config.service';
 })
 export class CartComponent implements OnInit, OnDestroy {
   @ViewChild('formRow') rows: ElementRef | any;
-  resultbox : boolean = false;
+  resultbox: boolean = false;
   loading: boolean = false;
-  api: string = environment.api; 
+  api: string = environment.api;
   barcode: string = "";
   items: any = [];
   adminMode: boolean = false;
   userId: string = "";
-  addItem : boolean = false;
+  addItem: boolean = false;
   // Demo 0000022
   error: boolean = false;
   noteScanner: string = "";
@@ -29,9 +29,9 @@ export class CartComponent implements OnInit, OnDestroy {
     barcode: "",
     price: 0,
   }
-  freeItem : any = [];
+  freeItem: any = [];
   itemsList: any = [];
-  itemsListfreeItem : any = [];
+  itemsListfreeItem: any = [];
   member: any = [];
   summary: any = {
     BKP: 0,
@@ -41,14 +41,14 @@ export class CartComponent implements OnInit, OnDestroy {
     subtotal: 0,
     totalAterTax: 0
   }
-  supervisor : any = {
-    name : "",
-    id : 0,
+  supervisor: any = {
+    name: "",
+    id: 0,
   }
-  uuidKios : any  = localStorage.getItem(this.configService.myUUID());
-  storeOutlesId : any  = localStorage.getItem('storeOutlesId');
-  terminalId : any  = localStorage.getItem('terminalId');
-  
+  uuidKios: any = localStorage.getItem(this.configService.myUUID());
+  storeOutlesId: any = localStorage.getItem('storeOutlesId');
+  terminalId: any = localStorage.getItem('terminalId');
+  ilock: boolean = false;
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
@@ -69,12 +69,12 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
 
-  callServer: any; 
+  callServer: any;
   callHttpServer() {
-    this.callServer = setInterval(() => { 
-      this.rows.nativeElement.focus(); 
+    this.callServer = setInterval(() => {
+      this.rows.nativeElement.focus();
     }, 300);
-  } 
+  }
   ngOnDestroy() {
     clearInterval(this.callServer);
     console.log("DESTRT");
@@ -86,19 +86,25 @@ export class CartComponent implements OnInit, OnDestroy {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.loading = false;
-        console.log(data);
-        this.items = data['items'];
-        this.freeItem = data['freeItem'];
+        if (data['ilock'] == true) {
+          this.router.navigate(['bill']);
+        } else {
 
-        this.itemsList = data['itemsList'];
-        this.itemsListfreeItem = data['itemsListfreeItem'];
 
-        this.member = data['member'];
-        this.summary = { 
-          final: data['summary']['final'], 
-          discount: data['summary']['discount'],
-          total: data['summary']['total'] == null ? 0 : data['summary']['total'] , 
+          this.loading = false;
+          console.log(data);
+          this.items = data['items'];
+          this.freeItem = data['freeItem'];
+          this.ilock = data['ilock'];
+          this.itemsList = data['itemsList'];
+          this.itemsListfreeItem = data['itemsListfreeItem'];
+
+          this.member = data['member'];
+          this.summary = {
+            final: data['summary']['final'],
+            discount: data['summary']['discount'],
+            total: data['summary']['total'] == null ? 0 : data['summary']['total'],
+          }
         }
       },
       e => {
@@ -110,7 +116,7 @@ export class CartComponent implements OnInit, OnDestroy {
   fnVoid(x: any) {
     const body = {
       items: x,
-      userId : this.supervisor['id'],
+      userId: this.supervisor['id'],
     }
     this.http.post<any>(this.api + 'kioskCart/fnVoid/', body,
       { headers: this.configService.headers() }
@@ -126,7 +132,7 @@ export class CartComponent implements OnInit, OnDestroy {
   fnVoidFreeItem(x: any) {
     const body = {
       items: x,
-      userId : this.supervisor['id'],
+      userId: this.supervisor['id'],
     }
     this.http.post<any>(this.api + 'kioskCart/fnVoidFreeItem/', body,
       { headers: this.configService.headers() }
@@ -138,7 +144,7 @@ export class CartComponent implements OnInit, OnDestroy {
       },
     );
   }
- 
+
   scanner() {
     this.loading = true;
     this.noteScanner = "";
@@ -146,7 +152,7 @@ export class CartComponent implements OnInit, OnDestroy {
     const body = {
       barcode: this.barcode,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
-      memberId : 0,
+      memberId: 0,
     }
     console.log(body);
     if (this.barcode != "") {
@@ -158,24 +164,24 @@ export class CartComponent implements OnInit, OnDestroy {
         data => {
           this.loading = false;
           if (data['error'] == false) {
-            this.httpGet(); 
+            this.httpGet();
             this.error = false;
             if (data['admin'] == false) {
               this.item = {
                 name: data['items']['description'],
                 barcode: data['items']['barcode'],
                 price: data['items']['price'],
-                images :data['items']['images'],
-              } 
+                images: data['items']['images'],
+              }
             } else {
-              this.noteScanner = this.barcode+" "+data['note'];
+              this.noteScanner = this.barcode + " " + data['note'];
               this.adminMode = true;
               this.userId = data['userId'];
               this.supervisor = data['supervisor'];
             }
-          
+
           } else {
-          
+
             this.error = true;
           }
           this.barcode = "";
@@ -190,7 +196,7 @@ export class CartComponent implements OnInit, OnDestroy {
   fnUpdate(x: any) {
     const body = {
       items: x,
-      userId : this.supervisor['id'],
+      userId: this.supervisor['id'],
     }
     console.log(body);
     this.http.post<any>(this.api + 'kioskCart/fnUpdate/', body,
@@ -203,27 +209,27 @@ export class CartComponent implements OnInit, OnDestroy {
     );
   }
 
-  
+
   fnCloseCart() {
     const body = {
       uuid: localStorage.getItem(this.configService.myUUID()),
-    } 
+    }
     this.http.post<any>(this.api + 'kioskCart/fnCloseCart/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-       this.router.navigate(['bill']);
+        this.router.navigate(['bill']);
         console.log(data);
       },
     );
   }
-  
+
   modal(content: any) {
-    this.modalService.open(content, { centered: true  });
+    this.modalService.open(content, { centered: true });
   }
 
   fnLogoutVisitor() {
-    const body = {  
+    const body = {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
     }
     console.log(body);
@@ -236,9 +242,9 @@ export class CartComponent implements OnInit, OnDestroy {
         this.router.navigate(['login']);
       },
     );
-    
+
   }
 
 
 }
- 
+

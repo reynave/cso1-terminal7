@@ -26,7 +26,9 @@
                 <h3>{{uuid}}</h3> 
             </div>
             <div class="col text-end">
-                
+                <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger p-1 border mx-1">
+                    <img src="./assets/imgs/icons8-close-64.png" width="60">
+                </a>
                 <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
                    <img src="./assets/imgs/icons8-bell-64.png" width="60"> 
                 </a>
@@ -161,3 +163,18 @@
 
 
 </div>
+
+<ng-template #modalCancel let-modal>
+    <div class="modal-header">
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <h1 class="text-center m-5">Do You Want Cancel Transaction ? </h1>
+
+        <div class="text-center m-5 d-grid">
+            <button type="submit" class="btn btn-danger btn-lg rounded font-btn" (click)="fnLogoutVisitor();">Yes</button>
+        </div>
+    </div>
+
+</ng-template>

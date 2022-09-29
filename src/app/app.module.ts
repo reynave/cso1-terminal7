@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { QRCodeModule } from 'angularx-qrcode';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,7 +22,9 @@ import { BillComponent } from './bill/bill.component';
 import { PrintComponent } from './print/print.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
 import { AdminComponent } from './admin/admin.component';
-import { SystemOfflineComponent } from './system-offline/system-offline.component'; 
+import { SystemOfflineComponent } from './system-offline/system-offline.component';
+import { MemberBarcodeComponent } from './login/member-barcode/member-barcode.component';
+import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component'; 
 
 @NgModule({
   declarations: [
@@ -39,7 +42,9 @@ import { SystemOfflineComponent } from './system-offline/system-offline.componen
     PrintComponent,
     PrintDetailComponent,
     AdminComponent,
-    SystemOfflineComponent, 
+    SystemOfflineComponent,
+    MemberBarcodeComponent,
+    PaymentQrisTelkomComponent, 
   ],
   imports: [
     BrowserModule,
@@ -48,7 +53,8 @@ import { SystemOfflineComponent } from './system-offline/system-offline.componen
     FormsModule,
     HttpClientModule,
     NgxScannerQrcodeModule,
-    WebcamModule
+    WebcamModule,
+    QRCodeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
