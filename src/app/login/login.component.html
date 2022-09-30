@@ -3,7 +3,7 @@
         <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
     </div>
     <div class="col-6 text-end">
-        <h2 class="p-2">Outlet Id : {{outletId}}</h2>
+        <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
     </div>
 </div>
 <div class="container">
@@ -56,6 +56,9 @@
 
 <footer>
     <div class="row g-1">
+        <div class="col-12 text-end">
+            <h2 class="p-2"> <a [routerLink]="[ '/admin' ]" >Admin Mode</a></h2>
+        </div>
         <div class="col-10">
             <h2 class="p-2">{{today}}</h2>
         </div>
@@ -118,9 +121,7 @@
 
 
 <ng-template #modalWelcome let-modal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
+    
     <div class="modal-body">
         <p class="text-center" [innerHTML]="kioskMessage['visitorDisplay']"> </p>
         <div class="text-center">

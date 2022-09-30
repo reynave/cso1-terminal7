@@ -7,24 +7,24 @@
                     <div class="border p-2 rounded bg-white shadow-sm mb-2">
                         <table class="table table-borderless">
                             <tr>
-                                <td width="50%">ID</td>
+                                <td width="50%">Terminal ID</td>
                                 <td>: {{terminal.id}}</td>
-                            </tr>
-                            <tr>
-                                <td>name</td>
-                                <td>: {{terminal.name}}</td>
-                            </tr>
+                            </tr> 
                             <tr>
                                 <td>Store Outlet ID</td>
                                 <td>: {{terminal.storeOutlesId}}</td>
-                            </tr> 
+                            </tr>  
                             <tr>
-                                <td>status</td>
-                                <td>: {{terminal.status}}</td>
-                            </tr>
+                                <td>Terminal Name</td>
+                                <td>: {{terminal.name}}</td>
+                            </tr> 
                             <tr>
                                 <td>Date</td>
                                 <td>: {{terminal.inputDate * 1000 | date}}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>: {{systemOnline}} </td>
                             </tr>
                         </table>
                     </div>
@@ -33,7 +33,7 @@
                     </div>
 
                    <div class="d-grid mt-3 text-center" > 
-                     <button type="button"  class="btn btn-dark btn-lg" [disabled]="error" (click)="start();">Login Terminal</button>
+                     <button type="button"  class="btn btn-dark btn-lg" [disabled]="!systemOnline" (click)="start();">Login Terminal</button>
                      <div class="mt-4">
                         <a href="javascript:;" (click)="httpGet();">Reload</a>
                      </div>

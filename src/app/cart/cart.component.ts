@@ -46,8 +46,8 @@ export class CartComponent implements OnInit, OnDestroy {
     id: 0,
   }
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
-  storeOutlesId: any = localStorage.getItem('storeOutlesId');
-  terminalId: any = localStorage.getItem('terminalId');
+  storeOutlesId: string = "";
+  terminalId: string = "";
   ilock: boolean = false;
   constructor(
     private modalService: NgbModal,
@@ -63,6 +63,15 @@ export class CartComponent implements OnInit, OnDestroy {
       console.log("SILAKAN BELANJA!");
       this.httpGet();
       this.callHttpServer();
+      this.configService.httpAccount().subscribe(
+        data=>{ 
+          this.storeOutlesId = data['storeOutlesId'];
+          this.terminalId  = data['terminalId'];
+          if (data['systemOnline'] == false) {
+            this.router.navigate(['offline']);
+          }
+        }
+      )
     } else {
       this.router.navigate(['login']);
     }

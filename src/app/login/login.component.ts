@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'; 
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 
 declare function haha(): any;
 declare let navigator: any;
@@ -18,60 +17,53 @@ declare let Camera: any;
   providers: [NgbModalConfig, NgbModal]
 })
 export class LoginComponent implements OnInit {
-  @ViewChild('formRow',  {static: false} ) formRow: ElementRef | any;
-  terminalId: any;
-  outletId : any;
+  @ViewChild('formRow', { static: false }) formRow: ElementRef | any;
+
+  outletId: any;
   loading: boolean = false;
   api: string = environment.api;
-  version : string = environment.version;
+  version: string = environment.version;
   myUUID: any;
   isStillLogin: boolean = false;
   interval: any;
   memberId: string = "";
   loop: number = 0;
   notes: string = "";
-  greeting  : string = "";
+  greeting: string = "";
   kioskMessage: any = {
-    logo : "", 
-    welcome : "",
-    limit : "", 
-    visitorDisplay : "",
-    timer : 5,
-    notFound : '',
-  }; 
-  member : any = [];
-  myTimeout : any;
-  loginSuccess : boolean = false;
-  kioskUuid : string = '';
-  intervalTime : any; 
-  countdown : number  = 0;  
-  today : any =  new Date();
+    logo: "",
+    welcome: "",
+    limit: "",
+    visitorDisplay: "",
+    timer: 5,
+    notFound: '',
+  };
+  member: any = [];
+  myTimeout: any;
+  loginSuccess: boolean = false;
+  kioskUuid: string = '';
+  intervalTime: any;
+  countdown: number = 0;
+  today: any = new Date();
+  autoFocus: any;
+  uuidKios: any = localStorage.getItem(this.configService.myUUID());
+  storeOutlesId: string = "";
+  terminalId: string = "";
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
-    private router: Router, 
-    config: NgbModalConfig, 
+    private router: Router,
+    config: NgbModalConfig,
   ) {
     config.backdrop = 'static';
     config.keyboard = false;
-   }
+  }
+
 
   ngOnInit(): void {
-
-    this.terminalId = localStorage.getItem('terminalId');
-    this.outletId = localStorage.getItem('storeOutlesId');
-
     console.log(navigator.camera);
-    this.configService.sytemOff().subscribe(
-      data => {
-        if (data['error'] == 400) {
-          this.router.navigate(['offline']);
-        }
-      }
-    );
-  
     if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
@@ -79,56 +71,60 @@ export class LoginComponent implements OnInit {
     this.httpGet();
     this.configService.httpAccount().subscribe(
       data => {
-        console.log(data['account'])
+        console.log(data);
+        if (data['systemOnline'] == false) {
+          this.router.navigate(['offline']);
+        }
+        this.storeOutlesId = data['storeOutlesId'];
+        this.terminalId = data['terminalId'];
+
         this.greeting = data['greeting'];
         this.kioskMessage = {
-            logo : data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  14 ))]['value'],
-            welcome : data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1001 ))]['value'],
-            limit: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1002 ))]['value'].replace("$item",data['limitItemsWarning']),
-            customerStatement: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1003 ))]['value'],
-            memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1005 ))]['value'],
-            visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1006 ))]['value'],
-            timer:  data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id ==  1008 ))]['value'], 
+          logo: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 14))]['value'],
+          welcome: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1001))]['value'],
+          limit: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1002))]['value'].replace("$item", data['limitItemsWarning']),
+          customerStatement: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1003))]['value'],
+          memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1005))]['value'],
+          visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1006))]['value'],
+          timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
         }
- 
-        console.log(this.kioskMessage);
         this.countdown = this.kioskMessage['timer'];
+
       }
-    ); 
+    );
   }
-  scannerMember(){
+  scannerMember() {
 
   }
 
-  
 
-  autoFocus: any; 
   fnAutoFocus() {
-    this.autoFocus = setInterval(() => { 
-    this.formRow.nativeElement.focus(); 
+    this.autoFocus = setInterval(() => {
+      this.formRow.nativeElement.focus();
       console.log("fnAutoFocus");
     }, 1000);
-  } 
-  
-
+  }
 
   httpGet() {
-    this.http.get<any>(this.api + 'kioskLogin/checkSession/?t=' + this.myUUID,
+
+    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.uuidKios;
+    console.log(url);
+    this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => { 
-        if (data['error'] == true) {
-          localStorage.removeItem(this.configService.myUUID());
-        }  
-        this.greeting = data['greeting'];
+      data => {
         console.log(data);
+        /* if (data['error'] == true) {
+            localStorage.removeItem(this.configService.getKioskUuid());
+          }*/
+        this.greeting = data['greeting'];
+
       },
       e => {
         console.log(e);
       },
     );
   }
-
 
   open(content: any) {
     this.modalService.open(content, { size: 'lg' });
@@ -174,22 +170,21 @@ export class LoginComponent implements OnInit {
     } else {
       this.loading = true;
       const body = {
-        terminalId: this.terminalId,
         base64Images: false,
       }
       this.http.post<any>(this.api + 'kioskLogin/loginVisitor/', body,
         { headers: this.configService.headers() }
       ).subscribe(
         data => {
-          this.modalService.open(loginVisitor,{ size: 'xl' });
+          this.modalService.open(loginVisitor, { size: 'xl' });
           this.runCountdown();
-         let self = this;
-         this.myTimeout = setTimeout(function(){
+          let self = this;
+          this.myTimeout = setTimeout(function () {
             self.goToCart();
             self.modalService.dismissAll();
             console.log('this.myTimeout TRIGER');
-         }, parseInt(this.kioskMessage['timer'])*1000);
-         console.log("wait for "+parseInt(this.kioskMessage['timer']));
+          }, parseInt(this.kioskMessage['timer']) * 1000);
+          console.log("wait for " + parseInt(this.kioskMessage['timer']));
 
 
           this.loading = false;
@@ -266,10 +261,10 @@ export class LoginComponent implements OnInit {
 
 
   }
- 
-  runCountdown(){
+
+  runCountdown() {
     let self = this;
-    this.intervalTime = setInterval(function(){
+    this.intervalTime = setInterval(function () {
       self.countdown--;
     }, 1000);
   }
@@ -277,11 +272,10 @@ export class LoginComponent implements OnInit {
   loginMemberManual(content: any) {
     this.loading = true;
     this.modalService.open(content, { size: 'xl' });
-    
   }
-  fnSubmitMemberIdManual() { 
+
+  fnSubmitMemberIdManual() {
     const body = {
-      terminalId: this.terminalId,
       memberId: this.memberId,
     }
     this.http.post<any>(this.api + 'kioskLogin/loginMember/', body,
@@ -290,21 +284,21 @@ export class LoginComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
-        if (data['error'] == false) { 
-         this.member = data['member'];
-         this.loginSuccess = true;
-         // this.goToCart(data);
-         // this.modalService.dismissAll();
-         localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-         this.kioskUuid = data['insert']['kioskUuid'];
-         let self = this;
-         this.runCountdown();
-         this.myTimeout = setTimeout(function(){
+        if (data['error'] == false) {
+          this.member = data['member'];
+          this.loginSuccess = true;
+          // this.goToCart(data);
+          // this.modalService.dismissAll();
+          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
+          this.kioskUuid = data['insert']['kioskUuid'];
+          let self = this;
+          this.runCountdown();
+          this.myTimeout = setTimeout(function () {
             self.goToCart();
             self.modalService.dismissAll();
             console.log('this.myTimeout TRIGER');
-         },parseInt(this.kioskMessage['timer'])*1000);
-         console.log("wait for "+parseInt(this.kioskMessage['timer']));
+          }, parseInt(this.kioskMessage['timer']) * 1000);
+          console.log("wait for " + parseInt(this.kioskMessage['timer']));
 
           this.notes = data['welcomeMember'];
           this.member = data['member'];
@@ -319,15 +313,16 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  goToCart() { 
-    this.router.navigate(['cart'], { queryParams: { kioskUuid:  this.kioskUuid  }, }); 
+  goToCart() {
+    this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
   }
+
   ngOnDestroy(): void {
     this.modalService.dismissAll();
     console.log('ngOnDestroy');
     clearTimeout(this.myTimeout);
     clearInterval(this.intervalTime);
-    clearInterval(this.autoFocus); 
+    clearInterval(this.autoFocus);
   }
 
 }

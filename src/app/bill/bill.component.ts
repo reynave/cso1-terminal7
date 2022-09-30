@@ -33,9 +33,10 @@ export class BillComponent implements OnInit {
     total: 0,
     voucer: 0,
   }
-  storeOutlesId : any = localStorage.getItem("storeOutlesId");
+  
   uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
-  terminalId : any  = localStorage.getItem('terminalId');
+  storeOutlesId: string = "";
+  terminalId: string = "";
   
   constructor(
     private http: HttpClient,
@@ -46,6 +47,16 @@ export class BillComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.configService.httpAccount().subscribe(
+      data=>{ 
+        this.storeOutlesId = data['storeOutlesId'];
+        this.terminalId  = data['terminalId'];
+        if (data['systemOnline'] == false) {
+          this.router.navigate(['offline']);
+        }
+      }
+    )
+
     this.uuid = localStorage.getItem(this.configService.myUUID());
     if (localStorage.getItem(this.configService.myUUID())) {
       console.log("SILAKAN BELANJA!");

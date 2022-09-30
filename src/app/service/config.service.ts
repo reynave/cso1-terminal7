@@ -6,49 +6,37 @@ import { CookiesService } from './cookies.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService {
-  secretKeyAccess: string = "QkSDhtCFJQ4n75Xq8Cmy4WExRU3C4r";
-  uuid: string = "t1_kioskUuid";
-  terminalImei: string = "t1_terminalImei";
-  varToken: string = "";
+export class ConfigService { 
+  kioskUuid : string = "t1_kioskUuid"; 
+  deviceUuidVar : string = 'deviceUuid';
+  varToken: any = [];
   varHeaders: any = [];
-  api: string = environment.api;
-  rules: any;
-  varData: any = [];
-  tokenName: string = "cso1AdminToken";
+  api: string = environment.api; 
   constructor(
     private cookies: CookiesService,
     private http: HttpClient,
 
   ) {
-    if (this.cookies.getCookie(this.tokenName) == null) {
+    if (localStorage.getItem(this.deviceUuidVar) == null) {
       console.log("tidak ada session login");
     } else {
-      this.varToken = this.cookies.getCookie(this.tokenName);
+      this.varToken = localStorage.getItem(this.deviceUuidVar);
     }
   }
 
   logout() {
-    document.cookie = this.tokenName + "=null; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    
+  }
+  getKioskUuid() {
+    return this.kioskUuid;
   }
   myUUID() {
-    return this.uuid;
+    return this.kioskUuid;
   }
-  myTerminalId() {
-    return this.terminalImei;
+  deviceUuid() {
+    return this.deviceUuidVar;
   }
-  setToken(token: string) {
-    this.cookies.setCookie(this.tokenName, token, 30);
-  }
-
-  getToken() {
-    return this.cookies.getCookie(this.tokenName);
-  }
-
-  username() {
-    return this.varData['name'];
-  }
-
+  
   headers() {
     return this.varHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -56,7 +44,7 @@ export class ConfigService {
     });
   }
   token() {
-    return this.varToken;
+    return localStorage.getItem(this.deviceUuidVar);
   }
 
   id_user() {
@@ -70,30 +58,16 @@ export class ConfigService {
     }
 
   }
-
-  secretKeyAccessGet() {
-    return this.secretKeyAccess;
-  };
-
-
-  extenCookies() {
-    var d = new Date();
-    d.setTime(d.getTime() + (24 * 60 * 60 * 90000));
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = this.tokenName + "=" + this.cookies.getCookie(this.tokenName) + ";" + expires + ";path=/";
-  }
-
-  accessRightPush(data: string) {
-    localStorage.setItem("SCO1Access", btoa(data));
-  }
+  
 
   sytemOff() {
-    return this.http.get<any>(this.api + 'kioskLogin/index/');
+    let url = this.api + 'kioskLogin/index/?token='+localStorage.getItem(this.deviceUuidVar);
+    return this.http.get<any>(url);
   }
 
 
   httpAccount() {
-    return this.http.get<any>(this.api + 'Kiosks/index/?outletId='+localStorage.getItem("storeOutlesId"),
+    return this.http.get<any>(this.api + 'Kiosks/index/?token='+this.varToken,
       { headers: this.headers() }
     );
     

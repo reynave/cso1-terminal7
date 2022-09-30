@@ -35,14 +35,23 @@ export class PaymentComponent implements OnInit {
     config.keyboard = false; 
   }
 
-  storeOutlesId : any = localStorage.getItem("storeOutlesId");
+ 
   uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
-  terminalId : any  = localStorage.getItem('terminalId');
+  storeOutlesId: string = "";
+  terminalId: string = "";
   
 
-  ngOnInit(): void {
-    this.t1_thank_you_display  = localStorage.getItem("t1_thank_you_display");
-
+  ngOnInit(): void { 
+    this.configService.httpAccount().subscribe(
+      data=>{ 
+        this.storeOutlesId = data['storeOutlesId'];
+        this.terminalId  = data['terminalId']; 
+        this.t1_thank_you_display  = data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1004))]['value'];
+        if (data['systemOnline'] == false) {
+          this.router.navigate(['offline']);
+        }
+      }
+    )
     if (localStorage.getItem(this.configService.myUUID())) {
      
       console.log("SILAKAN BELANJA!");
@@ -73,8 +82,10 @@ export class PaymentComponent implements OnInit {
   }
 
   httpCart() {
-    this.loading = true;
-    this.http.get<any>(this.api + 'kioskCart/index/?uuid=' + localStorage.getItem(this.configService.myUUID()),
+    this.loading = true; 
+    let url = this.api + 'kioskCart/index/?uuid=' + localStorage.getItem(this.configService.myUUID())+"&storeOutlesId="+localStorage.getItem('storeOutlesId')+"&terminalId="+localStorage.getItem('terminalId');
+    
+    this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -104,9 +115,9 @@ export class PaymentComponent implements OnInit {
   fnProcessPaymentFake(){
     const body = {
       paymentTypeId : this.paymentTypeId,
-      kioskUuid : localStorage.getItem(this.configService.myUUID()),
-      imei : imei,
-      memberId : 0,
+      kioskUuid : localStorage.getItem(this.configService.myUUID()), 
+      storeOutlesId : localStorage.getItem('storeOutlesId'), 
+      terminalId : localStorage.getItem('terminalId'), 
     }
     this.loading = true;
     console.log(body);

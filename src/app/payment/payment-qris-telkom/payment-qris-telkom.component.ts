@@ -16,10 +16,13 @@ export class PaymentQrisTelkomComponent implements OnInit {
   items: any = [];
   error: boolean = false;
   summary : any = [];
-  storeOutlesId : any = localStorage.getItem("storeOutlesId");
+
   uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
-  terminalId : any  = localStorage.getItem('terminalId');
+  storeOutlesId: string = "";
+  terminalId: string = "";
+  image : string = "";
   qrcode : string = "";
+  loadingStatus : boolean = false;
   constructor(
     private http: HttpClient,
     config: NgbModalConfig, 
@@ -31,6 +34,12 @@ export class PaymentQrisTelkomComponent implements OnInit {
 
   ngOnInit(): void {
       this.httpGet();
+      this.configService.httpAccount().subscribe(
+        data => {
+          this.storeOutlesId = data['storeOutlesId'];
+          this.terminalId  = data['terminalId'];  
+        }
+      );
   }
 
   httpGet(){ 
@@ -40,6 +49,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.image = data['image'];
         this.loading = false;
         console.log(data);  
         this.summary = data['summary'];
@@ -50,5 +60,67 @@ export class PaymentQrisTelkomComponent implements OnInit {
       },
     );
   }
+  note : string = "";
+  fnQrisTelkomStatus(){
+    this.note = "";
+    this.loadingStatus = true;
+    let url = environment.api+"kioskPayment/fnQrisTelkomStatus/?kioskUuid="+this.uuidKios;
+    this.http.get<any>(url,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        if(data['qris']['data']['qris_status'] == 'paid' ){
+          console.log('paid');   
+          this.note = data['qris']['data']['qris_status'];
+          this.fnProcessPaymentReal(data['qris']);
+        }else if(data['qris']['data']['qris_status'] == 'unpaid'){ 
+          this.loadingStatus = false;
+          console.log('unpaid');   
+          this.note = data['qris']['data']['qris_status'];
+        }else{
+          this.loadingStatus = false;
+          console.log('not register');   
+          this.note = 'not register';
+        }
+        console.log(data);   
+      },
+      e => {
+        console.log(e);
+      },
+    );
 
+  }
+
+
+  
+  fnProcessPaymentReal( data :any){
+    const body = {
+      paymentTypeId : 'QRT001',
+      qris : data,
+      kioskUuid : localStorage.getItem(this.configService.myUUID()),  
+      storeOutlesId : localStorage.getItem('storeOutlesId'), 
+      terminalId : localStorage.getItem('terminalId'), 
+      
+    }
+    this.loading = true;
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentReal/',body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+        localStorage.removeItem(this.configService.myUUID()); 
+        this.loading = false;
+        /**
+         * status payment disini
+         */
+        // this.paymentStatus = 2; 
+        this.router.navigate(['cart/finish/',data['id']]);
+      },
+      e => {
+        console.log(e);
+      },
+    );
+    
+  }
 }

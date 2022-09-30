@@ -8,9 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
  * THIS IS FOR DEVELOPMENT ONLY, DONT USE FOR PRODUCTION 
  * please use IME device Android for token!
  */
-declare var imei : any;
-
-
+ 
 @Component({
   selector: 'app-startup',
   templateUrl: './startup.component.html',
@@ -32,32 +30,33 @@ export class StartupComponent implements OnInit {
     updateDate: 0, 
     updateBy: 0
   }
-
-  
+  deviceUuid : string = "";
+  error  : boolean = true;
+  note : string = "";
+  systemOnline : boolean = false;
   constructor(
     private http: HttpClient,
     private configService: ConfigService, 
     private activatedRoute: ActivatedRoute,
-    private router: Router,
-    
+    private router: Router, 
   ) { }
 
-  ngOnInit(): void {
-  
+  ngOnInit(): void { 
     this.httpGet();
-    this.saveImei()
+    this.saveImei(); 
   }
-  saveImei(){ 
-    if(imei != ""){
-      localStorage.setItem(this.configService.myTerminalId(),imei); 
-      console.log(imei);
-    } 
+  
+  saveImei(){  
+       /**
+        * deviceUuid overwrite dari imei
+        */ 
+      localStorage.setItem(this.configService.deviceUuid(),environment.token); 
+      console.log(environment.token); 
   }
-  error  : boolean = true;
-  note : string = "";
+
   httpGet(){
     this.loading = true;
-    this.http.get<any>(this.api + 'kioskStartup/account/?imei='+imei,
+    this.http.get<any>(this.api + 'kioskStartup/account/?token='+environment.token,
       { headers: this.configService.headers() }
     ).subscribe(
       data => { 
@@ -65,10 +64,8 @@ export class StartupComponent implements OnInit {
         this.loading = false;
         console.log(data); 
         this.note = data['note'];
-        this.terminal = data['terminal'];  
-        localStorage.setItem("terminalId",data['terminal']['id']); 
-        localStorage.setItem("storeOutlesId",data['terminal']['storeOutlesId']); 
-        
+        this.terminal = data['terminal'];   
+        this.systemOnline = data['systemOnline'];
       },
       e => {
         console.log(e);
