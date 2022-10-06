@@ -91,7 +91,12 @@ export class PaymentQrisTelkomComponent implements OnInit {
 
   }
 
-
+  help(){ 
+    const msg = {
+      terminalId: this.terminalId,
+    }
+    this.configService.help(msg);
+  }
   
   fnProcessPaymentReal( data :any){
     const body = {

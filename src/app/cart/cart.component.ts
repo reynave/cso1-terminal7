@@ -45,6 +45,8 @@ export class CartComponent implements OnInit, OnDestroy {
     name: "",
     id: 0,
   }
+  private _docSub: any;
+
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
@@ -59,6 +61,15 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this._docSub = this.configService.getMessage().subscribe(
+      (data: { [x: string]: any; }) => {
+        console.log(data);
+        if (data['action'] == 'reload' && data['to'] == 'terminal') {
+          this.httpGet();
+        }
+      }
+    );
+
     if (localStorage.getItem(this.configService.myUUID())) {
       console.log("SILAKAN BELANJA!");
       this.httpGet();
@@ -86,7 +97,22 @@ export class CartComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     clearInterval(this.callServer);
-    console.log("DESTRT");
+    this._docSub.unsubscribe();
+    console.log("NGONDESTROY");
+  }
+  help(){ 
+    const msg = {
+      terminalId: this.terminalId,
+    }
+    this.configService.help(msg);
+  }
+  sendReload(){
+    const msg = {
+      to: 'supervisor',
+      msg: 'Scan items Success',
+      action : 'reload',
+    }
+    this.configService.sendMessage(msg);
   }
 
   httpGet() {
@@ -98,7 +124,7 @@ export class CartComponent implements OnInit, OnDestroy {
         if (data['ilock'] == true) {
           this.router.navigate(['bill']);
         } else {
-
+        
 
           this.loading = false;
           console.log(data);
@@ -132,6 +158,7 @@ export class CartComponent implements OnInit, OnDestroy {
     ).subscribe(
       data => {
         this.httpGet();
+        this.sendReload();
         this.loading = false;
         console.log(data);
       },
@@ -148,6 +175,7 @@ export class CartComponent implements OnInit, OnDestroy {
     ).subscribe(
       data => {
         this.httpGet();
+        this.sendReload();
         this.loading = false;
         console.log(data);
       },
@@ -181,7 +209,8 @@ export class CartComponent implements OnInit, OnDestroy {
                 barcode: data['items']['barcode'],
                 price: data['items']['price'],
                 images: data['items']['images'],
-              }
+              } 
+              this.sendReload();
             } else {
               this.noteScanner = this.barcode + " " + data['note'];
               this.adminMode = true;
@@ -189,8 +218,7 @@ export class CartComponent implements OnInit, OnDestroy {
               this.supervisor = data['supervisor'];
             }
 
-          } else {
-
+          } else { 
             this.error = true;
           }
           this.barcode = "";
@@ -213,6 +241,7 @@ export class CartComponent implements OnInit, OnDestroy {
     ).subscribe(
       data => {
         this.httpGet();
+        this.sendReload();
         console.log(data);
       },
     );
@@ -246,6 +275,7 @@ export class CartComponent implements OnInit, OnDestroy {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.sendReload();
         this.modalService.dismissAll();
         localStorage.removeItem(this.configService.myUUID());
         this.router.navigate(['login']);

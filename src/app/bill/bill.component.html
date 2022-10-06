@@ -18,19 +18,19 @@
         <div class="row">
             <div class="col">
                 <a href="javascript:void(0)" [routerLink]="[ '/cart']" [queryParams]="{ kioskUuid: uuid}" class="btn p-1  mx-1">
-                    <img src="./assets/imgs/icons8-back-67.png" width="60">
+                    <img src="./assets/imgs/icons8-back-67.png" width="90">
                 </a> 
             </div>
             <div class="col text-center">
-                <h2 class="px-2 mt-3">Checkout</h2>  
-                <h3>{{uuid}}</h3> 
+                <h1 class="px-2 mt-3">CHECKOUT</h1>  
+                <h2>{{uuid}}</h2> 
             </div>
             <div class="col text-end">
-                <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger p-1 border mx-1">
-                    <img src="./assets/imgs/icons8-close-64.png" width="60">
+                <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger rounded p-1   mx-1">
+                    <img src="./assets/imgs/icons8-close-64.png" width="90">
                 </a>
-                <a href="javascript:void(0)" class="btn bg-warning p-1 border mx-1">
-                   <img src="./assets/imgs/icons8-bell-64.png" width="60"> 
+                <a href="javascript:void(0)" (click)="help()" class="btn bg-warning rounded p-1 border mx-1">
+                   <img src="./assets/imgs/icons8-bell-64.png" width="90"> 
                 </a>
           
             </div>

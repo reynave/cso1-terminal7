@@ -1,1 +1,99 @@
-<p>member-barcode works!</p>
+<div class="bgn"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mt-5">
+            <div class="text-center my-5">
+                <img src="./assets/galleries/img12.png" [hidden]="member.length < 1" width="90%">
+                <img src="./assets/galleries/img10.png" [hidden]="member.length != 0" width="60%">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+       
+        
+        <div class="col-12" [hidden]="member.length != 0">
+            <div class="p-4">
+
+                <div class="text-center">
+                    <h1>Please enter your member ID</h1>
+                    <h1 class="text-danger my-5" [innerHTML]="this.notes"></h1>
+                </div>
+                <div class="mx-5">
+                    <div class="col-12 mb-4">
+                        <input type="text" class="form-control form-control-lg font-monospace inputScan border-5" #formRow [(ngModel)]="memberId" (change)="scannerMember();" placeholder="Scan Barcode" autofocus>
+
+                    </div>
+
+                    <div class="row">
+                       
+                        <div class="col-12  d-grid  my-3">
+                            <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-primary text-white rounded py-3 font-btn">SUBMIT</button>
+                        </div>
+                        <div class="col-12  d-grid">
+                            <button type="button" (click)="back()" class=" btn  btn-lg bg-white border  rounded py-3 font-btn">BACK</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" [hidden]="member.length < 1">
+            <div class="p-4 mx-5">
+                <div class="text-center">
+                    <h1 class="text-danger my-5" [innerHTML]="this.notes"></h1>
+                </div>
+                <table style="width: 100%" class="my-5">
+                    <tr>
+                        <td><h1>Name</h1></td>
+                        <td><h1>: {{member['firstName']}} {{member['lastName']}}</h1> </td>
+                    </tr>
+                    <tr>
+                        <td><h1>Member ID</h1></td>
+                        <td><h1>: {{member['id']}} </h1></td>
+                    </tr>
+                </table>
+                <div class="mt-5 d-grid">
+                    <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="text-center" [hidden]="!loginSuccess">
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h1>{{countdown}}</h1>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<footer>
+    <div class="container-fluid">
+        <div class="row g-1">
+
+            <div class="col-10">
+                <h2 class="p-2">{{today}}</h2>
+            </div>
+            <div class="col-2 text-end">
+                <h2 class="p-2">SCO V{{version}}</h2>
+            </div>
+        </div>
+    </div>
+</footer>

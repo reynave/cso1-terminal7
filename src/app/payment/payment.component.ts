@@ -61,7 +61,12 @@ export class PaymentComponent implements OnInit {
       this.router.navigate(['login']); 
     }
   }
- 
+  help(){ 
+    const msg = {
+      terminalId: this.terminalId,
+    }
+    this.configService.help(msg);
+  }
   httpGet() {
     this.loading = true;
     let url = this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID())+"&imei="+imei;

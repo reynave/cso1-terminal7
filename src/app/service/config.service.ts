@@ -3,6 +3,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookiesService } from './cookies.service';
 
+import { Socket } from 'ngx-socket-io';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +17,7 @@ export class ConfigService {
   constructor(
     private cookies: CookiesService,
     private http: HttpClient,
+    private socket: Socket
 
   ) {
     if (localStorage.getItem(this.deviceUuidVar) == null) {
@@ -27,6 +30,26 @@ export class ConfigService {
   logout() {
     
   }
+
+  sendMessage(data: any) {
+    this.socket.emit('data', data);
+  }
+  getMessage():any {
+    return this.socket.fromEvent('emiter');
+  }
+  getDocument(id: string) {
+    this.socket.emit('getDoc', id);
+  }
+    
+  help(data:any){
+    const msg = {
+      to: 'supervisor',
+      msg: 'Help! Terminal ID :'+ data['terminalId'],
+      action : 'help',
+    }
+    this.sendMessage(msg);
+  }
+
   getKioskUuid() {
     return this.kioskUuid;
   }

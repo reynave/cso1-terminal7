@@ -7,6 +7,7 @@ import { CartComponent } from './cart/cart.component';
 import { ForbidenComponent } from './forbiden/forbiden.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { MemberBarcodeComponent } from './login/member-barcode/member-barcode.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -21,7 +22,9 @@ const routes: Routes = [
   { path: "offline", component: SystemOfflineComponent, data: { active: "offline" }, },
   
   { path: "home", component: HomeComponent, data: { active: "home" }, },
-  { path: "login", component: LoginComponent, data: { active: "home" }, },
+  { path: "login", component: LoginComponent, data: { active: "login" }, },
+  { path: "login/memberBarcode", component: MemberBarcodeComponent, data: { active: "login" }, },
+  
   { path: "startup", component: StartupComponent, data: { active: "startup" }, },
   { path: "admin", component: AdminComponent, data: { active: "startup" }, },
 

@@ -26,6 +26,7 @@
     "crypto-js": "^4.1.1",
     "ngx-scanner-qrcode": "^1.0.17",
     "ngx-webcam": "^0.4.1",
+    "ngx-socket-io": "^4.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "uuid": "^8.3.2",

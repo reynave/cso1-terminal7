@@ -10,7 +10,8 @@ export const environment = {
   keygen: "t3XsTuq9aCvNxCkNXPEyvvGejhKBHumxVbv6fJ6aGeCPg83hzVGBYDFd6H8u",
   base_url: "#/",
   version : "1.1b",
-  token : 'DEV-WEBBASE-15fc3cec-5b65-4fb9-95af-r53bef239228'
+  token : 'DEV-WEBBASE-15fc3cec-5b65-4fb9-95af-r53bef239228',
+  socket_url : 'http://localhost:3000',
 };
 
 /*

@@ -49,8 +49,18 @@ export class PrintDetailComponent implements OnInit, AfterViewChecked {
     this.printable = true;
   }
 
-  print(){
-    window.print();
+  print(){ 
+    const body = {
+      id: this.activatedRoute.snapshot.params['id'], 
+    }
+    this.http.post<any>(this.api + 'kioskPrint/countingPrinting/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => { 
+        window.print();
+        console.log(data);
+      },
+    );
   }
   date : string = "";
   template : any = {

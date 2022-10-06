@@ -100,7 +100,12 @@ export class BillComponent implements OnInit {
   modal(content: any) {
     this.modalService.open(content, { centered: true });
   }
-
+  help(){ 
+    const msg = {
+      terminalId: this.terminalId,
+    }
+    this.configService.help(msg);
+  }
   fnLogoutVisitor() {
     const body = {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),

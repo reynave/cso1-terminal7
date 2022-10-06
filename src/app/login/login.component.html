@@ -1,17 +1,25 @@
-<div class="row">
-    <div class="col-6">
-        <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
-    </div>
-    <div class="col-6 text-end">
-        <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
+<div class="bgn"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
+        </div>
     </div>
 </div>
-<div class="container">
+<div class="container mt-5">
 
     <div class="row">
+
+        <div class="col-12 text-center my-4">
+            <h1 class="display-4" [innerHTML]="kioskMessage['welcome']"></h1>
+        </div>
+
         <div class="col-12">
             <div class="text-center mt-5">
-                <img [src]="this.api+'uploads/account/'+kioskMessage['logo']" class="intro-images">
+                <img [src]="this.api+'uploads/configuration/'+kioskMessage['logo']" class="intro-images">
             </div>
         </div>
 
@@ -19,11 +27,8 @@
 
 
     <div class="row">
-        <div class="col-12">
-        </div>
-        <div class="col-12 text-center my-4">
-            <h1 [innerHTML]="kioskMessage['welcome']"></h1>
-        </div>
+
+
         <div class="col-12 text-center my-4">
             <h1 [innerHTML]="greeting"></h1>
         </div>
@@ -34,96 +39,54 @@
 
     <div class="row" [hidden]="isStillLogin">
 
-        <div class="col-6 d-grid">
-            <button type="button" class=" btn  btn-lg btn-info text-white rounded py-3 font-btn" (click)="loginVisitor(modalWelcome);">VISITOR</button>
-        </div>
-        <div class="col-6 d-grid">
+        <div class="col-10 offset-1 d-grid">
             <!-- <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn"(click)="loginMember(modalWelcome)">MEMBER</button> -->
-
-            <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn" (click)="loginMemberManual(modalLoginMemberManual)">MEMBER</button>
+            <a class=" btn  btn-lg btn-primary text-white rounded-pill py-3  btn-login" [routerLink]="[ '/login/memberBarcode' ]">MEMBER</a>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12 text-center my-4">
-            <h1 [innerHTML]="kioskMessage['limit']"></h1>
+        
+        <div class="col-10 offset-1 d-grid  text-center" style="margin-top: 100px">
+            <h1>Don't have a membership?</h1>
+            <button type="button" class=" btn  btn-lg border  py-3 btn-visitor btn-light" (click)="loginVisitor(modalWelcome);">Visitor Login</button>
         </div>
+      
+       
     </div>
-
+ 
 
 </div>
- 
+
 
 <footer>
-    <div class="row g-1">
-        <div class="col-12 text-end">
-            <h2 class="p-2"> <a [routerLink]="[ '/admin' ]" >Admin Mode</a></h2>
-        </div>
-        <div class="col-10">
-            <h2 class="p-2">{{today}}</h2>
-        </div>
-        <div class="col-2 text-end">
-            <h2 class="p-2">SCO V{{version}}</h2>
+    <div class="container-fluid">
+        <div class="row g-1">
+            <div class="col-12 text-center mb-5">
+                <h1 [innerHTML]="kioskMessage['limit']"></h1>
+            </div> 
+          
+            <div class="col-12 text-end">
+                <h2 class="p-2"> <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
+            </div>
+            <div class="col-10">
+                <h2 class="p-2">{{today}}</h2>
+            </div>
+            <div class="col-2 text-end">
+                <h2 class="p-2">SCO V{{version}}</h2>
+            </div>
         </div>
     </div>
+
 </footer>
 
-<ng-template #modalLoginMemberManual let-modal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body ">
-        <div class="p-4 ">
-            <div>
-                <div class="text-center">
-                    <p>Silakan masukin member ID anda</p>
-                    <p class="text-danger my-5" [innerHTML]="this.notes"></p>
-                </div>
-                <div [hidden]="member.length < 1">
-                    <table style="width: 100%" class="my-5">
-                        <tr>
-                            <td>Name</td>
-                            <td>: {{member['firstName']}} {{member['lastName']}} </td>
-                        </tr>
-                        <tr>
-                            <td>Member ID</td>
-                            <td>: {{member['id']}} </td>
-                        </tr>
-                    </table>
-                    <div class="mt-5 d-grid">
-                        <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
-                    </div>
-                </div>
- 
-                <div >
-
-                    <div class="text-center" [hidden]="!loginSuccess">
-                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <h1>{{countdown}}</h1>
-                    </div>
-
-                    <input type="text" class="form-control form-control-lg font-monospace inputScan" 
-                    #formRow    [(ngModel)]="memberId" (change)="scannerMember();"  placeholder="Scan Barcode" autofocus>
-                    
-                    
-                    <div class="mt-5 d-grid">
-                        <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">SUBMIT</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</ng-template>
 
 
 <ng-template #modalWelcome let-modal let-c="close" let-d="dismiss">
-    
+
     <div class="modal-body">
-        <p class="text-center" [innerHTML]="kioskMessage['visitorDisplay']"> </p>
+        <div class="text-center">
+            <img class="my-4" [src]="this.api+'uploads/configuration/'+kioskMessage['logo']" width="90%">
+        </div>
+        <div class="mt-4 text-center display-5" [innerHTML]="kioskMessage['visitorDisplay']"> </div>
         <div class="text-center">
             <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>

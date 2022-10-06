@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit {
 
         this.greeting = data['greeting'];
         this.kioskMessage = {
-          logo: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 14))]['value'],
+          logo: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1010))]['value'],
           welcome: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1001))]['value'],
           limit: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1002))]['value'].replace("$item", data['limitItemsWarning']),
           customerStatement: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1003))]['value'],

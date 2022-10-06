@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 import { ConfigService } from 'src/app/service/config.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cart-finish',
@@ -23,9 +24,12 @@ export class CartFinishComponent implements OnInit {
   constructor(
     private router: Router,
     private configService: ConfigService,
+    private http: HttpClient,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+   
     this.httpGet();
   }
   httpGet() {
@@ -42,7 +46,7 @@ export class CartFinishComponent implements OnInit {
         setTimeout(() => {
           this.router.navigate(['/login']);
         },
-          n * 1000);
+          n * 1000 );
 
         this.runCountdown();
       }
@@ -54,8 +58,18 @@ export class CartFinishComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  printBill() {
-    window.print();
+  printBill() { 
+    const body = {
+      id: this.activatedRoute.snapshot.params['id'], 
+    }
+    this.http.post<any>(this.api + 'kioskPrint/countingPrinting/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => { 
+        window.print();
+        console.log(data);
+      },
+    );
   }
 
   runCountdown() {
