@@ -51,6 +51,7 @@
                             <td>{{x.qty}}</td>
                             <td>{{x.shortDesc}}
                                 <div [hidden]="x.isSpecialPrice == 0">*Special price</div>
+                                <div>{{x.note}}</div>
                             </td>
                             <td class="text-end">{{x.price |number}}</td>
                             <td class="text-end"><span [hidden]="x.totalDiscount<=0">-</span>{{x.totalDiscount |number}} </td>
