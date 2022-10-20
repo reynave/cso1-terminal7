@@ -1,11 +1,15 @@
+declare var env_api : any; 
+declare var env_socket : any;
+declare var env_terminal1 : any;
+
 export const environment = {
   production: true,
-  api:"http://194.233.77.27/cso/api/",
+  api: env_api,
   public : "",
   keygen : "t3XsTuq9aCvNxCkNXPEyvvGejhKBHumxVbv6fJ6aGeCPg83hzVGBYDFd6H8u", 
-  base_url : "http://194.233.77.27/cso/admin/#/",
+  base_url : env_terminal1,
   version : "1.1",
   token : 'DEV-WEBBASE-15fc3cec-5b65-4fb9-95af-r53bef239228',
-  socket_url : 'http://194.233.77.27:3000',
+  socket_url : env_socket,
 
 };
