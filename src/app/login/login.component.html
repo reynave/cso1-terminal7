@@ -12,58 +12,54 @@
 <div class="container mt-5">
 
     <div class="row">
-
-        <div class="col-12 text-center my-4">
-            <h1 class="display-4" [innerHTML]="kioskMessage['welcome']"></h1>
-        </div>
-
         <div class="col-12">
             <div class="text-center mt-5">
                 <img [src]="this.api+'uploads/configuration/'+kioskMessage['logo']" class="intro-images">
             </div>
         </div>
+        <div class="col-12 text-center my-4">
+            <h1 class="display-4" [innerHTML]="kioskMessage['welcome']"></h1>
+        </div>
+
+       
 
     </div>
 
 
     <div class="row">
-
-
-        <div class="col-12 text-center my-4">
-            <h1 [innerHTML]="greeting"></h1>
+        <div class="col-12 text-center my-5"> 
+            <h1 class="display-5" [innerHTML]="greeting"></h1> 
+            <h1 [innerHTML]="kioskMessage['limit']"></h1>
         </div>
         <div class="col-12 text-center" [hidden]="!isStillLogin">
             <a [routerLink]="[ '/cart' ]" [queryParams]="{kioskUuid: myUUID}" class="btn btn-lg bg-light border rounded font-btn">BACK TO CART</a>
         </div>
     </div>
 
-    <div class="row" [hidden]="isStillLogin">
-
-        <div class="col-10 offset-1 d-grid">
-            <!-- <button type="button" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn"(click)="loginMember(modalWelcome)">MEMBER</button> -->
-            <a class=" btn  btn-lg btn-primary text-white rounded-pill py-3  btn-login" [routerLink]="[ '/login/memberBarcode' ]">MEMBER</a>
+    <div class="row" [hidden]="isStillLogin"> 
+        <div class="col-6"  [routerLink]="[ '/login/memberBarcode' ]">
+            <div class="border shadow-md rounded bg-white p-4 text-center">
+                <img src="./assets/imgs/icons8-member-card-64.png" width="128">
+                <h1>Member</h1>
+            </div>
         </div>
-
-        
-        <div class="col-10 offset-1 d-grid  text-center" style="margin-top: 100px">
-            <h1>Don't have a membership?</h1>
-            <button type="button" class=" btn  btn-lg border  py-3 btn-visitor btn-light" (click)="loginVisitor(modalWelcome);">Visitor Login</button>
-        </div>
-      
+        <div class="col-6" (click)="loginVisitor(modalWelcome);">
+            <div class="border shadow-md rounded bg-white p-4 text-center">
+                <img src="./assets/imgs/icons8-visitor-100.png" width="128">
+                <h1>Visitor</h1>
+            </div>
+        </div> 
        
     </div>
  
-
 </div>
 
 
 <footer>
     <div class="container-fluid">
         <div class="row g-1">
-            <div class="col-12 text-center mb-5">
-                <h1 [innerHTML]="kioskMessage['limit']"></h1>
-            </div> 
-          
+     
+
             <div class="col-12 text-end">
                 <h2 class="p-2"> <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
             </div>

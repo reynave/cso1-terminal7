@@ -1,0 +1,73 @@
+<div class="bgn"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 pos-content">
+    <div class="row">
+        <div class="col-10 offset-1 ">
+            <div class="border text-center bg-dark  rounded shadow-sm">
+                <img [src]="images" width="700px" >
+            </div> 
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col-1">
+            <img src="./assets/imgs/checkbox.png" width="110%">
+        </div>
+        <div class="col-11">
+            <p>Saya bersedia dalam penggunaan system akan memasukan data  dengan benar & tepat</p>
+        </div>
+    
+        <div class="col-1">
+            <img src="./assets/imgs/checkbox.png" width="110%">
+        </div>
+        <div class="col-11">
+            <p>Saya bersedia jika ada kekurangan tepatan untuk menerima pihak toko melakukan penyesuaian</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-6 d-grid">
+            <button type="button" class="btn btn-dark btn-lg rounded font-btn py-3" (click)="takePhoto()" >Take Photo</button> 
+        </div>
+        <div class="col-6 d-grid">
+            <button type="button" class="btn btn-success btn-lg rounded font-btn py-3" [disabled]="!initPhoto" (click)="goToCart();" >{{ initPhoto ? "Ok and Next":"Photo required"}}</button>
+        
+        </div>
+
+        <div class="col-12 py-5">
+            <div [hidden]="!loading" class="text-center">
+                loading...
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+<footer>
+    <div class="container-fluid">
+        <div class="row g-1">
+     
+
+            <div class="col-12 text-end">
+                <h2 class="p-2"> <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
+            </div>
+            <div class="col-10">
+                <h2 class="p-2">{{today}}</h2>
+            </div>
+            <div class="col-2 text-end">
+                <h2 class="p-2">SCO V{{version}}</h2>
+            </div>
+        </div>
+    </div>
+
+</footer>
+

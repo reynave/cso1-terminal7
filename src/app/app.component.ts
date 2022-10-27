@@ -1,29 +1,34 @@
 import { Component, OnInit } from '@angular/core';
- 
-declare var device : any;
-declare var cordova : any;
+
+declare var device: any;
+declare var cordova: any;
+declare var screen: any;
 
 @Component({
   selector: 'app-root',
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-  
-  constructor(){}
+
+  constructor() { }
 
   ngOnInit(): void {
-      
+
     let onDeviceReady = () => {
-      console.log("Cordova Ready! ver 1.0.1 Stable");  
-      console.log(device.platform);
-      cordova.plugins.IMEI(function (err: any, imei: any) {
-        console.log('imei', imei);
-      })
-      
+      console.log("Cordova Ready! ver 1.0.1 Stable");
+      console.log('cordova ', device.cordova);
+      console.log('model ', device.model);
+      console.log('platform ', device.platform);
+      console.log('uuid ', device.uuid);
+      console.log('manufacturer ', device.manufacturer);
+      console.log('isVirtual ', device.isVirtual);
+      console.log('serial ', device.serial);
+      screen.orientation.lock('portrait');
+      console.log('Orientation is ' + screen.orientation.type);
     };
-    
+
     document.addEventListener('deviceready', onDeviceReady, false);
-    
+
   }
 
 }

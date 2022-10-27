@@ -4,12 +4,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-declare function haha(): any;
-declare let navigator: any;
-declare let cordova: any;
-declare let Camera: any;
-
+  
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,8 +12,7 @@ declare let Camera: any;
   providers: [NgbModalConfig, NgbModal]
 })
 export class LoginComponent implements OnInit {
-  @ViewChild('formRow', { static: false }) formRow: ElementRef | any;
-
+  
   outletId: any;
   loading: boolean = false;
   api: string = environment.api;
@@ -29,7 +23,7 @@ export class LoginComponent implements OnInit {
   memberId: string = "";
   loop: number = 0;
   notes: string = "";
-  greeting: string = "";
+  greeting: string = "loading...";
   kioskMessage: any = {
     logo: "",
     welcome: "",
@@ -37,6 +31,8 @@ export class LoginComponent implements OnInit {
     visitorDisplay: "",
     timer: 5,
     notFound: '',
+    visitorPhoto: true,
+    memberPhoto: true, 
   };
   member: any = [];
   myTimeout: any;
@@ -63,7 +59,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(navigator.camera);
+   
     if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
@@ -77,8 +73,6 @@ export class LoginComponent implements OnInit {
         }
         this.storeOutlesId = data['storeOutlesId'];
         this.terminalId = data['terminalId'];
-
-        this.greeting = data['greeting'];
         this.kioskMessage = {
           logo: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1010))]['value'],
           welcome: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1001))]['value'],
@@ -87,26 +81,17 @@ export class LoginComponent implements OnInit {
           memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1005))]['value'],
           visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1006))]['value'],
           timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
+          visitorPhoto : true,
+          
         }
         this.countdown = this.kioskMessage['timer'];
 
       }
     );
   }
-  scannerMember() {
+ 
 
-  }
-
-
-  fnAutoFocus() {
-    this.autoFocus = setInterval(() => {
-      this.formRow.nativeElement.focus();
-      console.log("fnAutoFocus");
-    }, 1000);
-  }
-
-  httpGet() {
-
+  httpGet() { 
     let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.uuidKios;
     console.log(url);
     this.http.get<any>(url,
@@ -114,9 +99,7 @@ export class LoginComponent implements OnInit {
     ).subscribe(
       data => {
         console.log(data);
-        /* if (data['error'] == true) {
-            localStorage.removeItem(this.configService.getKioskUuid());
-          }*/
+       
         this.greeting = data['greeting'];
 
       },
@@ -131,51 +114,22 @@ export class LoginComponent implements OnInit {
   }
 
   loginVisitor(loginVisitor: any) {
-    if (this.kioskMessage.visitorphoto == '1') {
-      console.log(" customer photo requred!");
+    this.loading = true;
+    const body = {
+      base64Images: false,
+    }
+    this.http.post<any>(this.api + 'kioskLogin/loginVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
 
-      navigator.camera.getPicture(cameraSuccess, cameraError, {
-        destinationType: Camera.DestinationType.FILE_URI,
-        quality: 10,
-        encodingType: Camera.EncodingType.JPEG,
-        correctOrientation: true,
-      });
-      let self = this;
-      function cameraSuccess(imageURI: any) {
-        console.log("Camera cameraSuccess.");
+        this.loading = false;
+        localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
 
-        const body = {
-          terminalId: self.terminalId,
-          base64Images: imageURI
-        }
-        self.http.post<any>(self.api + 'kioskLogin/loginVisitor/', body,
-          { headers: self.configService.headers() }
-        ).subscribe(
-          data => {
-            // this.modalService.open(loginVisitor); 
-            console.log(data);
-            self.loading = false;
-            self.goToCart();
-          },
-          e => {
-            console.log(e);
-          },
-        );
-
-      }
-
-      function cameraError() {
-        console.log("Camera cameraError / Close by user");
-      }
-    } else {
-      this.loading = true;
-      const body = {
-        base64Images: false,
-      }
-      this.http.post<any>(this.api + 'kioskLogin/loginVisitor/', body,
-        { headers: this.configService.headers() }
-      ).subscribe(
-        data => {
+        if (this.kioskMessage.visitorPhoto == true) {
+          console.log(" customer photo requred!");
+          this.router.navigate(['login/userPhoto']);
+        } else {
           this.modalService.open(loginVisitor, { size: 'xl' });
           this.runCountdown();
           let self = this;
@@ -185,134 +139,23 @@ export class LoginComponent implements OnInit {
             console.log('this.myTimeout TRIGER');
           }, parseInt(this.kioskMessage['timer']) * 1000);
           console.log("wait for " + parseInt(this.kioskMessage['timer']));
-
-
-          this.loading = false;
-          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-          //this.goToCart();
-        },
-        e => {
-          console.log(e);
-        },
-      );
-
-    }
-  }
-
-  loginMember(content: any) {
-    this.loading = true;
-    /**
-     * WIHT QR CODE
-     */
-    let self = this;
-    cordova.plugins.barcodeScanner.scan(
-
-      function (result: any) {
-
-        console.log("We got a barcode\n" +
-          "Result: " + result.text + "\n" +
-          "Format: " + result.format + "\n" +
-          "Cancelled: " + result.cancelled);
-
-
-        const body = {
-          terminalId: self.terminalId,
-          memberId: result.text,
-        }
-        self.http.post<any>(self.api + 'kioskLogin/loginMember/', body,
-          { headers: self.configService.headers() }
-        ).subscribe(
-          data => {
-            self.loading = false;
-            if (data['error'] == false) {
-              //localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-              //self.modalService.open(content, { size: 'lg' });
-              self.goToCart();
-            } else {
-              self.notes = self.kioskMessage['memberNotFound'];
-              console.log("MEMBER ID NOT FOUND");
-            }
-          },
-          e => {
-            console.log(e);
-          },
-        );
-
-
-      },
-      function (error: any) {
-        console.log("Scanning failed: " + error);
-      },
-      {
-        preferFrontCamera: false, // iOS and Android
-        showFlipCameraButton: true, // iOS and Android
-        showTorchButton: true, // iOS and Android
-        torchOn: false, // Android, launch with the torch switched on (if available)
-        saveHistory: false, // Android, save scan history (default false)
-        prompt: "Place a barcode inside the scan area", // Android
-        resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-        formats: "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
-        orientation: "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
-        disableAnimations: true, // iOS
-        disableSuccessBeep: false // iOS and Android
-      }
-    );
-
-
-
-  }
-
-  runCountdown() {
-    let self = this;
-    this.intervalTime = setInterval(function () {
-      self.countdown--;
-    }, 1000);
-  }
-
-  loginMemberManual(content: any) {
-    this.loading = true;
-    this.modalService.open(content, { size: 'xl' });
-  }
-
-  fnSubmitMemberIdManual() {
-    const body = {
-      memberId: this.memberId,
-    }
-    this.http.post<any>(this.api + 'kioskLogin/loginMember/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        this.loading = false;
-        console.log(data);
-        if (data['error'] == false) {
-          this.member = data['member'];
-          this.loginSuccess = true;
-          // this.goToCart(data);
-          // this.modalService.dismissAll();
-          localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-          this.kioskUuid = data['insert']['kioskUuid'];
-          let self = this;
-          this.runCountdown();
-          this.myTimeout = setTimeout(function () {
-            self.goToCart();
-            self.modalService.dismissAll();
-            console.log('this.myTimeout TRIGER');
-          }, parseInt(this.kioskMessage['timer']) * 1000);
-          console.log("wait for " + parseInt(this.kioskMessage['timer']));
-
-          this.notes = data['welcomeMember'];
-          this.member = data['member'];
-        } else {
-          this.notes = this.kioskMessage['memberNotFound'];
-          console.log("MEMBER ID NOT FOUND");
         }
       },
       e => {
         console.log(e);
       },
     );
-  }
 
+
+  }
+ 
+  runCountdown() {
+    let self = this;
+    this.intervalTime = setInterval(function () {
+      self.countdown--;
+    }, 1000);
+  }
+ 
   goToCart() {
     this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
   }

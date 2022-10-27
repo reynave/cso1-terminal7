@@ -4,7 +4,7 @@ import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { QRCodeModule } from 'angularx-qrcode';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io'; 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,10 +25,12 @@ import { PrintDetailComponent } from './print/print-detail/print-detail.componen
 import { AdminComponent } from './admin/admin.component';
 import { SystemOfflineComponent } from './system-offline/system-offline.component';
 import { MemberBarcodeComponent } from './login/member-barcode/member-barcode.component';
-import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component'; 
+import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { environment } from 'src/environments/environment';
+import { UserPhotoComponent } from './login/user-photo/user-photo.component'; 
 
-const config: SocketIoConfig = { url: environment.socket_url, options: { transports : ['websocket']} };
+
+const config: SocketIoConfig = { url: environment.socket_url, options: { transports: ['websocket'] } };
 
 @NgModule({
   declarations: [
@@ -48,12 +50,13 @@ const config: SocketIoConfig = { url: environment.socket_url, options: { transpo
     AdminComponent,
     SystemOfflineComponent,
     MemberBarcodeComponent,
-    PaymentQrisTelkomComponent, 
+    PaymentQrisTelkomComponent,
+    UserPhotoComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule, 
+    NgbModule,
     FormsModule,
     HttpClientModule,
     NgxScannerQrcodeModule,

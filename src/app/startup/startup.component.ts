@@ -74,7 +74,9 @@ export class StartupComponent implements OnInit {
   }
 
   start(){
-    this.router.navigate(['login']);
+    this.router.navigate(['login']).then(
+     // () => location.reload()
+    );
   }
 
 }

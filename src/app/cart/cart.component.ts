@@ -63,7 +63,6 @@ export class CartComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
-        console.log(data);
         if (data['action'] == 'reload' && data['to'] == 'terminal') {
           this.httpGet();
         }
@@ -71,7 +70,6 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     if (localStorage.getItem(this.configService.myUUID())) {
-      console.log("SILAKAN BELANJA!");
       this.httpGet();
       this.callHttpServer();
       this.configService.httpAccount().subscribe(
@@ -98,7 +96,6 @@ export class CartComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     clearInterval(this.callServer);
     this._docSub.unsubscribe();
-    console.log("NGONDESTROY");
   }
   help(){ 
     const msg = {
@@ -124,10 +121,7 @@ export class CartComponent implements OnInit, OnDestroy {
         if (data['ilock'] == true) {
           this.router.navigate(['bill']);
         } else {
-        
-
           this.loading = false;
-          console.log(data);
           this.items = data['items'];
           this.freeItem = data['freeItem'];
           this.ilock = data['ilock'];
@@ -160,7 +154,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.httpGet();
         this.sendReload();
         this.loading = false;
-        console.log(data);
       },
     );
   }
@@ -177,7 +170,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.httpGet();
         this.sendReload();
         this.loading = false;
-        console.log(data);
       },
     );
   }
@@ -191,7 +183,7 @@ export class CartComponent implements OnInit, OnDestroy {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
       memberId: 0,
     }
-    console.log(body);
+
     if (this.barcode != "") {
       this.addItem = true;
 
@@ -222,9 +214,7 @@ export class CartComponent implements OnInit, OnDestroy {
             this.error = true;
           }
           this.barcode = "";
-
           this.noteScanner = data['note'];
-          console.log(data);
         },
       );
     }
@@ -235,14 +225,13 @@ export class CartComponent implements OnInit, OnDestroy {
       items: x,
       userId: this.supervisor['id'],
     }
-    console.log(body);
+ 
     this.http.post<any>(this.api + 'kioskCart/fnUpdate/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
         this.httpGet();
         this.sendReload();
-        console.log(data);
       },
     );
   }
@@ -257,7 +246,6 @@ export class CartComponent implements OnInit, OnDestroy {
     ).subscribe(
       data => {
         this.router.navigate(['bill']);
-        console.log(data);
       },
     );
   }
@@ -270,7 +258,6 @@ export class CartComponent implements OnInit, OnDestroy {
     const body = {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
     }
-    console.log(body);
     this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
       { headers: this.configService.headers() }
     ).subscribe(

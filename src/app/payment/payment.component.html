@@ -50,11 +50,8 @@
         </div>
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1 d-grid mb-2">
-                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn bg-light btn-block py-3 rounded shadow-sm ">
-                  <img [src]="x.image" width="90%">  
-                  <div class="mt-4">
-                    <h1>{{x.name}}</h1>
-                  </div>
+                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block p-2 ">
+                  <img [src]="x.image" width="100%">   
                 </a>
             </div>
         </div>
@@ -65,9 +62,7 @@
 <ng-template #fakePayment let-c="close" let-d="dismiss">
 
     <div class="modal-body">
-        <div class="text-center my-5">
-
-
+        <div class="text-center my-5"> 
             <ng-container [ngSwitch]="paymentStatus">
                 <ng-container *ngSwitchCase="1"> 
                     <div class="py-1"> 
@@ -75,8 +70,7 @@
                         <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%"> 
                     </div>
 
-                    <div class="row g-2 ">
-                        
+                    <div class="row g-2 "> 
                         <div class="col-12 d-grid">
                             <a href="javascript:;" class="btn btn-block btn-info border text-white" (click)="fnProcessPaymentFake();">Fake payment process</a>
                         </div>

@@ -21,8 +21,12 @@ export class PaymentQrisTelkomComponent implements OnInit {
   storeOutlesId: string = "";
   terminalId: string = "";
   image : string = "";
+  status :  boolean = true;
   qrcode : string = "";
   loadingStatus : boolean = false;
+  name : string = "";
+  nmid : string = "";
+  exp : string="";
   constructor(
     private http: HttpClient,
     config: NgbModalConfig, 
@@ -40,8 +44,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
           this.terminalId  = data['terminalId'];  
         }
       );
-  }
-
+  } 
   httpGet(){ 
     this.loading = true;
     let url = environment.api+"kioskPayment/fnQrisTelkom/?kioskUuid="+this.uuidKios;
@@ -49,17 +52,41 @@ export class PaymentQrisTelkomComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.status = data['status'];
         this.image = data['image'];
         this.loading = false;
         console.log(data);  
         this.summary = data['summary'];
         this.qrcode = data['qris'];
+        this.name = data['name'];
+        this.nmid = data['nmid'];
+        this.exp = data['exp'];
+        
       },
       e => {
         console.log(e);
       },
     );
   }
+  fnGenerate(){ 
+    let url = environment.api+"kioskPayment/fnQrisTelkomRegenerate/";
+    const body = {
+      kioskUuid : this.uuidKios,  
+    }
+    this.http.post<any>(url,body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => { 
+        console.log(data);
+        history.back(); 
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+
+
   note : string = "";
   fnQrisTelkomStatus(){
     this.note = "";
