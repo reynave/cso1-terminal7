@@ -12,9 +12,28 @@
 
 <div class="container mt-5 pos-content">
     <div class="row">
+        <div class="col-12" [hidden]="memberId == '' ">
+            <div class="p-4 mx-5">
+                <div class="text-center">
+                    <h1 class="my-5" [innerHTML]="this.notes"></h1>
+                </div>
+                <table style="width: 100%" class="my-5">
+                    <tr>
+                        <td><h1>Name</h1></td>
+                        <td><h1>: {{name}}</h1> </td>
+                    </tr>
+                    <tr>
+                        <td><h1>Member ID</h1></td>
+                        <td><h1>: {{memberId}} </h1></td>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-10 offset-1 ">
             <div class="border text-center bg-dark  rounded shadow-sm">
-                <img [src]="images" width="700px" >
+                <img [src]="images" width="400px" >
             </div> 
         </div>
     </div>
@@ -39,7 +58,9 @@
         </div>
         <div class="col-6 d-grid">
             <button type="button" class="btn btn-success btn-lg rounded font-btn py-3" [disabled]="!initPhoto" (click)="goToCart();" >{{ initPhoto ? "Ok and Next":"Photo required"}}</button>
-        
+        </div>
+        <div class="col-12 text-center my-3">
+            <a href="javascript:;"  (click)="fnSkipPhoto();" >Skip take photo</a>
         </div>
 
         <div class="col-12 py-5">

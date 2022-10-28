@@ -63,10 +63,20 @@
                         <td><h1>: {{member['id']}} </h1></td>
                     </tr>
                 </table>
-                <div class="mt-5 d-grid">
-                    <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
-                </div>
+               
 
+                <div *ngIf="kioskMessage.memberPhoto; else justNext">
+                    <div   class="d-grid mt-5">
+                        <a [routerLink]="[ '/login/userPhoto' ]" class=" btn  btn-lg btn-warning text-white rounded py-3 font-btn">NEXT & TAKE PHOTO</a>
+                    </div>
+                </div>
+    
+                <ng-template #justNext>
+                    <div  class="d-grid mt-5">
+                        <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
+         
+                    </div>
+                </ng-template>
             </div>
         </div>
 

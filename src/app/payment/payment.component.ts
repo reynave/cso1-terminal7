@@ -5,8 +5,6 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
-declare var imei : any;
-
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
@@ -69,7 +67,7 @@ export class PaymentComponent implements OnInit {
   }
   httpGet() {
     this.loading = true;
-    let url = this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID())+"&imei="+imei;
+    let url = this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID());
     console.log(url);
     this.http.get<any>(url,
       { headers: this.configService.headers() }

@@ -21,14 +21,14 @@
             <h1 class="display-4" [innerHTML]="kioskMessage['welcome']"></h1>
         </div>
 
-       
+
 
     </div>
 
 
     <div class="row">
-        <div class="col-12 text-center my-5"> 
-            <h1 class="display-5" [innerHTML]="greeting"></h1> 
+        <div class="col-12 text-center my-5">
+            <h1 class="display-5" [innerHTML]="greeting"></h1>
             <h1 [innerHTML]="kioskMessage['limit']"></h1>
         </div>
         <div class="col-12 text-center" [hidden]="!isStillLogin">
@@ -36,8 +36,8 @@
         </div>
     </div>
 
-    <div class="row" [hidden]="isStillLogin"> 
-        <div class="col-6"  [routerLink]="[ '/login/memberBarcode' ]">
+    <div class="row" [hidden]="isStillLogin">
+        <div class="col-6" [routerLink]="[ '/login/memberBarcode' ]">
             <div class="border shadow-md rounded bg-white p-4 text-center">
                 <img src="./assets/imgs/icons8-member-card-64.png" width="128">
                 <h1>Member</h1>
@@ -48,17 +48,17 @@
                 <img src="./assets/imgs/icons8-visitor-100.png" width="128">
                 <h1>Visitor</h1>
             </div>
-        </div> 
-       
+        </div>
+
     </div>
- 
+
 </div>
 
 
 <footer>
     <div class="container-fluid">
         <div class="row g-1">
-     
+
 
             <div class="col-12 text-end">
                 <h2 class="p-2"> <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
@@ -89,8 +89,20 @@
             </div>
             <h1>{{countdown}}</h1>
         </div>
-        <div class="mt-5 d-grid">
-            <a [routerLink]="[ '/cart' ]" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">NEXT</a>
+        <div class="mt-5 ">
+             
+            <div *ngIf="kioskMessage.visitorPhoto; else justNext">
+                <div   class="d-grid">
+                    <a [routerLink]="[ '/login/userPhoto' ]" class=" btn  btn-lg btn-warning text-white rounded py-3 font-btn">NEXT & TAKE PHOTO</a>
+                </div>
+            </div>
+
+            <ng-template #justNext>
+                <div  class="d-grid">
+                    <a [routerLink]="[ '/cart' ]" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">NEXT</a>
+    
+                </div>
+            </ng-template>
         </div>
     </div>
 </ng-template>

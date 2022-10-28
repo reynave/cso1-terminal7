@@ -26,6 +26,9 @@ export class UserPhotoComponent implements OnInit {
   loading: boolean = false; 
   images : string = "./assets/imgs/user.png";
   initPhoto : boolean = false;
+  memberId : string = "";
+  name:string  = "";
+  notes : string = "";
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
@@ -46,19 +49,22 @@ export class UserPhotoComponent implements OnInit {
         this.terminalId = data['terminalId'];
       }
     );
+    this.httpGet();
   }
 
 
   httpGet() {
 
-    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.kioskUuid;
+    let url = this.api + 'kioskLogin/getInfo/?kioskUuid=' + this.kioskUuid;
     console.log(url);
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
         console.log(data);
-
+        this.memberId = data['memberId'];
+        this.name = data['name'];
+        this.notes = data['welcomeMember'];
       },
       e => {
         console.log(e);
@@ -96,7 +102,9 @@ export class UserPhotoComponent implements OnInit {
     console.log('error Camera', e);
     this.initPhoto= false;
   }
-
+  fnSkipPhoto(){
+    this.initPhoto = true;
+  }
 
   goToCart() {
     if(this.initPhoto == true){

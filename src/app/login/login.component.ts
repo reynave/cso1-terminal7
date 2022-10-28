@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-  
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +12,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   providers: [NgbModalConfig, NgbModal]
 })
 export class LoginComponent implements OnInit {
-  
+
   outletId: any;
   loading: boolean = false;
   api: string = environment.api;
@@ -31,18 +31,18 @@ export class LoginComponent implements OnInit {
     visitorDisplay: "",
     timer: 5,
     notFound: '',
-    visitorPhoto: true,
-    memberPhoto: true, 
+    visitorPhoto: false,
+    memberPhoto: false,
   };
   member: any = [];
   myTimeout: any;
   loginSuccess: boolean = false;
-  kioskUuid: string = '';
+  kioskUuid: any = localStorage.getItem(this.configService.myUUID());
   intervalTime: any;
   countdown: number = 0;
   today: any = new Date();
   autoFocus: any;
-  uuidKios: any = localStorage.getItem(this.configService.myUUID());
+
   storeOutlesId: string = "";
   terminalId: string = "";
   constructor(
@@ -59,7 +59,12 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-   
+    console.log("myUUID : ", localStorage.getItem(this.configService.myUUID()));
+    if (localStorage.getItem(this.configService.deviceUuid()) === null) {
+      alert("NO KEY");
+      this.router.navigate(['./']);
+    }
+
     if (localStorage.getItem(this.configService.myUUID()) !== null) {
       this.isStillLogin = true;
       this.myUUID = localStorage.getItem(this.configService.myUUID());
@@ -81,27 +86,30 @@ export class LoginComponent implements OnInit {
           memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1005))]['value'],
           visitorDisplay: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1006))]['value'],
           timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
-          visitorPhoto : true,
-          
+          memberPhoto: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 15))]['value'] == "1" ? true : false,
+          visitorPhoto: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 16))]['value'] == "1" ? true : false,
+
         }
         this.countdown = this.kioskMessage['timer'];
 
-      }
+      },
+      e => {
+        console.log(e);
+      },
     );
   }
- 
 
-  httpGet() { 
-    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.uuidKios;
+
+  httpGet() {
+
+    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.kioskUuid;
     console.log(url);
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
         console.log(data);
-       
         this.greeting = data['greeting'];
-
       },
       e => {
         console.log(e);
@@ -122,24 +130,19 @@ export class LoginComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-
         this.loading = false;
         localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
 
-        if (this.kioskMessage.visitorPhoto == true) {
-          console.log(" customer photo requred!");
-          this.router.navigate(['login/userPhoto']);
-        } else {
-          this.modalService.open(loginVisitor, { size: 'xl' });
-          this.runCountdown();
-          let self = this;
-          this.myTimeout = setTimeout(function () {
-            self.goToCart();
-            self.modalService.dismissAll();
-            console.log('this.myTimeout TRIGER');
-          }, parseInt(this.kioskMessage['timer']) * 1000);
-          console.log("wait for " + parseInt(this.kioskMessage['timer']));
-        }
+        this.modalService.open(loginVisitor, { size: 'xl' });
+        this.runCountdown();
+        let self = this;
+        this.myTimeout = setTimeout(function () {
+          self.goToCart();
+          self.modalService.dismissAll();
+          console.log('this.myTimeout TRIGER');
+        }, parseInt(this.kioskMessage['timer']) * 1000);
+        console.log("wait for " + parseInt(this.kioskMessage['timer']));
+
       },
       e => {
         console.log(e);
@@ -148,14 +151,14 @@ export class LoginComponent implements OnInit {
 
 
   }
- 
+
   runCountdown() {
     let self = this;
     this.intervalTime = setInterval(function () {
       self.countdown--;
     }, 1000);
   }
- 
+
   goToCart() {
     this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
   }

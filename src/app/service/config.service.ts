@@ -30,6 +30,9 @@ export class ConfigService {
   logout() {
     
   }
+  reloadToken(){
+    this.varToken = localStorage.getItem(this.deviceUuidVar);
+  }
 
   sendMessage(data: any) {
     this.socket.emit('data', data);
@@ -61,6 +64,7 @@ export class ConfigService {
   }
   
   headers() {
+    this.reloadToken();
     return this.varHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
       'Token': this.varToken,
@@ -70,7 +74,8 @@ export class ConfigService {
     return localStorage.getItem(this.deviceUuidVar);
   }
 
-  id_user() {
+  id_user() { 
+    this.reloadToken();
     return this.varToken;
   }
 
@@ -90,10 +95,31 @@ export class ConfigService {
 
 
   httpAccount() {
-    return this.http.get<any>(this.api + 'Kiosks/index/?token='+this.varToken,
+    this.reloadToken();
+    let url = this.api + 'Kiosks/index/?token='+this.varToken;
+    console.log("httpAccount : " ,url)
+    return this.http.get<any>(url,
       { headers: this.headers() }
     );
     
   }
+
+  reverseString(str : string) {
+    // Step 1. Use the split() method to return a new array
+    let splitString = str.split(""); // var splitString = "hello".split("");
+    // ["h", "e", "l", "l", "o"]
+
+    // Step 2. Use the reverse() method to reverse the new created array
+    let reverseArray = splitString.reverse(); // var reverseArray = ["h", "e", "l", "l", "o"].reverse();
+    // ["o", "l", "l", "e", "h"]
+
+    // Step 3. Use the join() method to join all elements of the array into a string
+    let joinArray = reverseArray.join(""); // var joinArray = ["o", "l", "l", "e", "h"].join("");
+    // "olleh"
+
+    //Step 4. Return the reversed string
+    return joinArray; // "olleh"
+}
+
 
 }

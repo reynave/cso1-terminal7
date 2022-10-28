@@ -30,6 +30,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
     visitorDisplay: "",
     timer: 5,
     notFound: '',
+    memberPhoto: false,
   };
   member: any = [];
   myTimeout: any;
@@ -64,7 +65,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
       this.myUUID = localStorage.getItem(this.configService.myUUID());
       this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
     }
-    
+
     this.configService.httpAccount().subscribe(
       data => {
         console.log(data);
@@ -72,13 +73,16 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
           this.router.navigate(['offline']);
         }
         this.storeOutlesId = data['storeOutlesId'];
-        this.terminalId = data['terminalId']; 
+        this.terminalId = data['terminalId'];
         this.greeting = data['greeting'];
         this.kioskMessage = {
           customerStatement: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1003))]['value'],
-          memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1005))]['value'], 
+          memberNotFound: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1005))]['value'],
           timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
+          memberPhoto: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 15))]['value'] == "1" ? true : false,
+
         }
+        console.log("kioskMessage", this.kioskMessage);
         this.countdown = this.kioskMessage['timer'];
 
       }
@@ -90,7 +94,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
     }, 300);
   }
   ngOnDestroy() {
-    clearInterval(this.callServer); 
+    clearInterval(this.callServer);
     console.log("NGONDESTROY");
   }
   goToCart() {
@@ -105,6 +109,8 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
   scannerMember() {
     this.fnSubmitMemberIdManual();
   }
+
+
   fnSubmitMemberIdManual() {
     const body = {
       memberId: this.memberId,
@@ -119,12 +125,13 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
         if (data['error'] == false) {
           this.member = data['member'];
           this.loginSuccess = true;
-          // this.goToCart(data);
-          // this.modalService.dismissAll();
           localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
           this.kioskUuid = data['insert']['kioskUuid'];
+          this.notes = data['welcomeMember'];
+          this.member = data['member'];
+
           let self = this;
-          this.runCountdown();  
+          this.runCountdown();
           this.myTimeout = setTimeout(function () {
             self.goToCart();
             self.modalService.dismissAll();
@@ -132,8 +139,8 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
           }, parseInt(this.kioskMessage['timer']) * 1000);
           console.log("wait for " + parseInt(this.kioskMessage['timer']));
 
-          this.notes = data['welcomeMember'];
-          this.member = data['member'];
+
+
         } else {
           this.notes = this.kioskMessage['memberNotFound'];
           console.log("MEMBER ID NOT FOUND");
@@ -144,7 +151,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
       },
     );
   }
-  back(){
+  back() {
     history.back();
   }
 }
