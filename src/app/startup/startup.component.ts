@@ -70,13 +70,15 @@ export class StartupComponent implements OnInit {
       const deviceData = device;
 
     } catch (err) { 
+
       localStorage.setItem(this.configService.deviceUuid(), environment.token);
-      console.log(environment.token);  
+      console.log("device.platform web base with key  : ",environment.token);  
     }
 
     if (device.platform == 'Android') {
-      console.log("ANDROID device.uuid : ",device.uuid,this.keyGen(device.uuid));
-      localStorage.setItem(this.configService.deviceUuid(), this.keyGen(device.uuid));
+      let newToken = device.serial+"@"+this.keyGen(device.serial);
+      console.log("device.platform is ANDROID with key  : ",newToken);
+      localStorage.setItem(this.configService.deviceUuid(),newToken);
     }  
    
   }
