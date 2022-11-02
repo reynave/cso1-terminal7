@@ -5,7 +5,10 @@
 /tmp
 /out-tsc
 /bazel-out
-/MyApp
+/MyApp/node_modules
+/MyApp/platforms
+/MyApp/plugins
+
 # Node
 /node_modules
 npm-debug.log
