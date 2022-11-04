@@ -1,23 +1,29 @@
-<div class="container py-2 my-5 disablePrintArea">
-    <div class="row">
-        <div class="col-6">
-            <h1>SUPERVISOR MODE </h1>
-            <h2>Transaction </h2>
-        </div>
-        <div class="col-6 text-end">
-            <a href="javascript:void(0)" (click)="back()" class="btn btn-sm py-1 btn-warning mx-4 font-btn">
-                <i class="ti ti-logout"></i> Back
-            </a>
+<app-header></app-header>
 
-            <a href="javascript:;" (click)="print();" [hidden]="!printable" class="btn btn-sm py-1 btn-info font-btn">
-                <i class="ti ti-printer"></i> Print
-            </a>
+<div class="container disablePrintArea">
+    <div class="row g-0">
+        <div class="col-8  ">
+            <a href="javascript:void(0)" (click)="back()" class="btn btn-lg btn-warning font-btn">
+                <i class="ti ti-logout"></i> Back 
+            </a>  
+            <button type="button" [disabled]="!printable" (click)="print('browser')" class="btn btn-lg btn-block btn-info mx-2 font-btn">
+                <img src="./assets/imgs/icons8-label-printer-100.png" height="40"> Browser
+            </button> 
+            <button type="button" (click)="print('android')" class="btn btn-lg btn-block btn-success font-btn">
+                <img src="./assets/imgs/icons8-label-printer-100.png" height="40" > Android
+            </button> 
         </div>
+
+        <div class="col-4 text-end">
+            <h1>TRANSACTION </h1>
+            <h2><div class="text-monospace">{{id}}</div> </h2>
+        </div>
+       
     </div>
 
 </div>
 
-<div class="mb-5 pb-4 text-monospace printbill">
+<div class="container text-monospace printbill">
 
     <div class="row">
         <div class="col-12">
@@ -26,7 +32,7 @@
                 <div class="text-center"> {{template.companyAddress}} </div>
                 <div class="text-center"> {{template.companyPhone}} </div>
 
-                <div class="row">
+                <div class="row mt-4">
                     <div class="col-6">
                         Order No : <span class="text-monospace">{{id}}</span>
                     </div>
@@ -73,7 +79,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="4"> total </td>
+                            <td colspan="4"> Subtotal </td>
                             <td class="text-end"> {{summary.total | number}} </td>
                         </tr>
                         <tr>
@@ -105,7 +111,7 @@
                             <td class="text-end">{{summary.nonBkp | number}} </td>
                         </tr>
                         <tr>
-                            <td colspan="4"> Total Setelah Pajak </td>
+                            <td colspan="4"> Total (Setelah Pajak) </td>
                             <td class="text-end"> {{summary.final | number}}</td>
                         </tr>
 
@@ -128,11 +134,25 @@
                     </span>
                 </div>
 
-                <div class="text-center">
-                    {{template.footer}}
-                </div>
+                <div class="text-center" [innerHtml]="template.footer"> </div>
             </div>
         </div>
     </div>
 
+</div>
+
+<div class="container disablePrintArea mt-5">
+    <div class="row">
+        <div class="col-6 text-center d-grid ">
+            <button type="button" [disabled]="!printable" (click)="print('browser')"  class="btn btn-lg btn-block btn-info my-1 py-4 mb-3 font-btn">
+                <img src="./assets/imgs/icons8-label-printer-100.png" height="50"> Browser Print
+            </button> 
+        </div>
+
+        <div class="col-6 text-center d-grid">
+            <button type="button" (click)="print('android')" class="btn btn-lg btn-block btn-success my-1 py-4 mb-3 font-btn">
+                <img src="./assets/imgs/icons8-label-printer-100.png" height="50" > Android Print
+            </button> 
+        </div>
+    </div>
 </div>

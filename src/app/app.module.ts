@@ -27,7 +27,9 @@ import { SystemOfflineComponent } from './system-offline/system-offline.componen
 import { MemberBarcodeComponent } from './login/member-barcode/member-barcode.component';
 import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { environment } from 'src/environments/environment';
-import { UserPhotoComponent } from './login/user-photo/user-photo.component'; 
+import { UserPhotoComponent } from './login/user-photo/user-photo.component';
+import { HeaderComponent } from './header/header.component';
+import { PrintSettingComponent } from './print/print-setting/print-setting.component'; 
 
 
 const config: SocketIoConfig = { url: environment.socket_url, options: { transports: ['websocket'] } };
@@ -52,6 +54,8 @@ const config: SocketIoConfig = { url: environment.socket_url, options: { transpo
     MemberBarcodeComponent,
     PaymentQrisTelkomComponent,
     UserPhotoComponent,
+    HeaderComponent,
+    PrintSettingComponent,
   ],
   imports: [
     BrowserModule,

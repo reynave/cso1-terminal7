@@ -32,7 +32,11 @@
         "ANDROIDX_CORE_VERSION": "1.6.+"
       },
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-screen-orientation": {}
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-usbprint": {}
     }
+  },
+  "dependencies": {
+    "cordova-plugin-usbprint": "0.0.4"
   }
 }

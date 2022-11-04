@@ -1,25 +1,28 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
+import { PrintingService } from 'src/app/service/printing.service';
 
+declare var window: any;
 @Component({
   selector: 'app-print-detail',
   templateUrl: './print-detail.component.html',
   styleUrls: ['./print-detail.component.css']
 })
-export class PrintDetailComponent implements OnInit, AfterViewChecked {
+export class PrintDetailComponent implements OnInit {
   loading: boolean = false;
+  printerName: any;
   api: string = environment.api;
   barcode: string = "";
   items: any = [];
   itemsList: any = [];
-  freeItem : any = [];
-  uuid : any;
-  freeItemWaitingScanFail : any = [];
-  adminMode : boolean = false;
-  id : string= "";
+  freeItem: any = [];
+  uuid: any;
+  freeItemWaitingScanFail: any = [];
+  adminMode: boolean = false;
+  id: string = "";
   summary: any = {
     Final: 0,
     NonBkp: 0,
@@ -31,63 +34,94 @@ export class PrintDetailComponent implements OnInit, AfterViewChecked {
     total: 0,
     voucer: 0,
   }
-  printable : boolean = false;
+  printable: boolean = false;
+
+  date: string = "";
+  template: any = {
+    companyName: '',
+    companyAddress: '',
+    companyPhone: '',
+    footer: '',
+  }
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
+    private printing: PrintingService, 
     private router: Router,
   ) { }
 
-  ngOnInit(): void { 
-    this.httpGet();  
+  ngOnInit(): void {
+    this.httpGet();
     console.log(this.activatedRoute.snapshot.params['id'])
   }
 
-  ngAfterViewChecked() : void{
-    console.log('ngAfterViewChecked');
-    this.printable = true;
-  }
 
-  print(){ 
+  
+
+  print(name: string) {
     const body = {
-      id: this.activatedRoute.snapshot.params['id'], 
+      id: this.activatedRoute.snapshot.params['id'],
     }
     this.http.post<any>(this.api + 'kioskPrint/countingPrinting/', body,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => { 
-        window.print();
-        console.log(data);
+      data => {
+        if (name == 'android') {
+         
+          
+
+          console.log(this.printing.template( this.bill));
+
+          this.printerName = localStorage.getItem(this.configService.printerName());
+          // if (this.printerName == "" || this.printerName == null) {
+          //   alert("NO PRINTING SELECT"); 
+          // }else{
+
+          //   window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
+          //     console.log(result);
+          //     window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
+          //       console.log("result of usb print action", result);
+          //     }, (err: any) => {
+          //       console.error('Error in usb print action', err)
+          //     });
+
+          //   }, (err: any) => {
+          //     console.error(err);
+          //   });
+          // }
+        }
+
+        else if (name == 'browser') {
+          window.print();
+          console.log(data);
+        }
+
       },
     );
   }
-  date : string = "";
-  template : any = {
-    companyName : '',
-    companyAddress : '',
-    companyPhone : '',
-    footer : '',
-  }
+  bill : any = [];
   httpGet() {
     this.loading = true;
-    this.http.get<any>(this.api + 'KioskPrint/printDetail/?id=' +this.activatedRoute.snapshot.params['id'] ,
+    this.http.get<any>(this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'],
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.bill = data;
+        this.printable = true;
         this.id = data['id'];
         this.date = data['date'];
         this.template = {
-          companyName : data['template']['companyName'],
-          companyAddress : data['template']['companyAddress'],
-          companyPhone : data['template']['companyPhone'],
-          footer : data['template']['footer'], 
+          companyName: data['template']['companyName'],
+          companyAddress: data['template']['companyAddress'],
+          companyPhone: data['template']['companyPhone'],
+          footer: data['template']['footer'],
         }
         this.loading = false;
         console.log(data);
         this.items = data['items'];
         this.itemsList = data['itemsList'];
-        this.freeItem =  data['freeItem'];
+        this.freeItem = data['freeItem'];
         this.freeItemWaitingScanFail = data['freeItemWaitingScanFail'];
         this.summary = {
           total: data['summary']['total'],
@@ -97,7 +131,7 @@ export class PrintDetailComponent implements OnInit, AfterViewChecked {
           discount: data['summary']['discount'],
           dpp: data['summary']['dpp'],
           discountMember: data['summary']['discountMember'],
-          ppn: data['summary']['ppn'], 
+          ppn: data['summary']['ppn'],
           voucher: data['summary']['voucher'],
         }
       },
@@ -107,7 +141,7 @@ export class PrintDetailComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  back(){
+  back() {
     window.history.back();
   }
 }

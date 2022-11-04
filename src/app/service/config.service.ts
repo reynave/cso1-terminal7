@@ -27,6 +27,10 @@ export class ConfigService {
     }
   }
 
+  printerName() :string{
+    return "SCO1printerName";
+  }
+
   logout() {
     
   }

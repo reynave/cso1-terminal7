@@ -14,6 +14,7 @@ import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/paymen
 import { PaymentComponent } from './payment/payment.component';
 import { PhotoComponent } from './photo/photo.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
+import { PrintSettingComponent } from './print/print-setting/print-setting.component';
 import { PrintComponent } from './print/print.component';
 import { StartupComponent } from './startup/startup.component';
 import { SystemOfflineComponent } from './system-offline/system-offline.component';
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: "bill", component: BillComponent, data: { active: "bill" }, },
   { path: "print", component: PrintComponent, data: { active: "print" }, },
   { path: "print/detail/:id", component: PrintDetailComponent, data: { active: "print" }, },
+  { path: "print/setting", component: PrintSettingComponent, data: { active: "print" }, },
   
   { path: "payment", component: PaymentComponent, data: { active: "payment" }, },
   { path: "payment/qristelkom/:id", component: PaymentQrisTelkomComponent, data: { active: "payment" }, },

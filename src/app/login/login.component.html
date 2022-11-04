@@ -5,7 +5,7 @@
             <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
         </div>
         <div class="col-6 text-end">
-            <h2 class="p-2">Outlet Id : {{storeOutlesId}}</h2>
+            <h2 class="p-2">Outlet Id : {{storeOutlesId}} <img src="./assets/imgs/icons8-label-printer-100.png" height="50"></h2>
         </div>
     </div>
 </div>
@@ -13,16 +13,14 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="text-center mt-5">
+            <div class="text-center my-5">
                 <img [src]="this.api+'uploads/configuration/'+kioskMessage['logo']" class="intro-images">
             </div>
         </div>
         <div class="col-12 text-center my-4">
-            <h1 class="display-4" [innerHTML]="kioskMessage['welcome']"></h1>
+            <h1 class="display-5" [innerHTML]="kioskMessage['welcome']"></h1>
         </div>
-
-
-
+ 
     </div>
 
 
