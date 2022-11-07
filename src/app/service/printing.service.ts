@@ -33,6 +33,7 @@ export class PrintingService {
   template(bill : any){
     let items = bill['items'];
     let summary = bill['summary'];
+    
     let message = "\n\n";
     console.log(items);
     console.log("123456789-123456789-123456789-123456789-12345678"+"\n");
@@ -65,10 +66,14 @@ export class PrintingService {
     this.stringfix(this.numberFormat(summary['ppn']), 11, 'f')+" "+
     this.stringfix(this.numberFormat(summary['dpp']), 11, 'f')+" "+
     this.stringfix(this.numberFormat(summary['nonBkp']), 11, 'f'); 
-    message += "\n";  
+    message += "\n\n";  
+    message += "BILL                  : "+bill['id']+ "\n"; 
+    message += "DATE                  : "+bill['date']+ "\n";    
+    message += "UNIT / OUTLET ID      : "+bill['detail']['terminalId']+ "/"+ bill['detail']['storeOutlesId'] +" \n";  
+    
     message += "\n";  
     message += bill['template']['footer'].replace("<br>","\n")+"\n\n\n\n"; 
-
+    console.log(message);
     return message;
   }
 }

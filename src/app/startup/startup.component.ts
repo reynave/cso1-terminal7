@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/service/config.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as CryptoJS from "crypto-js";
 
 declare var device: any;
 @Component({
@@ -14,6 +13,7 @@ declare var device: any;
 export class StartupComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
+  serialNumber: string = "";
   terminal: any = {
     id: "",
     name: "",
@@ -27,11 +27,13 @@ export class StartupComponent implements OnInit {
     updateDate: 0,
     updateBy: 0
   }
+  agent: any = [];
   deviceUuid: string = "";
   error: boolean = true;
   note: string = "";
   systemOnline: boolean = false;
-  platform: string = "browser";
+  platform: string = "browser"; 
+  printer : any;
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
@@ -40,9 +42,7 @@ export class StartupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.httpGet();
-    this.fnSaveDeviceID();
-
+   
     let onDeviceReady = () => {
       console.log('cordova ', device.cordova);
       console.log('model ', device.model);
@@ -51,45 +51,42 @@ export class StartupComponent implements OnInit {
       console.log('manufacturer ', device.manufacturer);
       console.log('isVirtual ', device.isVirtual);
       console.log('serial ', device.serial);
-    }; 
+    };
     document.addEventListener('deviceready', onDeviceReady, false);
+    this.reload();
+ 
+  }
+  
+  reload() {
+    this.fnSaveDeviceID();
+    this.httpGet();
+    this.printer = this.configService.printer();
   }
 
-  keyGen(data : string){
-    let word = this.configService.reverseString(data)
-    const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(word));
-    const md5 = hash.toString(CryptoJS.enc.Hex);
-    return md5;
-  }
 
   fnSaveDeviceID() {
-    /**
-     * deviceUuid overwrite dari imei
-     */ 
-    try {
-      const deviceData = device;
+    this.agent = this.configService.agent();
 
-    } catch (err) { 
-
-      localStorage.setItem(this.configService.deviceUuid(), environment.token);
-      console.log("device.platform web base with key  : ",environment.token);  
-    }
-
-    if (device.platform == 'Android') {
-      let newToken = device.serial+"@"+this.keyGen(device.serial);
-      console.log("device.platform is ANDROID with key  : ",newToken);
-      localStorage.setItem(this.configService.deviceUuid(),newToken);
-    }  
-   
+    if (this.agent.isDesktopDevice === true) {
+      this.platform = "isDesktopDevice";
+      console.log("isDesktopDevice");
+      localStorage.setItem(this.configService.deviceUuid(), environment.token);  
+      this.serialNumber = environment.token;
+    } else {
+      this.platform = "isTablet"; 
+      console.log("isTablet"); 
+      localStorage.setItem(this.configService.deviceUuid(),  device.serial);
+      this.serialNumber =  device.serial;
+    } 
   }
 
-  reload() {
-    this.httpGet();
-    this.fnSaveDeviceID();
-  }
+
   httpGet() {
+
+    console.log("keygen  ",this.configService.keygen() ); 
     this.loading = true;
-    let api = this.api + 'kioskStartup/account/?token=' + environment.token;
+    let api = this.api + 'kioskStartup/account/?token=' + this.configService.keygen();
+    console.log(api);
     this.http.get<any>(api
     ).subscribe(
       data => {
@@ -108,5 +105,6 @@ export class StartupComponent implements OnInit {
   start() {
     this.router.navigate(['login']);
   }
+
 
 }

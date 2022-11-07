@@ -66,13 +66,14 @@
             <ng-container [ngSwitch]="paymentStatus">
                 <ng-container *ngSwitchCase="1"> 
                     <div class="py-1"> 
-                        <h4>Payment Process</h4>
+                        <h1>Payment Process</h1>
                         <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%"> 
                     </div>
 
                     <div class="row g-2 "> 
                         <div class="col-12 d-grid">
-                            <a href="javascript:;" class="btn btn-block btn-info border text-white" (click)="fnProcessPaymentFake();">Fake payment process</a>
+                            <a href="javascript:;" class="btn btn-block btn-info border text-white  font-btn" 
+                            (click)="fnProcessPaymentFake();">Fake Payment Process</a>
                         </div>
                         <div class="col-12 d-grid mt-2">
                             <a href="javascript:;" (click)="d('Cross click')" class="text-danger" >
@@ -83,13 +84,13 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="2">
-                    <h4>Payment Success</h4>
+                    <h1>Payment Success</h1>
                     <div class="my-4">{{t1_thank_you_display}}</div>
                     <button type="button" (click)="finishShopping();" class="btn btn-lg btn-success">Close</button>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="3">
-                    <h4>Payment Fail</h4>
+                    <h1>Payment Fail</h1>
                     <div>Please try again!</div>
                 </ng-container>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from 'src/app/service/config.service';
- 
+
 declare var window: any;
 @Component({
   selector: 'app-print-setting',
@@ -18,40 +18,45 @@ export class PrintSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.printerName = localStorage.getItem(this.configService.printerName());
     this.reloadData();
   }
   reloadData() {
+    console.log("reloadData");
+    this.logs("Reload Data");
     this.printerName = localStorage.getItem(this.configService.printerName());
-    let onDeviceReady = () => {
-      window['cordova'].plugins.UsbPrinter.getConnectedPrinters((result: any) => {
-        this.selectPrinter = result;
-        console.log(result);
-        this.logs("! result will be list of printers connected to the usb device");
 
-      }, (err: any) => {
-        console.error(err)
-        this.logs("! failure callback execution");
+    window['cordova'].plugins.UsbPrinter.getConnectedPrinters((result: any) => {
+      this.selectPrinter = result;
+      console.log(result);
+      if (result === undefined || result.length == 0) {
+          // array does not exist or is empty
+          this.logs("PRINTER USB does not exist");
+      }
+     
+      this.logs("result will be list of printers connected to the usb device");
 
-      });
-    };
-    document.addEventListener('deviceready', onDeviceReady, false);
+    }, (err: any) => {
+      console.error(err)
+      this.logs("!failure callback execution");
+    });
   }
 
   fnSelectPrinter() {
     window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
       console.log(result);
       this.logs("! success callback execution");
-    }, (err: any) => {
-
+    }, (err: any) => { 
       console.error(err)
-      this.logs("! err : use this method to recognise the disconnection of usb device");
-      this.logs("! err : failure callback execution");
+      this.logs("!err : use this method to recognise the disconnection of usb device");
+      this.logs("!err : failure callback execution");
     });
   }
 
   fnSave() {
     this.logs("SAVE() " + this.printerName);
     if (this.printerName != "" && this.printerName != null) {
+      this.fnSelectPrinter();
       localStorage.setItem(this.configService.printerName(), this.printerName);
     } else {
       alert("Please select printer ID");
@@ -60,14 +65,7 @@ export class PrintSettingComponent implements OnInit {
     }
 
   }
-  reload() {
-    this.loading = true;
-    let self = this;
-    setTimeout(function () {
-      self.loading = false;
-    }, 500);
-    this.reloadData();
-  }
+
   fnClear() {
     localStorage.removeItem(this.configService.printerName());
     this.reloadData();
@@ -79,6 +77,7 @@ export class PrintSettingComponent implements OnInit {
   }
 
   logs(note: string) {
+    console.log(note);
     this.note = this.note + "\n" + note;
   }
 
@@ -102,8 +101,8 @@ ${date}
         console.log(result);
         this.logs("! success callback execution");
         window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
-          console.log("result of usb print action", result); 
-          this.logs("! successful callback execution"); 
+          console.log("result of usb print action", result);
+          this.logs("! successful callback execution");
         }, (err: any) => {
           console.error('Error in usb print action', err)
           this.logs("! Error in usb print action");

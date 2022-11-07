@@ -2,57 +2,61 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookiesService } from './cookies.service';
-
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { Socket } from 'ngx-socket-io';
+import * as CryptoJS from "crypto-js";
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService { 
-  kioskUuid : string = "t1_kioskUuid"; 
-  deviceUuidVar : string = 'deviceUuid';
+export class ConfigService {
+  kioskUuid: string = "t1_kioskUuid";
+  deviceUuidVar: string = 'deviceUuid';
   varToken: any = [];
   varHeaders: any = [];
-  api: string = environment.api; 
+  deviceInfo : any = null;
+  api: string = environment.api;
   constructor(
     private cookies: CookiesService,
     private http: HttpClient,
-    private socket: Socket
+    private socket: Socket,
+    private deviceService: DeviceDetectorService
 
   ) {
     if (localStorage.getItem(this.deviceUuidVar) == null) {
       console.log("tidak ada session login");
     } else {
-      this.varToken = localStorage.getItem(this.deviceUuidVar);
+      this.varToken = this.keygen();
     }
   }
 
-  printerName() :string{
+  printerName(): string {
     return "SCO1printerName";
   }
 
   logout() {
-    
+
   }
-  reloadToken(){
-    this.varToken = localStorage.getItem(this.deviceUuidVar);
+  reloadToken() {
+    this.varToken = this.keygen();
   }
 
   sendMessage(data: any) {
     this.socket.emit('data', data);
   }
-  getMessage():any {
+  getMessage(): any {
     return this.socket.fromEvent('emiter');
   }
   getDocument(id: string) {
     this.socket.emit('getDoc', id);
   }
-    
-  help(data:any){
+
+  help(data: any) {
     const msg = {
       to: 'supervisor',
-      msg: 'Help! Terminal ID :'+ data['terminalId'],
-      action : 'help',
+      msg: 'Help! Terminal ID :' + data['terminalId'],
+      action: 'help',
     }
     this.sendMessage(msg);
   }
@@ -66,19 +70,19 @@ export class ConfigService {
   deviceUuid() {
     return this.deviceUuidVar;
   }
-  
+
   headers() {
     this.reloadToken();
     return this.varHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Token': this.varToken,
+      'Token': this.keygen(),
     });
   }
   token() {
     return localStorage.getItem(this.deviceUuidVar);
   }
 
-  id_user() { 
+  id_user() {
     this.reloadToken();
     return this.varToken;
   }
@@ -90,25 +94,25 @@ export class ConfigService {
     }
 
   }
-  
+
 
   sytemOff() {
-    let url = this.api + 'kioskLogin/index/?token='+localStorage.getItem(this.deviceUuidVar);
+    let url = this.api + 'kioskLogin/index/?token=' + localStorage.getItem(this.deviceUuidVar);
     return this.http.get<any>(url);
   }
 
 
   httpAccount() {
     this.reloadToken();
-    let url = this.api + 'Kiosks/index/?token='+this.varToken;
-    console.log("httpAccount : " ,url)
+    let url = this.api + 'Kiosks/index/?token=' + this.keygen();
+    console.log("httpAccount : ", url)
     return this.http.get<any>(url,
       { headers: this.headers() }
     );
-    
+
   }
 
-  reverseString(str : string) {
+  reverseString(str: string) {
     // Step 1. Use the split() method to return a new array
     let splitString = str.split(""); // var splitString = "hello".split("");
     // ["h", "e", "l", "l", "o"]
@@ -123,7 +127,49 @@ export class ConfigService {
 
     //Step 4. Return the reversed string
     return joinArray; // "olleh"
-}
+  }
+
+
+  agent() {
+
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    const isMobile = this.deviceService.isMobile();
+    const isTablet = this.deviceService.isTablet();
+    const isDesktopDevice = this.deviceService.isDesktop(); 
+    const data = {
+      getDeviceInfo :  this.deviceService.getDeviceInfo(),
+      isMobile : isMobile,
+      isTablet : isTablet,
+      isDesktopDevice : isDesktopDevice,
+    }
+    console.log(data);
+    return data;
+  }
+
+  keygen(){
+    let token : any = false;
+    let data : any  = localStorage.getItem(this.deviceUuid());
+    if( data != '' &&  data != null ){
+      let word = this.reverseString(data);
+      const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(word));
+      const md5 = hash.toString(CryptoJS.enc.Hex); 
+       token = data + "-" + md5;
+  
+    }
+    return token;
+  }
+
+  printer(){ 
+    let data : any  = localStorage.getItem(this.printerName());
+    if( data != '' &&  data != null ){
+      return data;
+    }else{
+      return null;
+    }
+  
+  }
+
+  
 
 
 }

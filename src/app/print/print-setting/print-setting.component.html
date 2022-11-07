@@ -11,7 +11,7 @@
             <h1>PRINTER SETTING</h1>
         </div>
         <div class="col-4 text-end">
-            <a href="javascript:;" class="display-6" (click)="reload()">Reload()</a>
+            <a href="javascript:;" class="display-6" (click)="reloadData()">Reload()</a>
         </div>
         <div class="col-12">
             <h4>Select USB ID/Address for Printer : </h4>
@@ -19,8 +19,9 @@
         <div class="col-12">
             <select class="form-control form-control-lg" [(ngModel)]="printerName">
                 <option *ngFor="let x of selectPrinter" [value]="x.printername">{{x.printername}}</option>
-            </select> 
+            </select>
         </div>
+         
         <div class="col-6">
             <div class="d-grid">
                 <a href="javascript:;" (click)="fnClear()" class="btn btn-sm btn-block btn-light my-2 py-2 ">CLEAR SAVE</a>
@@ -28,7 +29,7 @@
         </div>
         <div class="col-6">
             <div class="d-grid">
-                <a href="javascript:;" (click)="fnSave()"  class="btn btn-sm btn-block btn-info my-2 py-2">SAVE</a>
+                <a href="javascript:;" (click)="fnSave()" class="btn btn-sm btn-block btn-info my-2 py-2">SAVE</a>
             </div>
         </div>
         <div class="col-12 text-center" [hidden]="!loading">
@@ -37,21 +38,19 @@
 
         <div class="col-12 mt-5">
             <h4>Save Setting History</h4>
-            <div class="form-control form-control-lg">
-                <code>{{printerName}}</code>
-            </div>
-            
+            <input type="text" [(ngModel)]="printerName" class="form-control form-control-lg"> 
+
             <div class="text-center mt-5">
-                <a href="javascript:;" (click)="fnTestPrinting();"   class="btn btn-sm btn-block btn-warning my-2 py-1"> 
-                    <img src="./assets/imgs/icons8-label-printer-100.png" height="50">  
+                <a href="javascript:;" (click)="fnTestPrinting();" class="btn btn-sm btn-block btn-warning my-2 py-1">
+                    <img src="./assets/imgs/icons8-label-printer-100.png" height="50">
                     <h4 class="d-inline">Test Printing</h4>
-                </a> 
+                </a>
             </div>
         </div>
         <div class="col-12">
             <div class="mt-1 p-1 border shadow-md">
                 <pre> {{note}}  </pre>
-              </div>
+            </div>
         </div>
     </div>
 </div>

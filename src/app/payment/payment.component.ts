@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
+import { PrintingService } from '../service/printing.service';
 
+declare var window: any;
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
@@ -16,50 +18,51 @@ export class PaymentComponent implements OnInit {
   api: string = environment.api;
   items: any = [];
   error: boolean = false;
-  final : number = 0;
-  paymentStatus : number = 1;
-  paymentTypeId : number = 0;
-  storeOutlesPaymentType : any = [];
-  t1_thank_you_display : any;
+  final: number = 0;
+  paymentStatus: number = 1;
+  paymentTypeId: number = 0;
+  storeOutlesPaymentType: any = [];
+  t1_thank_you_display: any;
   constructor(
     private http: HttpClient,
-    config: NgbModalConfig, 
+    config: NgbModalConfig,
     private modalService: NgbModal,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-  ) { 
+    private printing: PrintingService,
+  ) {
     config.backdrop = 'static';
-    config.keyboard = false; 
+    config.keyboard = false;
   }
 
- 
-  uuidKios : any  = localStorage.getItem(this.configService.myUUID()); 
+
+  uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
-  
 
-  ngOnInit(): void { 
+
+  ngOnInit(): void {
     this.configService.httpAccount().subscribe(
-      data=>{ 
+      data => {
         this.storeOutlesId = data['storeOutlesId'];
-        this.terminalId  = data['terminalId']; 
-        this.t1_thank_you_display  = data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1004))]['value'];
+        this.terminalId = data['terminalId'];
+        this.t1_thank_you_display = data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1004))]['value'];
         if (data['systemOnline'] == false) {
           this.router.navigate(['offline']);
         }
       }
     )
     if (localStorage.getItem(this.configService.myUUID())) {
-     
+
       console.log("SILAKAN BELANJA!");
       this.httpGet();
       this.httpCart();
     } else {
-      this.router.navigate(['login']); 
+      this.router.navigate(['login']);
     }
   }
-  help(){ 
+  help() {
     const msg = {
       terminalId: this.terminalId,
     }
@@ -75,7 +78,7 @@ export class PaymentComponent implements OnInit {
       data => {
         this.loading = false;
         console.log(data);
-        this.final =  data['summary']['final'];
+        this.final = data['summary']['final'];
         this.storeOutlesPaymentType = data['storeOutlesPaymentType'];
       },
       e => {
@@ -85,16 +88,16 @@ export class PaymentComponent implements OnInit {
   }
 
   httpCart() {
-    this.loading = true; 
-    let url = this.api + 'kioskCart/index/?uuid=' + localStorage.getItem(this.configService.myUUID())+"&storeOutlesId="+localStorage.getItem('storeOutlesId')+"&terminalId="+localStorage.getItem('terminalId');
-    
+    this.loading = true;
+    let url = this.api + 'kioskCart/index/?uuid=' + localStorage.getItem(this.configService.myUUID()) + "&storeOutlesId=" + localStorage.getItem('storeOutlesId') + "&terminalId=" + localStorage.getItem('terminalId');
+
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
         this.loading = false;
         console.log(data);
-      
+
       },
       e => {
         console.log(e);
@@ -102,29 +105,29 @@ export class PaymentComponent implements OnInit {
     );
   }
 
-  payment(x:any, content:any) {
-    if(x.paymentTypeId == 'QRT001'){
-      this.router.navigate(['payment/qristelkom/',x.paymentTypeId]);
-    }else{
+  payment(x: any, content: any) {
+    if (x.paymentTypeId == 'QRT001') {
+      this.router.navigate(['payment/qristelkom/', x.paymentTypeId]);
+    } else {
       console.log(x);
       this.paymentStatus = 1;
       this.loading = true;
       this.paymentTypeId = x.paymentTypeId;
-      this.modalService.open(content,{centered:true});  
+      this.modalService.open(content, { centered: true });
     }
-   
+
   }
 
-  fnProcessPaymentFake(){
+  fnProcessPaymentFake() {
     const body = {
-      paymentTypeId : this.paymentTypeId,
-      kioskUuid : localStorage.getItem(this.configService.myUUID()), 
-      storeOutlesId : localStorage.getItem('storeOutlesId'), 
-      terminalId : localStorage.getItem('terminalId'), 
+      paymentTypeId: this.paymentTypeId,
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      storeOutlesId: localStorage.getItem('storeOutlesId'),
+      terminalId: localStorage.getItem('terminalId'),
     }
     this.loading = true;
     console.log(body);
-    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentFake/',body,
+    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentFake/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -132,22 +135,61 @@ export class PaymentComponent implements OnInit {
         localStorage.removeItem(this.configService.myUUID());
         this.modalService.dismissAll();
         this.loading = false;
-        /**
-         * status payment disini
-         */
-        // this.paymentStatus = 2; 
-        this.router.navigate(['cart/finish/',data['id']]);
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.print(data['id']);
+          }
+        ) 
+
       },
       e => {
         console.log(e);
       },
     );
-    
+
   }
 
 
-  finishShopping(){
-     this.modalService.dismissAll();
-     this.router.navigate(['login']);
+  printerName: any;
+  bill: any;
+  print(id:string) {
+
+    let url = this.api + 'KioskPrint/printDetail/?id=' + id;
+    console.log(url);
+    this.http.get<any>(url,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.bill = data;
+        let message = this.printing.template(this.bill);
+        this.printerName = localStorage.getItem(this.configService.printerName());
+        if (this.printerName == "" || this.printerName == null) {
+          alert("NO PRINTING SELECT");
+        } else {
+
+          window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
+            console.log(result);
+            window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
+              console.log("result of usb print action", result);
+            }, (err: any) => {
+              console.error('Error in usb print action', err)
+            });
+
+          }, (err: any) => {
+            console.error(err);
+          });
+        }
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+
+  }
+
+  finishShopping() {
+    this.modalService.dismissAll();
+    this.router.navigate(['login']);
   }
 }

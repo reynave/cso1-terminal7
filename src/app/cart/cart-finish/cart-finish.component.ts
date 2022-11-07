@@ -4,7 +4,9 @@ import { environment } from 'src/environments/environment';
 
 import { ConfigService } from 'src/app/service/config.service';
 import { HttpClient } from '@angular/common/http';
+import { PrintingService } from 'src/app/service/printing.service';
 
+declare var window: any;
 @Component({
   selector: 'app-cart-finish',
   templateUrl: './cart-finish.component.html',
@@ -17,19 +19,20 @@ export class CartFinishComponent implements OnInit {
     timer: 10,
   };
   api: string = environment.api;
-
+  printerName : any;
   intervalTime: any;
-
+  bill : any = [];
   countdown: number = 0;
   constructor(
     private router: Router,
     private configService: ConfigService,
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
+    private printing: PrintingService, 
   ) { }
 
   ngOnInit(): void {
-   
+
     this.httpGet();
   }
   httpGet() {
@@ -46,28 +49,70 @@ export class CartFinishComponent implements OnInit {
         setTimeout(() => {
           this.router.navigate(['/login']);
         },
-          n * 1000 );
+          n * 1000);
 
         this.runCountdown();
       }
 
     );
-  }
 
+    let url = this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'];
+    console.log(url);
+    this.http.get<any>(url,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.bill = data;   
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+ 
   home() {
     this.router.navigate(['/login']);
   }
 
   printBill() { 
+    this.print("android");
+  }
+ 
+
+  print(name: string) {
     const body = {
-      id: this.activatedRoute.snapshot.params['id'], 
+      id: this.activatedRoute.snapshot.params['id'],
     }
     this.http.post<any>(this.api + 'kioskPrint/countingPrinting/', body,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => { 
-        window.print();
-        console.log(data);
+      data => {
+        if (name == 'android') {  
+          let message = this.printing.template( this.bill);
+          this.printerName = localStorage.getItem(this.configService.printerName());
+          if (this.printerName == "" || this.printerName == null) {
+            alert("NO PRINTING SELECT"); 
+          }else{
+
+            window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
+              console.log(result);
+              window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
+                console.log("result of usb print action", result);
+              }, (err: any) => {
+                console.error('Error in usb print action', err)
+              });
+
+            }, (err: any) => {
+              console.error(err);
+            });
+          }
+        }
+
+        else if (name == 'browser') {
+          window.print();
+          console.log(data);
+        }
+
       },
     );
   }

@@ -35,7 +35,7 @@ export class PrintDetailComponent implements OnInit {
     voucer: 0,
   }
   printable: boolean = false;
-
+  bill : any = [];
   date: string = "";
   template: any = {
     companyName: '',
@@ -72,24 +72,24 @@ export class PrintDetailComponent implements OnInit {
           
 
           console.log(this.printing.template( this.bill));
-
+          let message = this.printing.template( this.bill);
           this.printerName = localStorage.getItem(this.configService.printerName());
-          // if (this.printerName == "" || this.printerName == null) {
-          //   alert("NO PRINTING SELECT"); 
-          // }else{
+          if (this.printerName == "" || this.printerName == null) {
+            alert("NO PRINTING SELECT"); 
+          }else{
 
-          //   window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
-          //     console.log(result);
-          //     window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
-          //       console.log("result of usb print action", result);
-          //     }, (err: any) => {
-          //       console.error('Error in usb print action', err)
-          //     });
+            window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
+              console.log(result);
+              window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
+                console.log("result of usb print action", result);
+              }, (err: any) => {
+                console.error('Error in usb print action', err)
+              });
 
-          //   }, (err: any) => {
-          //     console.error(err);
-          //   });
-          // }
+            }, (err: any) => {
+              console.error(err);
+            });
+          }
         }
 
         else if (name == 'browser') {
@@ -100,10 +100,12 @@ export class PrintDetailComponent implements OnInit {
       },
     );
   }
-  bill : any = [];
+
   httpGet() {
     this.loading = true;
-    this.http.get<any>(this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'],
+    let url = this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'];
+    console.log(url);
+    this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
@@ -118,7 +120,7 @@ export class PrintDetailComponent implements OnInit {
           footer: data['template']['footer'],
         }
         this.loading = false;
-        console.log(data);
+        
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem = data['freeItem'];

@@ -17,10 +17,12 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout(){
+  logout() {
     this.router.navigate(['']).then(
-      ()=> {
-        localStorage.clear(); 
+      () => {
+        localStorage.removeItem("deviceUuid");
+        localStorage.removeItem("t1_kioskUuid");
+
         this.configService.reloadToken();
       }
     );
