@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { MemberBarcodeComponent } from './login/member-barcode/member-barcode.component';
 import { UserPhotoComponent } from './login/user-photo/user-photo.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { PaymentBcaDebitComponent } from './payment/payment-bca-debit/payment-bca-debit.component';
 import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { PaymentComponent } from './payment/payment.component';
 import { PhotoComponent } from './photo/photo.component';
@@ -42,6 +43,7 @@ const routes: Routes = [
   
   { path: "payment", component: PaymentComponent, data: { active: "payment" }, },
   { path: "payment/qristelkom/:id", component: PaymentQrisTelkomComponent, data: { active: "payment" }, },
+  { path: "payment/bcaDebit", component: PaymentBcaDebitComponent, data: { active: "payment" }, },
   
   { path: "forbiden", component: ForbidenComponent, data: { active: "home" }, },
   { path: "nofound", component: NotFoundComponent, data: { active: "home" }, },

@@ -65,6 +65,7 @@ export class CartComponent implements OnInit, OnDestroy {
       (data: { [x: string]: any; }) => {
         if (data['action'] == 'reload' && data['to'] == 'terminal') {
           this.httpGet();
+          console.log("SOCKET getMessage");
         }
       }
     );
@@ -101,7 +102,7 @@ export class CartComponent implements OnInit, OnDestroy {
     const msg = {
       terminalId: this.terminalId,
     }
-    this.configService.help(msg);
+    this.configService.help(msg); 
   }
   sendReload(){
     const msg = {
@@ -110,6 +111,7 @@ export class CartComponent implements OnInit, OnDestroy {
       action : 'reload',
     }
     this.configService.sendMessage(msg);
+    console.log("sendReload");
   }
 
   httpGet() {

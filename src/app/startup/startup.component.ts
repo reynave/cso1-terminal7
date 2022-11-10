@@ -66,8 +66,8 @@ export class StartupComponent implements OnInit {
 
   fnSaveDeviceID() {
     this.agent = this.configService.agent();
-
-    if (this.agent.isDesktopDevice === true) {
+    console.log(this.agent);
+    if (this.agent.isDesktopDevice === true || environment.device == 'browser') {
       this.platform = "isDesktopDevice";
       console.log("isDesktopDevice");
       localStorage.setItem(this.configService.deviceUuid(), environment.token);  

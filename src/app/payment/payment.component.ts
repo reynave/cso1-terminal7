@@ -115,6 +115,12 @@ export class PaymentComponent implements OnInit {
       this.paymentTypeId = x.paymentTypeId;
       this.modalService.open(content, { centered: true });
     }
+  }
+
+  testBCADebit(){
+    this.router.navigate(['payment/bcaDebit']);
+  }
+  testBCAQris(){
 
   }
 
