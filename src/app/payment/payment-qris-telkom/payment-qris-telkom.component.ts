@@ -152,7 +152,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
         // this.paymentStatus = 2; 
         this.router.navigate(['cart/finish/', data['id']]).then(
           () => {
-            this.print(data['id']);
+            this.printing.print(data['id']); 
           }
         )
       },
@@ -164,7 +164,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
   }
 
 
-
+/*
   printerName: any;
   bill: any;
   print(id: string) {
@@ -202,6 +202,6 @@ export class PaymentQrisTelkomComponent implements OnInit {
 
 
   }
-
+*/
 
 }

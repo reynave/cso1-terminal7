@@ -84,12 +84,41 @@ export class PaymentBcaDebitComponent implements OnInit {
   }
 
   fnBcaCash(){
-    const msg = {  
-      msg: 'bcaCash',
-      uuidKios : this.uuidKios,
-      txt : 'P010000005500000000000000001688700627201892   251000000000000000  N00000                                                                              ',
-      action : 'ajax',
+    const body = {
+      paymentTypeId: 'bca01',
+      kioskUuid: localStorage.getItem(this.configService.myUUID()), 
     }
+    this.loading = true;
+ 
+    this.http.post<any>(this.api + 'kioskPayment/fnBcaCashDevNoCC/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+     //   localStorage.removeItem(this.configService.myUUID());
+        this.com3(data['data']['hex']);
+        this.loading = false;
+        // this.router.navigate(['cart/finish/', data['id']]).then(
+        //   () => {
+        //     this.printing.print(data['id']);
+        //   }
+        // ) 
+
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+
+  com3(hex: string){
+     const msg = {  
+      action : 'ajax',
+      msg: 'bca01',
+      uuidKios : this.uuidKios,
+      txt :  hex, 
+    }
+    console.log(msg);
     this.configService.sendMessage(msg);
   }
 }

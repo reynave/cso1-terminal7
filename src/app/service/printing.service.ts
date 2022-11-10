@@ -1,11 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { environment } from 'src/environments/environment';
+import { ConfigService } from './config.service';
+declare var window: any;
 @Injectable({
   providedIn: 'root'
 })
 export class PrintingService {
-
-  constructor() { }
+  api: string = environment.api;
+  printerName: any;
+  bill: any;
+  constructor(
+    private configService: ConfigService,
+    private http: HttpClient, 
+  ) { }
 
   stringfix(txt: any, l: number = 0, pos: string = '') {
     let data = txt.toString();
@@ -28,8 +36,7 @@ export class PrintingService {
     let data = price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,").toString().replace(".00", "");
     return data;
   }
-  
-
+   
   template(bill : any){
     let items = bill['items'];
     let summary = bill['summary'];
@@ -75,5 +82,42 @@ export class PrintingService {
     message += bill['template']['footer'].replace("<br>","\n")+"\n\n\n\n"; 
     console.log(message);
     return message;
+  }
+
+
+
+  print(id:string) { 
+    let url = this.api + 'KioskPrint/printDetail/?id=' + id;
+    console.log(url);
+    this.http.get<any>(url,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.bill = data;
+        let message = this.template(this.bill);
+        this.printerName = localStorage.getItem(this.configService.printerName());
+        if (this.printerName == "" || this.printerName == null) {
+          alert("NO PRINTING SELECT");
+        } else {
+
+          window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
+            console.log(result);
+            window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
+              console.log("result of usb print action", result);
+            }, (err: any) => {
+              console.error('Error in usb print action', err)
+            });
+
+          }, (err: any) => {
+            console.error(err);
+          });
+        }
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+
   }
 }

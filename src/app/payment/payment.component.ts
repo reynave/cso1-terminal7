@@ -128,8 +128,8 @@ export class PaymentComponent implements OnInit {
     const body = {
       paymentTypeId: this.paymentTypeId,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
-      storeOutlesId: localStorage.getItem('storeOutlesId'),
-      terminalId: localStorage.getItem('terminalId'),
+    //  storeOutlesId: localStorage.getItem('storeOutlesId'),
+    //  terminalId: localStorage.getItem('terminalId'),
     }
     this.loading = true;
     console.log(body);
@@ -143,7 +143,7 @@ export class PaymentComponent implements OnInit {
         this.loading = false;
         this.router.navigate(['cart/finish/', data['id']]).then(
           () => {
-            this.print(data['id']);
+            this.printing.print(data['id']);
           }
         ) 
 
@@ -155,7 +155,7 @@ export class PaymentComponent implements OnInit {
 
   }
 
-
+/*
   printerName: any;
   bill: any;
   print(id:string) {
@@ -192,7 +192,7 @@ export class PaymentComponent implements OnInit {
     );
 
 
-  }
+  }*/
 
   finishShopping() {
     this.modalService.dismissAll();
