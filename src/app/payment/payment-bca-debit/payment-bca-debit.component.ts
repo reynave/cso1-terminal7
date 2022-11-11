@@ -47,7 +47,12 @@ export class PaymentBcaDebitComponent implements OnInit {
          // this.httpGet();
          
         //}
-        console.log("SOCKET getMessage : ",data);
+
+        if(data['action']=="bca01"){
+          console.log("SOCKET getMessage : ",data);
+        }
+
+       
       }
     );
 
@@ -68,6 +73,17 @@ export class PaymentBcaDebitComponent implements OnInit {
     }
   }
 
+  back(){
+    history.back();
+  }
+  comClose(){
+    const msg = { 
+      msg: 'comClose',
+      action : 'ajax',
+    }
+    this.configService.sendMessage(msg);
+  }
+
   help(){ 
     const msg = {
       terminalId: this.terminalId,
@@ -83,10 +99,11 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.configService.sendMessage(msg);
   }
 
-  fnBcaCash(){
+  fnBcaECR(transType : string = ""){
     const body = {
       paymentTypeId: 'bca01',
       kioskUuid: localStorage.getItem(this.configService.myUUID()), 
+      transType : transType,
     }
     this.loading = true;
  
@@ -96,7 +113,8 @@ export class PaymentBcaDebitComponent implements OnInit {
       data => {
         console.log(data);
      //   localStorage.removeItem(this.configService.myUUID());
-        this.com3(data['data']['hex']);
+        
+        this.com3(data['data']['hex'], transType);
         this.loading = false;
         // this.router.navigate(['cart/finish/', data['id']]).then(
         //   () => {
@@ -111,10 +129,11 @@ export class PaymentBcaDebitComponent implements OnInit {
     );
   }
 
-  com3(hex: string){
+  com3(hex: string, transType : string){
      const msg = {  
       action : 'ajax',
-      msg: 'bca01',
+      msg: 'BcaECR',
+      transType : transType,
       uuidKios : this.uuidKios,
       txt :  hex, 
     }

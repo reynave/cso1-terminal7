@@ -47,7 +47,7 @@ export class PrintDetailComponent implements OnInit {
     private http: HttpClient,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
-    private printing: PrintingService, 
+    private printing: PrintingService,
     private router: Router,
   ) { }
 
@@ -57,7 +57,7 @@ export class PrintDetailComponent implements OnInit {
   }
 
 
-  
+
 
   print(name: string) {
     const body = {
@@ -67,29 +67,8 @@ export class PrintDetailComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        if (name == 'android') {
-         
-          
-
-          console.log(this.printing.template( this.bill));
-          let message = this.printing.template( this.bill);
-          this.printerName = localStorage.getItem(this.configService.printerName());
-          if (this.printerName == "" || this.printerName == null) {
-            alert("NO PRINTING SELECT"); 
-          }else{
-
-            window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
-              console.log(result);
-              window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
-                console.log("result of usb print action", result);
-              }, (err: any) => {
-                console.error('Error in usb print action', err)
-              });
-
-            }, (err: any) => {
-              console.error(err);
-            });
-          }
+        if (name == 'android') { 
+          this.printing.print(body['id']); 
         }
 
         else if (name == 'browser') {
@@ -120,7 +99,7 @@ export class PrintDetailComponent implements OnInit {
           footer: data['template']['footer'],
         }
         this.loading = false;
-        
+
         this.items = data['items'];
         this.itemsList = data['itemsList'];
         this.freeItem = data['freeItem'];
