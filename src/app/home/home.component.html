@@ -1,10 +1,31 @@
- <div class="container my-5">
+<div class="container my-5">
   <div class="row">
     <div class="col-12 text-center my-5">
-      <h1 class="display-4">Terminal  SCO V{{version}}</h1>
-      <img src="./assets/galleries/40796.jpg" width="100%" class="py-5">
+      <h1 class="display-4">Terminal SCO V{{version}}</h1>
+      <img src="./assets/galleries/40796.jpg" width="50%" class="py-5">
+    </div>
+    <div class="col-12 my-3">
+      <h2>Android </h2> 
+      <input type="text" class="form-control form-control-lg p-3"  readonly [(ngModel)]="device">
+    </div>
+    <div class="col-12 my-3">
+      <h2>Input IP Address Server</h2>
+      <input type="text" class="form-control form-control-lg p-3"  readonly [(ngModel)]="env_api">
+    </div>
+    <div class="col-12 my-3">
+      <h2>Input Socket Address Server</h2>
+      <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="env_socket">
+    </div>
+    <div class="col-12 mb-3 text-center">
+      <p>{{note}}</p>
+  
+      <button type="button" class="btn  btn-lg btn-warning rounded px-5  mx-2  font-btn" (click)="fnTestCon();">Test
+        Connection</button>
+    </div>
+    <div class="col-12">
       <div class="d-grid">
-        <a [routerLink]="[ '/startup' ]" class=" btn  btn-lg btn-info text-white rounded py-5 my-5 font-btn">START SYSTEM</a> 
+        <a [routerLink]="[ '/startup' ]" class=" btn  btn-lg btn-info text-white rounded py-5 my-5 font-btn">START
+          SYSTEM</a>
       </div>
     </div>
   </div>
@@ -12,14 +33,14 @@
 
 <footer>
   <div class="container-fluid">
-      <div class="row g-1"> 
-          <div class="col-10">
-              <h2 class="p-2">{{today}}</h2>
-          </div>
-          <div class="col-2 text-end">
-              <h2 class="p-2">SCO V{{version}}</h2>
-          </div>
+    <div class="row g-1">
+      <div class="col-10">
+        <h2 class="p-2">{{today}}</h2>
       </div>
+      <div class="col-2 text-end">
+        <h2 class="p-2">SCO V{{version}}</h2>
+      </div>
+    </div>
   </div>
 
 </footer>

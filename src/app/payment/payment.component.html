@@ -50,7 +50,7 @@
         </div>
         <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
             <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block p-2 ">
+                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block p-2 border shadow-sm">
                     <img [src]="x.image" width="100%">
                     <h4>{{x.name}}</h4>
                 </a>
@@ -58,16 +58,17 @@
         </div>
         <div class="col-4">
             <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;" (click)="testBCADebit()" class="btn  btn-block p-2 ">
-                   <img src="https://cdn.jagonews24.com/media/imgAllNew/BG/2019November/visamastercardb-20220306083840.jpg" width="100%">
-                   <h4>DEBIT / CREDIT BCA ECR</h4>
+                <a href="javascript:;" (click)="BCADebit()" class="btn  btn-block p-2 ">
+                   <img src="https://dummyimage.com/600x400/ffffff/000000.png&text=BCA+DEBIT" class="border" width="100%">
+                   <h4>BCA CREDIT</h4>
                 </a>
             </div> 
         </div>
+        
         <div class="col-4">
             <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;"  (click)="testBCAQris()"  class="btn  btn-block p-2 ">
-                    <img src="https://home.oxygen.id/public/contents/info-pembayaran/img/qris-logo.png" width="100%">
+                <a href="javascript:;"  (click)="BCAQris()"  class="btn  btn-block p-2 ">
+                    <img src="https://home.oxygen.id/public/contents/info-pembayaran/img/qris-logo.png" class="border" width="100%">
                     <h4>QRIS BCA</h4>
                 </a>
             </div>
@@ -84,7 +85,7 @@
                 <ng-container *ngSwitchCase="1">
                     <div class="py-1">
                         <h1>Payment Process</h1>
-                        <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="100%">
+                        <img src="./assets/gif/icons8-pos-terminal.gif" width="100%">
                     </div>
 
                     <div class="row g-2 ">

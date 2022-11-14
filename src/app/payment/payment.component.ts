@@ -117,11 +117,11 @@ export class PaymentComponent implements OnInit {
     }
   }
 
-  testBCADebit(){
+  BCADebit(){
     this.router.navigate(['payment/bcaDebit']);
   }
-  testBCAQris(){
-
+  BCAQris(){
+    this.router.navigate(['payment/bcaQris']);
   }
 
   fnProcessPaymentFake() {

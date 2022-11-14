@@ -67,20 +67,19 @@ export class StartupComponent implements OnInit {
   fnSaveDeviceID() {
     this.agent = this.configService.agent();
     console.log(this.agent);
-    if (this.agent.isDesktopDevice === true || environment.device == 'browser') {
-      this.platform = "isDesktopDevice";
-      console.log("isDesktopDevice");
+    console.log("Device : ", environment.device);
+    if (environment.device == false) { 
       localStorage.setItem(this.configService.deviceUuid(), environment.token);  
       this.serialNumber = environment.token;
-    } else {
-      this.platform = "isTablet"; 
-      console.log("isTablet"); 
+    } else { 
       localStorage.setItem(this.configService.deviceUuid(),  device.serial);
       this.serialNumber =  device.serial;
     } 
   }
 
-
+  back(){
+    history.back();
+  }
   httpGet() {
 
     console.log("keygen  ",this.configService.keygen() ); 

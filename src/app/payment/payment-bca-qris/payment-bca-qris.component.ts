@@ -6,11 +6,11 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 import { PrintingService } from 'src/app/service/printing.service';
 @Component({
-  selector: 'app-payment-bca-debit',
-  templateUrl: './payment-bca-debit.component.html',
-  styleUrls: ['./payment-bca-debit.component.css']
+  selector: 'app-payment-bca-qris',
+  templateUrl: './payment-bca-qris.component.html',
+  styleUrls: ['./payment-bca-qris.component.css']
 })
-export class PaymentBcaDebitComponent implements OnInit {
+export class PaymentBcaQrisComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
   items: any = [];
@@ -45,68 +45,28 @@ export class PaymentBcaDebitComponent implements OnInit {
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
         console.log(data);
-        if (data['respCode'] == '00') {
-          this.comClose();
+        if (data['respCode'] == '00' && data['transType'] == '01') {
           this.fnProcessPaymentReal(data); 
-          this.note = "Payment Success";
         } 
- 
-        if (data['respCode'] == '54') {  
-          this.comClose();
-          this.note = "Decline Expired Card " + data['respCode'];
-        }
-        if (data['respCode'] == '55') {   
-          this.comClose();
-          this.note = "Decline Incorrect PIN " + data['respCode'];
-        }
-        if (data['respCode'] == 'P2') {   
-          this.comClose();
-          this.note = " Read Card Error" + data['respCode'];
-        }
 
-        if (data['respCode'] == 'P3') {   
-          this.comClose();
-          this.note = " User press Cancel on EDC" + data['respCode'];
-        }
-       
-        if (data['respCode'] == 'Z3') {   
-          this.comClose();
-          this.note = " EMV Card Decline" + data['respCode'];
-        }
-       
-        if (data['respCode'] == 'CE') {   
-          this.comClose();
-          this.note = " Connection Error/Line Busy " + data['respCode'];
-        }
+        // if (data['respCode'] != '00' || data['respCode'] != '') {
+        //   this.comClose();
+        //   this.note = "ERROR " + data['respCode'];
+        // } 
 
-        if (data['respCode'] == 'TO') {   
+        if (data['respCode'] == 'P3' ) {
           this.comClose();
-          this.note = " Connection Timeout " + data['respCode'];
-        }
-
-        if (data['respCode'] == 'PT') {   
-          this.comClose();
-          this.note = " EDC Problem" + data['respCode'];
-        }
-
-        if (data['respCode'] == 'aa' || data['respCode'] == 'AA') {   
-          this.comClose();
-          this.note = "aa Decline (aa represent two digit alphanumeric value from EDC)" + data['respCode'];
-        }
-
-        if (data['respCode'] == 'S2') {   
-          this.comClose();
-          this.note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC" + data['respCode'];
-        }
-
-        if (data['respCode'] == 'S3') {   
-          this.comClose();
-          this.note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED" + data['respCode'];
+          this.note =  data['respCode']+" User press Cancel on EDC ";
         } 
-        if (data['respCode'] == 'ERRCON' ) {
+
+        if (data['respCode'] == 'CE') { 
           this.comClose();
-          this.note =   data['respCode']+" ERROR CONNECTION, ECR is not connect!";
-        } 
+          this.note = "ERROR " + data['respCode'];
+        }
+        if (data['respCode'] == 'PS') {   
+          this.comClose();
+          this.note = "ERROR " + data['respCode'];
+        }
        
       }
     );
@@ -207,4 +167,5 @@ export class PaymentBcaDebitComponent implements OnInit {
   back() {
     history.back();
   }
+
 }

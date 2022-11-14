@@ -4,7 +4,7 @@ declare var env_socket : any;
 export const environment = {
   production: true,
   api: env_api, 
-  device : "browser",
+  device : false,
   base_url: "#/",
   version : "1.1",
   token: 'DEV-WEBBASE-15fc3cec',

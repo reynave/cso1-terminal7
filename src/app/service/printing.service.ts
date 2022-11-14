@@ -41,13 +41,13 @@ export class PrintingService {
     let items = bill['items'];
     let summary = bill['summary'];
     
-    let message = "\n\n";
+    let message = "";
     console.log(items);
     console.log("123456789-123456789-123456789-123456789-12345678"+"\n");
     message += bill['template']['companyName']+"\n";
     message += bill['template']['companyAddress']+"\n";
-    message += bill['template']['companyPhone']+"\n"; 
-    message += "────────────────────────────────────────────────"+"\n";
+    message += bill['template']['companyPhone']+"\n";  
+    message += "================================================"+"\n"; 
     items.forEach((el: any) => {
       message += el['itemId'] + " " + el['shortDesc'] + "\n";
       message +=
@@ -59,7 +59,7 @@ export class PrintingService {
         "\n"; 
     });
     message += "================================================"+"\n"; 
-    message += "\n"; 
+
     message += "SUBTOTAL              :"+this.stringfix(this.numberFormat(summary['total']), 24, 'f')+"\n";  
     message += "DISCOUNT              :"+this.stringfix(this.numberFormat(summary['discount']), 24, 'f')+"\n";  
     message += "DISCOUNT MEMBER       :"+this.stringfix(this.numberFormat(summary['discountMember']), 24, 'f')+"\n";  
@@ -79,7 +79,15 @@ export class PrintingService {
     message += "UNIT / OUTLET ID      : "+bill['detail']['terminalId']+ "/"+ bill['detail']['storeOutlesId'] +" \n";  
     
     message += "\n";  
-    message += bill['template']['footer'].replace("<br>","\n")+"\n\n\n\n"; 
+    message += bill['template']['footer'].replace("<br>","\n")+"\n\n\n\n";
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    message += "                                               "+"\n";  
+    
     console.log(message);
     return message;
   }
@@ -97,7 +105,7 @@ export class PrintingService {
         let message = this.template(this.bill);
         this.printerName = localStorage.getItem(this.configService.printerName());
         if (this.printerName == "" || this.printerName == null) {
-          alert("NO PRINTING SELECT");
+          alert("NO PRINTING SELECT"); 
         } else {
 
           window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
