@@ -39,77 +39,101 @@ export class PaymentBcaDebitComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
- 
-  ngOnInit(): void {
-    this.comClear();
+  finish : boolean = false;
+  ngOnInit(): void {   
+    this.comConn();
+    // setTimeout(() => {
+    //   this.fnBcaECR('01',true);
+    // }, 1000);
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
         console.log(data);
         if (data['respCode'] == '00') {
-          this.comClose();
-          this.fnProcessPaymentReal(data); 
-          this.note = "Payment Success";
+          if(this.finish == false){
+            this.fnProcessPaymentReal(data); 
+            this.note = "Payment Success";
+            this.finish = true;
+          } 
         } 
  
         if (data['respCode'] == '54') {  
-          this.comClose();
+         
           this.note = "Decline Expired Card " + data['respCode'];
+          setTimeout(() => {
+              this.back();
+          }, 1000);
         }
         if (data['respCode'] == '55') {   
-          this.comClose();
+         
           this.note = "Decline Incorrect PIN " + data['respCode'];
         }
         if (data['respCode'] == 'P2') {   
-          this.comClose();
-          this.note = " Read Card Error" + data['respCode'];
+          
+          this.note = " Read Card Error " + data['respCode'];
         }
 
-        if (data['respCode'] == 'P3') {   
-          this.comClose();
-          this.note = " User press Cancel on EDC" + data['respCode'];
+        if (data['respCode'] == 'P3') {    
+          this.note = " User press Cancel on EDC " + data['respCode'];
         }
        
         if (data['respCode'] == 'Z3') {   
-          this.comClose();
+           
           this.note = " EMV Card Decline" + data['respCode'];
         }
        
         if (data['respCode'] == 'CE') {   
-          this.comClose();
+         
           this.note = " Connection Error/Line Busy " + data['respCode'];
         }
 
         if (data['respCode'] == 'TO') {   
-          this.comClose();
+           
           this.note = " Connection Timeout " + data['respCode'];
         }
 
         if (data['respCode'] == 'PT') {   
-          this.comClose();
+         
           this.note = " EDC Problem" + data['respCode'];
         }
 
         if (data['respCode'] == 'aa' || data['respCode'] == 'AA') {   
-          this.comClose();
+          
           this.note = "aa Decline (aa represent two digit alphanumeric value from EDC)" + data['respCode'];
         }
 
         if (data['respCode'] == 'S2') {   
-          this.comClose();
-          this.note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC" + data['respCode'];
+           
+          this.note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC " + data['respCode'];
         }
 
         if (data['respCode'] == 'S3') {   
-          this.comClose();
-          this.note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED" + data['respCode'];
+         
+          this.note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED " + data['respCode'];
         } 
         if (data['respCode'] == 'ERRCON' ) {
-          this.comClose();
+          
           this.note =   data['respCode']+" ERROR CONNECTION, ECR is not connect!";
         } 
+        if (data['respCode'] == 'ER01') {    
+          this.note = " Connection Timeout, Please refresh pages " + data['respCode'];
+          setTimeout(() => {
+              this.back();
+          }, 3000);
+        }
        
       }
     );
+  }
+
+  comConn(){ 
+    const msg = {
+      port : 80,
+      host : localStorage.getItem("env_ecr"),
+      action: 'ajax',
+      msg: 'comConn',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg);
   }
 
   fnProcessPaymentReal(data: any) {
@@ -190,7 +214,16 @@ export class PaymentBcaDebitComponent implements OnInit {
   comClear() {
     const msg = {
       action: 'ajax',
-      msg: 'ercClear',
+      msg: 'comClear',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg);
+  }
+
+  comTest(){
+    const msg = {
+      action: 'ajax',
+      msg: 'comTest',
     }
     console.log(msg);
     this.configService.sendMessage(msg);
@@ -204,7 +237,15 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.configService.sendMessage(msg);
   }
 
+ 
   back() {
     history.back();
+  }
+
+  ngOnDestroy(): void {
+     console.log("ngOnDestroy");
+     this.comClose();
+     this._docSub.unsubscribe();
+     this.modalService.dismissAll();
   }
 }

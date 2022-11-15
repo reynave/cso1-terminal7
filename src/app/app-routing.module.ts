@@ -18,6 +18,7 @@ import { PhotoComponent } from './photo/photo.component';
 import { PrintDetailComponent } from './print/print-detail/print-detail.component';
 import { PrintSettingComponent } from './print/print-setting/print-setting.component';
 import { PrintComponent } from './print/print.component';
+import { SettingEcrComponent } from './setting-ecr/setting-ecr.component';
 import { StartupComponent } from './startup/startup.component';
 import { SystemOfflineComponent } from './system-offline/system-offline.component';
 
@@ -47,7 +48,8 @@ const routes: Routes = [
   { path: "payment/bcaDebit", component: PaymentBcaDebitComponent, data: { active: "payment" }, },
   { path: "payment/bcaQris", component: PaymentBcaQrisComponent, data: { active: "payment" }, },
   
-
+  { path: "setting/ecr", component: SettingEcrComponent, data: { active: "setting" }, },
+  
   { path: "forbiden", component: ForbidenComponent, data: { active: "home" }, },
   { path: "nofound", component: NotFoundComponent, data: { active: "home" }, },
   { path: "**", component: NotFoundComponent, data: { active: "404" } },

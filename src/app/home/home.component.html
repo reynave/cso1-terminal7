@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 text-center my-5">
       <h1 class="display-4">Terminal SCO V{{version}}</h1>
-      <img src="./assets/galleries/40796.jpg" width="50%" class="py-5">
+      <img src="./assets/galleries/40796.jpg" width="30%" class="py-5">
     </div>
     <div class="col-12 my-3">
       <h2>Android </h2> 
@@ -17,7 +17,7 @@
       <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="env_socket">
     </div>
     <div class="col-12 mb-3 text-center">
-      <p>{{note}}</p>
+      <p>{{note |json}}</p>
   
       <button type="button" class="btn  btn-lg btn-warning rounded px-5  mx-2  font-btn" (click)="fnTestCon();">Test
         Connection</button>

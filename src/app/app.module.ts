@@ -31,7 +31,8 @@ import { UserPhotoComponent } from './login/user-photo/user-photo.component';
 import { HeaderComponent } from './header/header.component';
 import { PrintSettingComponent } from './print/print-setting/print-setting.component';
 import { PaymentBcaDebitComponent } from './payment/payment-bca-debit/payment-bca-debit.component';
-import { PaymentBcaQrisComponent } from './payment/payment-bca-qris/payment-bca-qris.component'; 
+import { PaymentBcaQrisComponent } from './payment/payment-bca-qris/payment-bca-qris.component';
+import { SettingEcrComponent } from './setting-ecr/setting-ecr.component'; 
 
 
 const config: SocketIoConfig = { url: environment.socket_url, options: { transports: ['websocket'] } };
@@ -60,6 +61,7 @@ const config: SocketIoConfig = { url: environment.socket_url, options: { transpo
     PrintSettingComponent,
     PaymentBcaDebitComponent,
     PaymentBcaQrisComponent,
+    SettingEcrComponent,
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,7 @@ declare let Camera: any;
 })
 export class UserPhotoComponent implements OnInit {
   api: string = environment.api;
+  device : boolean = environment.device;
   kioskUuid: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";

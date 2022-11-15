@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-
+  printerName : any ;
 
   ngOnInit(): void { 
     if (localStorage.getItem(this.configService.deviceUuid()) === null) {
@@ -61,8 +61,10 @@ export class HeaderComponent implements OnInit {
   } 
 
   httpGet() {
- 
+    this.printerName = localStorage.getItem(this.configService.printerName());
   } 
+
+  
  
 
 }

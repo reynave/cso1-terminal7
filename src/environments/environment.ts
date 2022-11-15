@@ -9,7 +9,7 @@ export const environment = {
   //   token: 'DEV-WEBBASE-15fc3cec',
   device : false,
   socket_url: 'http://localhost:3000',
-  api: env_api,
+  api: "http://194.233.77.27/cso/api/",
   base_url: "#/",
   version: "1.1",
   token: 'DEV-WEBBASE-15fc3cec',

@@ -78,7 +78,7 @@ export class CartFinishComponent implements OnInit {
     this.print("android");
   }
  
-
+  warning : string = "";
   print(name: string) {
     const body = {
       id: this.activatedRoute.snapshot.params['id'],
@@ -90,8 +90,8 @@ export class CartFinishComponent implements OnInit {
         if (name == 'android') {  
           let message = this.printing.template( this.bill);
           this.printerName = localStorage.getItem(this.configService.printerName());
-          if (this.printerName == "" || this.printerName == null) {
-            alert("NO PRINTING SELECT"); 
+          if (this.printerName == "" || this.printerName == null) { 
+            this.warning = "NO PRINTING SELECT";
           }else{
 
             window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {

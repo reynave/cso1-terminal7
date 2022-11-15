@@ -4,7 +4,7 @@
             <h2 class="p-2">SCO Unit ID : {{terminalId}}</h2>
         </div>
         <div class="col-6 text-end">
-            <h2 class="p-2">Outlet Id : {{storeOutlesId}} <img src="./assets/imgs/icons8-label-printer-100.png" height="50"></h2>
+            <h2 class="p-2">Outlet Id : {{storeOutlesId}} <img [hidden]="!printerName" src="./assets/imgs/icons8-label-printer-100.png" height="50"></h2>
         </div>
     </div>
 </div>

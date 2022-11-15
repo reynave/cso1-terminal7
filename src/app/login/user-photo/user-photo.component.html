@@ -59,7 +59,7 @@
         <div class="col-6 d-grid">
             <button type="button" class="btn btn-success btn-lg rounded font-btn py-3" [disabled]="!initPhoto" (click)="goToCart();" >{{ initPhoto ? "Ok and Next":"Photo required"}}</button>
         </div>
-        <div class="col-12 text-center my-3">
+        <div class="col-12 text-center my-3" [hidden]="device == true">
             <a href="javascript:;"  (click)="fnSkipPhoto();" >Skip take photo</a>
         </div>
 
@@ -78,9 +78,7 @@
         <div class="row g-1">
      
 
-            <div class="col-12 text-end">
-                <h2 class="p-2"> <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
-            </div>
+            
             <div class="col-10">
                 <h2 class="p-2">{{today}}</h2>
             </div>

@@ -20,32 +20,55 @@
         <div class="col-12">
             <div class="text-center py-5">
                 <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="90%">
-            </div> 
+            </div>
         </div>
-        <div class="col-12"> 
+        <div class="col-12">
 
-            <div class="d-grid m-4 text-center"> 
-                <button type="button" (click)="fnBcaECR('01',true);" class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD DEV MODE</button>
+            <div class="d-grid m-4 text-center">
+                <button type="button" (click)="fnBcaECR('01',true);"
+                    class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD DEV MODE</button>
                 <p>With Dummy CC</p>
             </div>
 
 
-            <div class="d-grid m-4"> 
-                <button type="button" (click)="fnBcaECR('01');" class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD </button>
+            <div class="d-grid m-4">
+                <button type="button" (click)="fnBcaECR('01');"
+                    class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD </button>
             </div>
-
-            <div class="d-grid  m-4"> 
-                <button type="button" (click)="comClear();" class="btn btn-lg font-btn btn-warning py-3">ERC CLEAR</button>
-            </div>
-
-            <div class="d-grid  m-4"> 
-                <button type="button" (click)="comClose();" class="btn btn-lg font-btn btn-danger py-3">comClose</button>
+            <div class="my-5 text-center">
+                <h1> {{note}}</h1>
             </div>
         </div>
 
-        <div class="col-12">
-            <div class="my-5 text-center">
-               <h1> {{note}}</h1>
+
+    </div>
+    <div class="row g-3">
+        <div class="col-12 text-center">
+            <h2 class="mt-5">Developer mode</h2>
+        </div>
+        <div class="col-6">
+            <div class="d-grid  ">
+                <button type="button" (click)="comClear();" class="btn btn-lg font-btn btn-warning py-2">ERC
+                    CLEAR</button>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="d-grid ">
+                <button type="button" (click)="comTest();" class="btn btn-lg font-btn btn-danger py-2">Test
+                    Connection</button>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="d-grid ">
+                <button type="button" (click)="comConn();" class="btn btn-lg font-btn btn-primary py-2">com
+                    Connection</button>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div class="d-grid ">
+                <button type="button" (click)="comClose();"
+                    class="btn btn-lg font-btn btn-danger py-2">comClose</button>
             </div>
         </div>
     </div>
