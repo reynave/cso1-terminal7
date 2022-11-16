@@ -169,6 +169,72 @@ export class ConfigService {
   
   }
 
+  ecrRespCode(code : string = ""){
+    let note = "";
+    if (code == '00') { 
+        note = "Approve, Payment Success."; 
+    } 
+    
+    if (code == '54') {   
+      note = "Decline Expired Card " + code; 
+    }
+    if (code == '55') {    
+      note = "Decline Incorrect PIN " + code;
+    }
+    if (code == 'P2') {   
+      
+      note = " Read Card Error " + code;
+    }
+
+    if (code == 'P3') {    
+      note = " User press Cancel on EDC " + code;
+    }
+   
+    if (code == 'Z3') {   
+       
+      note = " EMV Card Decline" + code;
+    }
+   
+    if (code == 'CE') {   
+     
+      note = " Connection Error/Line Busy " + code;
+    }
+
+    if (code == 'TO') {   
+       
+      note = " Connection Timeout " + code;
+    }
+
+    if (code == 'PT') {   
+     
+      note = " EDC Problem" + code;
+    }
+
+    if (code == 'aa' || code == 'AA') {   
+      
+      note = "aa Decline (aa represent two digit alphanumeric value from EDC)" + code;
+    }
+
+    if (code == 'S2') {   
+       
+      note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC " + code;
+    }
+
+    if (code == 'S3') {   
+     
+      note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED " + code;
+    } 
+    if (code == 'ERRCON' ) {
+      
+      note =   code+" ERROR CONNECTION, ECR is not connect!";
+    } 
+    if (code == 'ER01') {    
+      note = " Connection Timeout, Please refresh pages " + code; 
+    }
+
+    return note;
+  }
+
   
 
 

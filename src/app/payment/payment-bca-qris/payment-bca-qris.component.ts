@@ -21,7 +21,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   storeOutlesPaymentType: any = [];
   t1_thank_you_display: any;
 
-  note: string = "";
+  note: string = "Generate QRIS, please wait...";
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
@@ -40,36 +40,54 @@ export class PaymentBcaQrisComponent implements OnInit {
     config.keyboard = false;
   }
  
+  finish : boolean = false;
+  paymentType : string = "31";
   ngOnInit(): void {
-    this.comClear();
+   // this.fnQrisCheck();
+    this.loading = true;
+   // this.comConn();
+ 
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
         console.log(data);
-        if (data['respCode'] == '00' && data['transType'] == '01') {
-          this.fnProcessPaymentReal(data); 
-        } 
-
-        // if (data['respCode'] != '00' || data['respCode'] != '') {
-        //   this.comClose();
-        //   this.note = "ERROR " + data['respCode'];
-        // } 
-
-        if (data['respCode'] == 'P3' ) {
-          this.comClose();
-          this.note =  data['respCode']+" User press Cancel on EDC ";
-        } 
-
-        if (data['respCode'] == 'CE') { 
-          this.comClose();
-          this.note = "ERROR " + data['respCode'];
+        
+        this.note = this.configService.ecrRespCode(data['respCode']);
+        if (data['respCode'] == '00' && data['respCode'] == '32' ) {
+          if(this.finish == false){
+            this.fnProcessPaymentReal(data);  
+            this.finish = true;
+          } 
+        }  
+        if (data['respCode'] == '00' && data['respCode'] == '31' ) {
+          this.fnQrisInsert(data);
+          this.paymentType == '32';
         }
-        if (data['respCode'] == 'PS') {   
-          this.comClose();
-          this.note = "ERROR " + data['respCode'];
+
+
+        if (data['respCode'] == '54') {   
+          setTimeout(() => {
+              this.back();
+          }, 1000);
+        } 
+        if (data['respCode'] == 'ER01') {    
+          setTimeout(() => {
+              this.back();
+          }, 3000);
         }
        
       }
     );
+  }
+
+  comConn(){ 
+    const msg = {
+      port : 80,
+      host : localStorage.getItem("env_ecr"),
+      action: 'ajax',
+      msg: 'comConn',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg);
   }
 
   fnProcessPaymentReal(data: any) {
@@ -111,13 +129,13 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.configService.help(msg);
   }
 
-  fnBcaECR(transType: string = "",dummyCC :boolean = false) {
+  fnBcaECR(transType: string = "") {
 
     const body = {
-      paymentTypeId: 'bca01',
+      paymentTypeId: 'bca31',
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
       transType: transType,
-      dummyCC : dummyCC,
+      dummyCC : false,
     }
     this.loading = true;
 
@@ -125,8 +143,50 @@ export class PaymentBcaQrisComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+      
         console.log(data);
         this.com(data['data']['hex'], transType);
+        this.loading = false; 
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+
+  fnBcaECRType32(){
+
+  }
+
+  fnQrisCheck(){
+    this.loading = true;
+    const body = {
+      kioskUuid: this.uuidKios,
+    }
+    this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisCheck/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data); 
+        if(data['data'] == false){
+          this.fnBcaECR('31');
+        }
+        this.loading = false; 
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
+
+  fnQrisInsert(data : any = []){ 
+    this.loading = true;
+
+    this.http.post<any>(this.api + 'kioskPaymentBca/fnBcaEcr/', data,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data); 
         this.loading = false; 
       },
       e => {
@@ -150,7 +210,16 @@ export class PaymentBcaQrisComponent implements OnInit {
   comClear() {
     const msg = {
       action: 'ajax',
-      msg: 'ercClear',
+      msg: 'comClear',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg);
+  }
+
+  comTest(){
+    const msg = {
+      action: 'ajax',
+      msg: 'comTest',
     }
     console.log(msg);
     this.configService.sendMessage(msg);
@@ -164,8 +233,15 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.configService.sendMessage(msg);
   }
 
+ 
   back() {
     history.back();
   }
 
+  ngOnDestroy(): void {
+     console.log("ngOnDestroy");
+     this.comClose();
+     this._docSub.unsubscribe();
+     this.modalService.dismissAll();
+  }
 }

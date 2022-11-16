@@ -19,28 +19,37 @@
     <div class="row">
         <div class="col-12">
             <div class="text-center py-5">
-                <img src="./assets/imgs/qrscan.jpg" width="90%">
+                <container-element [ngSwitch]="paymentType">
+                    <div *ngSwitchCase="'31'">   <img src="./assets/gif/Blocks-1s-200px.gif">  </div>
+                    <div *ngSwitchCase="'32'"><img src="./assets/imgs/qrscan.jpg" width="90%"></div>
+                
+                    
+                    <div *ngSwitchDefault> </div>
+                </container-element>
+                
             </div>
-          
+            <div class="my-5 text-center">
+                <h1> {{note}}</h1>
+            </div>
         </div>
         <div class="col-12">
-            <div class="d-grid m-4"> 
-                <button type="button" (click)="fnBcaECR('31');" class="btn btn-lg font-btn btn-info py-3">Qris BCA</button>
+            <div class="d-grid m-4">
+                <button type="button" (click)="fnBcaECR('31');" class="btn btn-lg font-btn btn-info py-3">Generate QRIS BCA</button>
             </div>
- 
-            <div class="d-grid  m-4"> 
+
+
+            <div class="d-grid m-4">
+                <button type="button" (click)="fnBcaECRType32();" class="btn btn-lg font-btn btn-info py-3">Check manual Status Payment</button>
+            </div>
+
+            <div class="d-grid  m-4">
                 <button type="button" (click)="comClear();" class="btn btn-lg font-btn btn-warning py-3">ERC CLEAR</button>
             </div>
 
-            <div class="d-grid  m-4"> 
+            <div class="d-grid  m-4">
                 <button type="button" (click)="comClose();" class="btn btn-lg font-btn btn-danger py-3">comClose</button>
             </div>
         </div>
-
-        <div class="col-12">
-            <div class="my-5 text-center">
-               <p> {{note}}</p>
-            </div>
-        </div>
+ 
     </div>
 </div>

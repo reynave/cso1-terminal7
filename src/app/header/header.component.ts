@@ -45,8 +45,7 @@ export class HeaderComponent implements OnInit {
     }
     this.httpGet();
     this.configService.httpAccount().subscribe(
-      data => {
-        console.log(data);
+      data => { 
         if (data['systemOnline'] == false) {
           this.router.navigate(['offline']);
         }

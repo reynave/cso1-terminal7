@@ -42,80 +42,23 @@ export class PaymentBcaDebitComponent implements OnInit {
   finish : boolean = false;
   ngOnInit(): void {   
     this.comConn();
-    // setTimeout(() => {
-    //   this.fnBcaECR('01',true);
-    // }, 1000);
+   
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
         console.log(data);
+        this.note = this.configService.ecrRespCode(data['respCode']);
         if (data['respCode'] == '00') {
           if(this.finish == false){
-            this.fnProcessPaymentReal(data); 
-            this.note = "Payment Success";
+            this.fnProcessPaymentReal(data);  
             this.finish = true;
           } 
-        } 
- 
-        if (data['respCode'] == '54') {  
-         
-          this.note = "Decline Expired Card " + data['respCode'];
+        }  
+        if (data['respCode'] == '54') {   
           setTimeout(() => {
               this.back();
           }, 1000);
-        }
-        if (data['respCode'] == '55') {   
-         
-          this.note = "Decline Incorrect PIN " + data['respCode'];
-        }
-        if (data['respCode'] == 'P2') {   
-          
-          this.note = " Read Card Error " + data['respCode'];
-        }
-
-        if (data['respCode'] == 'P3') {    
-          this.note = " User press Cancel on EDC " + data['respCode'];
-        }
-       
-        if (data['respCode'] == 'Z3') {   
-           
-          this.note = " EMV Card Decline" + data['respCode'];
-        }
-       
-        if (data['respCode'] == 'CE') {   
-         
-          this.note = " Connection Error/Line Busy " + data['respCode'];
-        }
-
-        if (data['respCode'] == 'TO') {   
-           
-          this.note = " Connection Timeout " + data['respCode'];
-        }
-
-        if (data['respCode'] == 'PT') {   
-         
-          this.note = " EDC Problem" + data['respCode'];
-        }
-
-        if (data['respCode'] == 'aa' || data['respCode'] == 'AA') {   
-          
-          this.note = "aa Decline (aa represent two digit alphanumeric value from EDC)" + data['respCode'];
-        }
-
-        if (data['respCode'] == 'S2') {   
-           
-          this.note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC " + data['respCode'];
-        }
-
-        if (data['respCode'] == 'S3') {   
-         
-          this.note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED " + data['respCode'];
-        } 
-        if (data['respCode'] == 'ERRCON' ) {
-          
-          this.note =   data['respCode']+" ERROR CONNECTION, ECR is not connect!";
         } 
         if (data['respCode'] == 'ER01') {    
-          this.note = " Connection Timeout, Please refresh pages " + data['respCode'];
           setTimeout(() => {
               this.back();
           }, 3000);
