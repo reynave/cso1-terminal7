@@ -19,10 +19,13 @@
     <div class="row">
         <div class="col-12">
             <div class="text-center py-5">
-                <container-element [ngSwitch]="paymentType">
-                    <div *ngSwitchCase="'31'">   <img src="./assets/gif/Blocks-1s-200px.gif">  </div>
-                    <div *ngSwitchCase="'32'"><img src="./assets/imgs/qrscan.jpg" width="90%"></div>
-                
+                 
+                <container-element [ngSwitch]="ongoingpaymentType">
+                    <div *ngSwitchCase="'31'"> <img src="./assets/gif/Blocks-1s-200px.gif">  </div>
+                    <div *ngSwitchCase="'32'">
+                        <img src="./assets/imgs/qrscan.jpg" width="90%">
+                        <h1 class="mt-2">  REFF NO : {{reffNo}}<br> Type : {{ongoingpaymentType}}</h1>
+                    </div> 
                     
                     <div *ngSwitchDefault> </div>
                 </container-element>
@@ -34,12 +37,13 @@
         </div>
         <div class="col-12">
             <div class="d-grid m-4">
-                <button type="button" (click)="fnBcaECR('31');" class="btn btn-lg font-btn btn-info py-3">Generate QRIS BCA</button>
+                <button type="button" (click)="fnBcaECR('31');" [disabled]="ongoingpaymentType == '32'" class="btn btn-lg font-btn btn-info py-3">Generate QRIS BCA</button>
             </div>
 
 
             <div class="d-grid m-4">
-                <button type="button" (click)="fnBcaECRType32();" class="btn btn-lg font-btn btn-info py-3">Check manual Status Payment</button>
+                <button type="button" (click)="fnBcaECR32();" class="btn btn-lg font-btn btn-info py-3">Check manual Status Payment</button>
+              
             </div>
 
             <div class="d-grid  m-4">

@@ -174,6 +174,9 @@ export class ConfigService {
     if (code == '00') { 
         note = "Approve, Payment Success."; 
     } 
+    if (code == 'Q2') { 
+      note = "Transaksi tidak ditemukan!"; 
+  } 
     
     if (code == '54') {   
       note = "Decline Expired Card " + code; 
@@ -192,7 +195,7 @@ export class ConfigService {
    
     if (code == 'Z3') {   
        
-      note = " EMV Card Decline" + code;
+      note = " EMV Card Decline " + code;
     }
    
     if (code == 'CE') {   
@@ -207,7 +210,7 @@ export class ConfigService {
 
     if (code == 'PT') {   
      
-      note = " EDC Problem" + code;
+      note = " EDC Problem " + code;
     }
 
     if (code == 'aa' || code == 'AA') {   

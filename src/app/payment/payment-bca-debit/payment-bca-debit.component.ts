@@ -39,43 +39,65 @@ export class PaymentBcaDebitComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-  finish : boolean = false;
-  ngOnInit(): void {   
+  finish: boolean = false;
+  ngOnInit(): void {
     this.comConn();
-   
+
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
-        console.log(data);
+       
         this.note = this.configService.ecrRespCode(data['respCode']);
         if (data['respCode'] == '00') {
-          if(this.finish == false){
-            this.fnProcessPaymentReal(data);  
+          if (this.finish == false) {
+            this.fnProcessPaymentReal(data);
             this.finish = true;
-          } 
-        }  
-        if (data['respCode'] == '54') {   
+          }
+        }
+        if (data['respCode'] == '54') {
           setTimeout(() => {
-              this.back();
+            this.back();
           }, 1000);
-        } 
-        if (data['respCode'] == 'ER01') {    
+        }
+        if (data['respCode'] == 'ER01') {
           setTimeout(() => {
-              this.back();
+            this.back();
           }, 3000);
         }
-       
+
+        console.log(data);
+        if (data['respCode'] != '' && data['respCode']) {
+         // this.fnSaveLog(data);
+        }
+
       }
     );
   }
+  fnSaveLog(data: any) {
+    const body = {
+      data : data,
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+    }
+    this.http.post(environment.api + 'kioskPaymentBca/fnSaveLog/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data =>{
+        console.log(data);
+      },
+      e => {
+        console.log(e);
+      },
+    );
+  }
 
-  comConn(){ 
+
+  comConn() {
     const msg = {
-      port : 80,
-      host : localStorage.getItem("env_ecr"),
+      port: 80,
+      host: localStorage.getItem("env_ecr"),
       action: 'ajax',
       msg: 'comConn',
     }
-    console.log(msg);
+   
     this.configService.sendMessage(msg);
   }
 
@@ -85,8 +107,7 @@ export class PaymentBcaDebitComponent implements OnInit {
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
       data: data,
     }
-    this.loading = true;
-    console.log(body);
+    this.loading = true; 
     this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentReal/', body,
       { headers: this.configService.headers() }
     ).subscribe(
@@ -118,13 +139,13 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.configService.help(msg);
   }
 
-  fnBcaECR(transType: string = "",dummyCC :boolean = false) {
+  fnBcaECR(transType: string = "", dummyCC: boolean = false) {
 
     const body = {
       paymentTypeId: 'bca01',
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
       transType: transType,
-      dummyCC : dummyCC,
+      dummyCC: dummyCC,
     }
     this.loading = true;
 
@@ -134,7 +155,7 @@ export class PaymentBcaDebitComponent implements OnInit {
       data => {
         console.log(data);
         this.com(data['data']['hex'], transType);
-        this.loading = false; 
+        this.loading = false;
       },
       e => {
         console.log(e);
@@ -150,7 +171,7 @@ export class PaymentBcaDebitComponent implements OnInit {
       uuidKios: this.uuidKios,
       txt: hex,
     }
-    console.log(msg);
+    
     this.configService.sendMessage(msg);
   }
 
@@ -159,16 +180,16 @@ export class PaymentBcaDebitComponent implements OnInit {
       action: 'ajax',
       msg: 'comClear',
     }
-    console.log(msg);
+   
     this.configService.sendMessage(msg);
   }
 
-  comTest(){
+  comTest() {
     const msg = {
       action: 'ajax',
       msg: 'comTest',
     }
-    console.log(msg);
+   
     this.configService.sendMessage(msg);
   }
 
@@ -180,15 +201,15 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.configService.sendMessage(msg);
   }
 
- 
+
   back() {
     history.back();
   }
 
   ngOnDestroy(): void {
-     console.log("ngOnDestroy");
-     this.comClose();
-     this._docSub.unsubscribe();
-     this.modalService.dismissAll();
+    console.log("ngOnDestroy");
+    this.comClose();
+    this._docSub.unsubscribe();
+    this.modalService.dismissAll();
   }
 }
