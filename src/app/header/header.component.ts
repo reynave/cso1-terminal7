@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   member: any = []; 
   loginSuccess: boolean = false;
   kioskUuid: any = localStorage.getItem(this.configService.myUUID());  
-
+  private _docSub: any;
   storeOutlesId: string = "";
   terminalId: string = "";
   constructor( 
@@ -34,6 +34,18 @@ export class HeaderComponent implements OnInit {
   printerName : any ;
 
   ngOnInit(): void { 
+
+    this._docSub = this.configService.getMessage().subscribe(
+      (data: { [x: string]: any; }) => { 
+        if(data['action'] == 'turnOn'){
+            if(data['msg'] == '0'){
+              this.router.navigate(['offline']);
+              localStorage.removeItem('t1_kioskUuid');
+            } 
+        }
+      }
+    );
+ 
     if (localStorage.getItem(this.configService.deviceUuid()) === null) {
       alert("NO KEY");
       this.router.navigate(['./']);
@@ -45,8 +57,9 @@ export class HeaderComponent implements OnInit {
     }
     this.httpGet();
     this.configService.httpAccount().subscribe(
-      data => { 
-        if (data['systemOnline'] == false) {
+      data => {   
+       
+        if (data['systemOnline'] == false || data['turnOn'] == 0) {
           this.router.navigate(['offline']);
         }
         this.storeOutlesId = data['storeOutlesId'];
@@ -63,7 +76,11 @@ export class HeaderComponent implements OnInit {
     this.printerName = localStorage.getItem(this.configService.printerName());
   } 
 
-  
+  ngOnDestroy() {
+    this._docSub.unsubscribe();
+  }
+
+
  
 
 }

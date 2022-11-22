@@ -11,7 +11,7 @@ export const environment = {
   device : false,
   socket_url: 'http://localhost:3000',
   base_url: "#/",
-  version: "1.1",
+  version : "1.2.1122",
   token: 'DEV-WEBBASE-15fc3cec',
   //socket_url: env_socket,
 };

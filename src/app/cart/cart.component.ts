@@ -122,6 +122,7 @@ export class CartComponent implements OnInit, OnDestroy {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        console.log(data);
         if (data['ilock'] == true) {
           this.router.navigate(['bill']);
         } else {
@@ -195,6 +196,7 @@ export class CartComponent implements OnInit, OnDestroy {
         { headers: this.configService.headers() }
       ).subscribe(
         data => {
+          console.log(data);
           this.loading = false;
           if (data['error'] == false) {
             this.httpGet();

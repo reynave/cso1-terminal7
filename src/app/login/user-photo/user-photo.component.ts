@@ -22,12 +22,12 @@ export class UserPhotoComponent implements OnInit {
   kioskUuid: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
-  version: string = environment.version;
+  version: string = environment.version; 
   today: any = new Date();
   loading: boolean = false; 
   images : string = "./assets/imgs/user.png";
   initPhoto : boolean = false;
-  memberId : string = "";
+  memberId : string = "0";
   name:string  = "";
   notes : string = "";
   constructor(
@@ -53,7 +53,7 @@ export class UserPhotoComponent implements OnInit {
     this.httpGet();
   }
 
-
+  tnc : any = [];
   httpGet() {
 
     let url = this.api + 'kioskLogin/getInfo/?kioskUuid=' + this.kioskUuid;
@@ -63,6 +63,7 @@ export class UserPhotoComponent implements OnInit {
     ).subscribe(
       data => {
         console.log(data);
+        this.tnc = data['tnc'];
         this.memberId = data['memberId'];
         this.name = data['name'];
         this.notes = data['welcomeMember'];
