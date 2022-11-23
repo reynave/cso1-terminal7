@@ -93,15 +93,15 @@ export class CartFinishComponent implements OnInit {
           if (this.printerName == "" || this.printerName == null) { 
             this.warning = "NO PRINTING SELECT";
           }else{
-
+           
             window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {
               console.log(result);
               window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
                 console.log("result of usb print action", result);
               }, (err: any) => {
-                console.error('Error in usb print action', err)
+                console.error('Error in usb print action', err);
               });
-
+              this.router.navigate(['/login']);
             }, (err: any) => {
               console.error(err);
             });
