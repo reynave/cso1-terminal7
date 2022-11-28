@@ -2,17 +2,10 @@
 
     <app-header></app-header>
 
-    <div class="container py-4 ">
-
-        <div class="row g-1 mb-4" [hidden]="adminMode">
-
-
-            <div class="col-8">
-
-
-                <h1>Hi, {{member['firstName']}} {{member['lastName']}} </h1>
-
-
+    <div class="container py-4 "> 
+        <div class="row g-1 mb-4" [hidden]="adminMode"> 
+            <div class="col-8">  
+                <h1>Hi, {{member['firstName']}} {{member['lastName']}} </h1> 
             </div>
 
             <div class="col-4 text-end">
@@ -119,6 +112,7 @@
                         <img [src]="x.images ? x.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
                     </div>
                     <div class="col-6 col-lg-6">
+                        <h3>{{x.barcode}}</h3>
                         <h2>{{x.description}}</h2>
                         <h2>
                             <span class="box-qty bg-white mx-3 border">{{x.qty}}</span> Rp {{x.price | number}}

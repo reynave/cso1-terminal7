@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
-import { PrintingService } from 'src/app/service/printing.service'; 
+import { PrintingService } from 'src/app/service/printing.service';
 @Component({
-  selector: 'app-payment-bca-qris',
-  templateUrl: './payment-bca-qris.component.html',
-  styleUrls: ['./payment-bca-qris.component.css']
+  selector: 'app-payment-bca-qris32',
+  templateUrl: './payment-bca-qris32.component.html',
+  styleUrls: ['./payment-bca-qris32.component.css']
 })
-export class PaymentBcaQrisComponent implements OnInit {
+export class PaymentBcaQris32Component implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
   items: any = [];
@@ -20,7 +20,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   paymentTypeId: number = 0;
   storeOutlesPaymentType: any = [];
   t1_thank_you_display: any;
-  reffNo: string = ""; 
+  reffNo: string = "";
   note: string = "Generate QRIS, please wait...";
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
@@ -29,7 +29,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   generateQris: boolean = true;
   private _docSub: any;
   myInterval: any;
-  transType : string = '0';
+  transType: string = '0';
   hex: string = "";
   constructor(
     private http: HttpClient,
@@ -43,38 +43,25 @@ export class PaymentBcaQrisComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-
+  ercError: boolean = false;
   finish: boolean = false;
   ongoingpaymentType: string = "31";
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.loading = true;
     this.comConn();
     this.fnQrisCheck();
 
     this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => {
-    
-        console.log('subscribe : ', data, 'this.transType :'+this.transType);
+      (data: { [x: string]: any; }) => { 
+        console.log('subscribe : ', data, 'this.transType :' + this.transType); 
+        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Menunggu pembayaran';
 
-        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Silakan tekan tombol <b>OK</b> atau <b>Hijau</b> pada mesin Edisi BCA';
-
-        if (data['respCode'] == '00') { 
-          this.fnQrisInsert(data); 
+        if (data['respCode'] == '00') {
+          this.fnQrisUpdate(data);
         }
-
-        
-
-        if (data['respCode'] == '54') {
-          setTimeout(() => {
-            this.back();
-          }, 1000);
-        }
-        if (data['respCode'] == 'ER01') {
-          setTimeout(() => {
-            this.back();
-          }, 3000);
-        }
-
+        if (data['respCode'] != '00') {
+          this.ercError = true;
+        } 
       }
     );
   }
@@ -90,7 +77,37 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.configService.sendMessage(msg);
   }
 
-  
+  fnProcessPaymentReal(data: any) {
+    const body = {
+      paymentTypeId: 'BCA31',
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      data: data,
+    }
+    this.loading = true;
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentReal/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+        localStorage.removeItem(this.configService.myUUID());
+        this.loading = false;
+        /**
+         * status payment disini
+         */
+        // this.paymentStatus = 2; 
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.printing.print(data['id']);
+          }
+        )
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+  }
 
   help() {
     const msg = {
@@ -98,35 +115,8 @@ export class PaymentBcaQrisComponent implements OnInit {
     }
     this.configService.help(msg);
   }
-
-  fnBcaECR(transType: string = "") {
-
-    const body = {
-      paymentTypeId: 'bca31',
-      kioskUuid: localStorage.getItem(this.configService.myUUID()),
-      transType: transType,
-      dummyCC: false,
-    }
-    this.loading = true;
-
-    this.http.post<any>(this.api + 'kioskPaymentBca/fnBcaEcr/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-
-        console.log(data);
-        this.com(data['data']['hex'], transType);
-        this.loading = false;
-      },
-      e => {
-        console.log(e);
-      },
-    );
-  }
-
-
-  fnQrisCheck() {
-   
+ 
+  fnQrisCheck() { 
     this.loading = true;
     const body = {
       kioskUuid: this.uuidKios,
@@ -134,16 +124,15 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisCheck/', body,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => { 
+      data => {
         this.loading = false;
-        console.log("fnQrisCheck", data);
-        if (data['data'] == false) { 
-        //  this.reffNo = data['data']['reffNo'];
-       //   this.hex = data['hex']['hex'];
-          this.generateQris = false;
-           this.fnBcaECR('31');
-        }else{ 
-          this.router.navigate(["payment/bcaQris/32"], { queryParams: { reffNo: data['data']['reffNo'] } });
+        if(data['data']['reffNo']){
+          console.log("fnQrisCheck", data);
+          this.reffNo = data['data']['reffNo'];
+          this.hex = data['hex']['hex']; 
+        }else{
+          console.log("ERROR");
+          this.note = 'Data <b>REFF NO</b> tidak ditemukan, silakan hubungi admin!';
         }
       
       },
@@ -153,23 +142,22 @@ export class PaymentBcaQrisComponent implements OnInit {
     );
   }
 
-  fnQrisInsert(data: any = []) {
-    this.loading = true;
-    this.ongoingpaymentType = '32';
-  //  this.note = "";
-    console.log("ongoingpaymentType  : ", this.ongoingpaymentType);
+  fnQrisUpdate(data: any = []) {
+    this.loading = true; 
     const body = {
       data: data,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      status : 1,
+      reffNo:  this.reffNo,
     }
-    this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisInsert/', body,
+    console.log("fnQrisUpdate ", body);
+    this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisUpdate/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        console.log(data);
-        this.reffNo = data['reffNo'];
-        if(data['reffNo']){
-          this.fnQrisCheck(); 
+        console.log(data); 
+        if(data['id'] && data['update'] != false){
+          this.fnProcessPaymentReal(body['data']);
         }
         this.loading = false;
       },
@@ -177,6 +165,16 @@ export class PaymentBcaQrisComponent implements OnInit {
         console.log(e);
       },
     );
+  }
+ 
+  fnBcaECR32() {
+    const msg = {
+      action: 'ajax',
+      msg: 'transType31',
+      reffNo: this.reffNo,
+      hex: this.hex,
+    }
+    this.configService.sendMessage(msg); 
   }
  
   com(hex: string, transType: string) {
@@ -216,8 +214,8 @@ export class PaymentBcaQrisComponent implements OnInit {
     }
     this.configService.sendMessage(msg);
   }
-  back() { 
-     history.back();
+  back() {
+    history.back();
   }
 
   ngOnDestroy(): void {
@@ -227,4 +225,24 @@ export class PaymentBcaQrisComponent implements OnInit {
     this._docSub.unsubscribe();
     this.modalService.dismissAll();
   }
-}
+
+  modal(content: any) {
+    this.modalService.open(content, { centered: true });
+  }
+  fnLogoutVisitor() {
+    const body = {
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+    }
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
+      },
+    );
+
+  }
+} 

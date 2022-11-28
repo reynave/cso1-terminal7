@@ -46,7 +46,9 @@
                     <tbody>
                         <tr *ngFor="let x of items">
                             <td>{{x.qty}}</td>
-                            <td>{{x.description}}
+                            <td>
+                                <code>{{x.barcode}}</code>
+                               <div> {{x.description}}</div>
                                 <div [hidden]="x.isSpecialPrice == 0">*Special price</div>
                                 <div [hidden]="x.isFreeItem == 0">*Free Items</div>
 

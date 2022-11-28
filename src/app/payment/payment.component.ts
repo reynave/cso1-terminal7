@@ -35,13 +35,11 @@ export class PaymentComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-
-
+ 
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
-
-
+ 
   ngOnInit(): void {
     this.configService.httpAccount().subscribe(
       data => {
@@ -54,14 +52,18 @@ export class PaymentComponent implements OnInit {
       }
     )
     if (localStorage.getItem(this.configService.myUUID())) {
-
-      console.log("SILAKAN BELANJA!");
+ 
       this.httpGet();
       this.httpCart();
     } else {
       this.router.navigate(['login']);
     }
   }
+
+  modal(content: any) {
+    this.modalService.open(content, { centered: true });
+  }
+
   help() {
     const msg = {
       terminalId: this.terminalId,
@@ -71,13 +73,12 @@ export class PaymentComponent implements OnInit {
   httpGet() {
     this.loading = true;
     let url = this.api + 'kioskPayment/index/?uuid=' + localStorage.getItem(this.configService.myUUID());
-    console.log(url);
+ 
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.loading = false;
-        console.log(data);
+        this.loading = false; 
         this.final = data['summary']['final'];
         this.storeOutlesPaymentType = data['storeOutlesPaymentType'];
       },
@@ -95,8 +96,7 @@ export class PaymentComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.loading = false;
-        console.log(data);
+        this.loading = false; 
 
       },
       e => {
@@ -108,8 +108,7 @@ export class PaymentComponent implements OnInit {
   payment(x: any, content: any) {
     if (x.paymentTypeId == 'QRT001') {
       this.router.navigate(['payment/qristelkom/', x.paymentTypeId]);
-    } else {
-      console.log(x);
+    } else { 
       this.paymentStatus = 1;
       this.loading = true;
       this.paymentTypeId = x.paymentTypeId;
@@ -131,13 +130,12 @@ export class PaymentComponent implements OnInit {
     //  storeOutlesId: localStorage.getItem('storeOutlesId'),
     //  terminalId: localStorage.getItem('terminalId'),
     }
-    this.loading = true;
-    console.log(body);
+    this.loading = true; 
     this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentFake/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        console.log(data);
+     
         localStorage.removeItem(this.configService.myUUID());
         this.modalService.dismissAll();
         this.loading = false;
@@ -197,5 +195,22 @@ export class PaymentComponent implements OnInit {
   finishShopping() {
     this.modalService.dismissAll();
     this.router.navigate(['login']);
+  }
+
+  fnLogoutVisitor() {
+    const body = {
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+    }
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
+      },
+    );
+
   }
 }

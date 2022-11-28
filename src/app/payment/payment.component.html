@@ -1,3 +1,4 @@
+ 
 <div class="sticky-top   pt-2  bg-white">
   
  <app-header></app-header>
@@ -6,10 +7,13 @@
             <div class="col-6">
                 <a href="javascript:void(0)" [routerLink]="[ '/bill']" class="btn p-1  mx-1">
                     <img src="./assets/imgs/icons8-back-67.png" width="90">
-                </a>
-
+                </a> 
             </div>
+            
             <div class="col-6 text-end">
+                <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger rounded p-1   mx-1">
+                    <img src="./assets/imgs/icons8-close-64.png" width="90">
+                </a>
                 <a href="javascript:void(0)" (click)="help()" class="btn bg-warning p-1 border rounded mx-1">
                     <img src="./assets/imgs/icons8-bell-64.png" width="90">
                 </a>
@@ -31,32 +35,32 @@
 
     </div>
 
-    <div class="row g-2 my-5">
+    <div class="row  my-5">
 
         <div class="col-12 text-center mb-4">
             <h1>Select Payment Methods :</h1>
         </div>
-        <div class="col-4" *ngFor="let x of storeOutlesPaymentType">
-            <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block p-2 border shadow-sm">
-                    <img [src]="x.image" width="100%">
+        <div class="col-6" *ngFor="let x of storeOutlesPaymentType">
+            <div class="p-1 d-grid mb-5  ">
+                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block  border shadow-sm">
+                    <img [src]="x.image" width="100%" class="p-2">
                     <h4>{{x.name}}</h4>
                 </a>
             </div>
         </div>
-        <div class="col-4">
-            <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;" (click)="BCADebit()" class="btn  btn-block p-2 ">
-                   <img src="https://dummyimage.com/600x400/ffffff/000000.png&text=BCA+DEBIT" class="border" width="100%">
+        <div class="col-6">
+            <div class="p-1 d-grid mb-5  ">
+                <a href="javascript:;" (click)="BCADebit()" class="btn  btn-block  border shadow-sm p-2 ">
+                   <img src="https://dummyimage.com/600x250/ffffff/000000.png&text=DEBIT+CARD" width="100%">
                    <h4>BCA CREDIT</h4>
                 </a>
             </div> 
         </div>
         
-        <div class="col-4">
-            <div class="p-1 d-grid mb-2  ">
-                <a href="javascript:;"  (click)="BCAQris()"  class="btn  btn-block p-2 ">
-                    <img src="https://home.oxygen.id/public/contents/info-pembayaran/img/qris-logo.png" class="border" width="100%">
+        <div class="col-6">
+            <div class="p-1 d-grid mb-5  ">
+                <a href="javascript:;"  (click)="BCAQris()"  class="btn  btn-block  border shadow-sm p-2">
+                    <img src="https://home.oxygen.id/public/contents/info-pembayaran/img/qris-logo.png" width="100%">
                     <h4>QRIS BCA</h4>
                 </a>
             </div>
@@ -104,6 +108,22 @@
             </ng-container>
         </div>
 
+    </div>
+
+</ng-template>
+
+
+<ng-template #modalCancel let-modal>
+    <div class="modal-header">
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <h1 class="text-center m-5">Do You Want Cancel Transaction ? </h1>
+
+        <div class="text-center m-5 d-grid">
+            <button type="submit" class="btn btn-danger btn-lg rounded font-btn" (click)="fnLogoutVisitor();">Yes</button>
+        </div>
     </div>
 
 </ng-template>

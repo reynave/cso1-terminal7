@@ -105,7 +105,7 @@ export class ConfigService {
   httpAccount() {
     this.reloadToken();
     let url = this.api + 'Kiosks/index/?token=' + this.keygen();
-    console.log("httpAccount : ", url)
+  
     return this.http.get<any>(url,
       { headers: this.headers() }
     );

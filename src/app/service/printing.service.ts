@@ -49,7 +49,7 @@ export class PrintingService {
     message += bill['template']['companyPhone']+"\n";  
     message += "================================================"+"\n"; 
     items.forEach((el: any) => {
-      message += el['itemId'] + " " + el['shortDesc'] + "\n";
+      message += el['barcode'] + " " + el['shortDesc'] + "\n";
       message +=
         this.stringfix(el['qty'], 4) + " X " +
         this.stringfix(this.numberFormat(el['price']), 10, 'f') + " " +

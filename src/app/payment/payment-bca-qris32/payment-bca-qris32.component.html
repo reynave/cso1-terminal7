@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div class="container  py-4">
+    <div class="row">
+        <div class="col-6">
+            <a href="javascript:void(0)" (click)="back()" class="btn p-1  mx-1">
+                <img src="./assets/imgs/icons8-back-67.png" width="90">
+            </a>
+
+        </div>
+        <div class="col-6 text-end">
+            <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger rounded p-1   mx-1">
+                <img src="./assets/imgs/icons8-close-64.png" width="90">
+            </a>
+            <a href="javascript:void(0)" (click)="help()" class="btn bg-warning p-1 border rounded mx-1">
+                <img src="./assets/imgs/icons8-bell-64.png" width="90">
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+
+                <img src="./assets/imgs/qrscan.jpg" width="90%">
+                <h1 class="mt-2"> REFF NO : {{reffNo}} </h1>
+
+            </div>
+            <div class="my-5 text-center">
+                <h1 [innerHTML]="note"></h1>
+            </div>
+        </div>
+        <div class="col-12">
+
+
+            <div class="d-grid m-4">
+                <button type="button" (click)="fnBcaECR32();" class="btn btn-lg font-btn btn-info py-3">Check manual Status Payment</button>
+
+            </div>
+            <div  [hidden]="ercError">
+                <div class="d-grid  m-4"> 
+                    <button type="button"   class="btn btn-lg font-btn btn-warning py-3">Cancel Payment</button> 
+                </div> 
+            </div>
+          
+        </div>
+
+    </div>
+</div>
+
+
+<ng-template #modalCancel let-modal>
+    <div class="modal-header">
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <h1 class="text-center m-5">Do You Want Cancel Transaction ? </h1>
+
+        <div class="text-center m-5 d-grid">
+            <button type="submit" class="btn btn-danger btn-lg rounded font-btn" (click)="fnLogoutVisitor();">Yes</button>
+        </div>
+    </div>
+
+</ng-template>
