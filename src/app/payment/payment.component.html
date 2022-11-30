@@ -41,78 +41,17 @@
             <h1>Select Payment Methods :</h1>
         </div>
         <div class="col-6" *ngFor="let x of storeOutlesPaymentType">
-            <div class="p-1 d-grid mb-5  ">
-                <a href="javascript:;" (click)="payment(x,fakePayment);" class="btn  btn-block  border shadow-sm">
+            <div class="p-1 d-grid mb-5  "> 
+                <a href="javascript:;" (click)="payment(x);" class="btn  btn-block  border shadow-sm">
                     <img [src]="x.image" width="100%" class="p-2">
-                    <h4>{{x.name}}</h4>
+                    <h4>{{x.label}}</h4>
                 </a>
             </div>
         </div>
-        <div class="col-6">
-            <div class="p-1 d-grid mb-5  ">
-                <a href="javascript:;" (click)="BCADebit()" class="btn  btn-block  border shadow-sm p-2 ">
-                   <img src="https://dummyimage.com/600x250/ffffff/000000.png&text=DEBIT+CARD" width="100%">
-                   <h4>BCA CREDIT</h4>
-                </a>
-            </div> 
-        </div>
-        
-        <div class="col-6">
-            <div class="p-1 d-grid mb-5  ">
-                <a href="javascript:;"  (click)="BCAQris()"  class="btn  btn-block  border shadow-sm p-2">
-                    <img src="https://home.oxygen.id/public/contents/info-pembayaran/img/qris-logo.png" width="100%">
-                    <h4>QRIS BCA</h4>
-                </a>
-            </div>
-        </div>
+       
     </div>
 </div>
-
-
-<ng-template #fakePayment let-c="close" let-d="dismiss">
-
-    <div class="modal-body">
-        <div class="text-center my-5">
-            <ng-container [ngSwitch]="paymentStatus">
-                <ng-container *ngSwitchCase="1">
-                    <div class="py-1">
-                        <h1>Payment Process</h1>
-                        <img src="./assets/gif/icons8-pos-terminal.gif" width="100%">
-                    </div>
-
-                    <div class="row g-2 ">
-                        <div class="col-12 d-grid">
-                            <a href="javascript:;" class="btn btn-block btn-info border text-white  font-btn"
-                                (click)="fnProcessPaymentFake();">Fake Payment Process</a>
-                        </div>
-                        <div class="col-12 d-grid mt-2">
-                            <a href="javascript:;" (click)="d('Cross click')" class="text-danger">
-                                Cancel
-                            </a>
-                        </div>
-                    </div>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="2">
-                    <h1>Payment Success</h1>
-                    <div class="my-4">{{t1_thank_you_display}}</div>
-                    <button type="button" (click)="finishShopping();" class="btn btn-lg btn-success">Close</button>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="3">
-                    <h1>Payment Fail</h1>
-                    <div>Please try again!</div>
-                </ng-container>
-
-                <ng-container *ngSwitchDefault>...</ng-container>
-            </ng-container>
-        </div>
-
-    </div>
-
-</ng-template>
-
-
+ 
 <ng-template #modalCancel let-modal>
     <div class="modal-header">
 

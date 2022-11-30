@@ -13,6 +13,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { PaymentBcaDebitComponent } from './payment/payment-bca-debit/payment-bca-debit.component';
 import { PaymentBcaQrisComponent } from './payment/payment-bca-qris/payment-bca-qris.component';
 import { PaymentBcaQris32Component } from './payment/payment-bca-qris32/payment-bca-qris32.component';
+import { PaymentFakeComponent } from './payment/payment-fake/payment-fake.component';
 import { PaymentQrisTelkomComponent } from './payment/payment-qris-telkom/payment-qris-telkom.component';
 import { PaymentComponent } from './payment/payment.component';
 import { PhotoComponent } from './photo/photo.component';
@@ -49,6 +50,7 @@ const routes: Routes = [
   { path: "payment/bcaDebit", component: PaymentBcaDebitComponent, data: { active: "payment" }, },
   { path: "payment/bcaQris", component: PaymentBcaQrisComponent, data: { active: "payment" }, },
   { path: "payment/bcaQris/32", component: PaymentBcaQris32Component, data: { active: "payment" }, },
+  { path: "payment/fake/:id", component: PaymentFakeComponent, data: { active: "payment" }, },
   
   { path: "setting/ecr", component: SettingEcrComponent, data: { active: "setting" }, },
   

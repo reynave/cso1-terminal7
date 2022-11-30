@@ -234,7 +234,9 @@ export class ConfigService {
     if (code == 'ER01') {    
       note = " Connection Timeout, Please refresh pages " + code; 
     }
-
+    if (code == 'IPDEAD') {    
+      note = code+" :  IP Terminal to ECR is dead or not found! "; 
+    }
     return note;
   }
 

@@ -33,7 +33,8 @@ import { PrintSettingComponent } from './print/print-setting/print-setting.compo
 import { PaymentBcaDebitComponent } from './payment/payment-bca-debit/payment-bca-debit.component';
 import { PaymentBcaQrisComponent } from './payment/payment-bca-qris/payment-bca-qris.component';
 import { SettingEcrComponent } from './setting-ecr/setting-ecr.component';
-import { PaymentBcaQris32Component } from './payment/payment-bca-qris32/payment-bca-qris32.component'; 
+import { PaymentBcaQris32Component } from './payment/payment-bca-qris32/payment-bca-qris32.component';
+import { PaymentFakeComponent } from './payment/payment-fake/payment-fake.component'; 
 
 
 const config: SocketIoConfig = { url: environment.socket_url, options: { transports: ['websocket'] } };
@@ -64,6 +65,7 @@ const config: SocketIoConfig = { url: environment.socket_url, options: { transpo
     PaymentBcaQrisComponent,
     SettingEcrComponent,
     PaymentBcaQris32Component,
+    PaymentFakeComponent,
   ],
   imports: [
     BrowserModule,

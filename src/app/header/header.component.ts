@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment'; 
 import { ConfigService } from 'src/app/service/config.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PrintingService } from '../service/printing.service';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +26,8 @@ export class HeaderComponent implements OnInit {
   terminalId: string = "";
   constructor( 
     private configService: ConfigService, 
-    private router: Router,
+    private router: Router, 
+    private printing: PrintingService,
     config: NgbModalConfig,
   ) {
     config.backdrop = 'static';
@@ -42,6 +44,16 @@ export class HeaderComponent implements OnInit {
               this.router.navigate(['offline']);
               localStorage.removeItem('t1_kioskUuid');
             } 
+        }
+
+        if(data['action']=='paid' && data['kioskUuid'] == localStorage.getItem(this.configService.myUUID()) ){
+          localStorage.removeItem(this.configService.myUUID()); 
+          this.loading = false;
+          this.router.navigate(['cart/finish/', data['id']]).then(
+            () => {
+              this.printing.print(data['id']);
+            }
+          ) 
         }
       }
     );

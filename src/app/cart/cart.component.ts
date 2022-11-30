@@ -61,7 +61,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    console.log("masuk");
+   
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
        

@@ -4,16 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
-import { PrintingService } from '../service/printing.service';
-
-declare var window: any;
+import { PrintingService } from 'src/app/service/printing.service';
+ 
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css'],
-  providers: [NgbModalConfig, NgbModal]
+  selector: 'app-payment-fake',
+  templateUrl: './payment-fake.component.html',
+  styleUrls: ['./payment-fake.component.css']
 })
-export class PaymentComponent implements OnInit {
+export class PaymentFakeComponent implements OnInit {
   loading: boolean = false;
   api: string = environment.api;
   items: any = [];
@@ -39,15 +37,8 @@ export class PaymentComponent implements OnInit {
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
-  private _docSub: any;
-
-
-  ngOnInit(): void { 
-    this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => {  
-      }
-    );
  
+  ngOnInit(): void {
     this.configService.httpAccount().subscribe(
       data => {
         this.storeOutlesId = data['storeOutlesId'];
@@ -65,10 +56,6 @@ export class PaymentComponent implements OnInit {
     } else {
       this.router.navigate(['login']);
     }
-
-  }
-  ngOnDestroy() { 
-    this._docSub.unsubscribe();
   }
 
   modal(content: any) {
@@ -116,20 +103,40 @@ export class PaymentComponent implements OnInit {
     );
   }
 
-  payment(x: any) {
-    if (x.paymentTypeId == 'QRT001') {
-      this.router.navigate(['payment/qristelkom/', x.paymentTypeId]);
-    } 
-    else if (x.paymentTypeId == 'BCA01') {
-      this.router.navigate(['payment/bcaDebit/']);
+    
+
+  fnProcessPaymentFake() {
+    const body = {
+      paymentTypeId: this.paymentTypeId,
+      kioskUuid: localStorage.getItem(this.configService.myUUID()), 
     }
-    else if (x.paymentTypeId == 'BCA31') {
-      this.router.navigate(['payment/bcaQris/']);
-    }
-    else if (x.paymentTypeId == 'FP01') {
-      this.router.navigate(['payment/fake/', x.paymentTypeId]);
-    } 
-  } 
+    this.loading = true; 
+    this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentFake/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+     
+        localStorage.removeItem(this.configService.myUUID());
+        this.modalService.dismissAll();
+        this.loading = false;
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.printing.print(data['id']);
+          }
+        ) 
+
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+  }
+ 
+  finishShopping() {
+    this.modalService.dismissAll();
+    this.router.navigate(['login']);
+  }
 
   fnLogoutVisitor() {
     const body = {
@@ -146,5 +153,9 @@ export class PaymentComponent implements OnInit {
       },
     );
 
+  }
+
+  back(){
+    history.back();
   }
 }

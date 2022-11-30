@@ -4,14 +4,10 @@ declare var env_socket: any;
 export const environment = {
   production: false,
   //api: "http://194.233.77.27/cso/api/",
-  api: "http://localhost/application/cso/api/", 
-  //  base_url: "#/",
-  //  version : "1.1b",
-  //   token: 'DEV-WEBBASE-15fc3cec',
+  api: "http://localhost/app/cso/cso1-api/",  
   device : false,
   socket_url: 'http://localhost:3000',
   base_url: "#/",
-  version : "1.2.3",
-  token: 'DEV-WEBBASE-15fc3cec',
-  //socket_url: env_socket,
+  version : "1.2.6 A",
+  token: 'DEV-WEBBASE-15fc3cec', 
 };

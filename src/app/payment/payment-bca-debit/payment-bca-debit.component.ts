@@ -26,6 +26,7 @@ export class PaymentBcaDebitComponent implements OnInit {
   storeOutlesId: string = "";
   terminalId: string = "";
   ilock: boolean = false;
+  myTimeout  : any;
   private _docSub: any;
   constructor(
     private http: HttpClient,
@@ -53,15 +54,20 @@ export class PaymentBcaDebitComponent implements OnInit {
             this.finish = true;
           }
         }
-        if (data['respCode'] == '54') {
-          setTimeout(() => {
+        if (data['respCode'] == 'IPDEAD') {
+          this.myTimeout = setTimeout(() => {
             this.back();
-          }, 1000);
+          }, 10000);
+        }
+        if (data['respCode'] == '54') {
+          this.myTimeout = setTimeout(() => {
+            this.back();
+          }, 10000);
         }
         if (data['respCode'] == 'ER01') {
-          setTimeout(() => {
+          this.myTimeout = setTimeout(() => {
             this.back();
-          }, 3000);
+          }, 10000);
         }
 
         console.log(data);
@@ -211,5 +217,6 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.comClose();
     this._docSub.unsubscribe();
     this.modalService.dismissAll();
+    clearTimeout(this.myTimeout);
   }
 }

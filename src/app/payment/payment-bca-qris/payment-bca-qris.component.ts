@@ -31,6 +31,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   myInterval: any;
   transType : string = '0';
   hex: string = "";
+  myTimeout  : any;
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -65,14 +66,14 @@ export class PaymentBcaQrisComponent implements OnInit {
         
 
         if (data['respCode'] == '54') {
-          setTimeout(() => {
+          this.myTimeout = setTimeout(() => {
             this.back();
-          }, 1000);
+          }, 10000);
         }
         if (data['respCode'] == 'ER01') {
-          setTimeout(() => {
+          this.myTimeout = setTimeout(() => {
             this.back();
-          }, 3000);
+          }, 10000);
         }
 
       }
@@ -225,6 +226,7 @@ export class PaymentBcaQrisComponent implements OnInit {
     clearInterval(this.myInterval);
     this.comClose();
     this._docSub.unsubscribe();
-    this.modalService.dismissAll();
+    this.modalService.dismissAll(); 
+    clearTimeout(this.myTimeout);
   }
 }
