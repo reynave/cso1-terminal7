@@ -2,7 +2,7 @@
 export const environment = {
   production: true,
   api: "http://192.168.202.72/cso1-api/", // CHANDRA 
-  device : false,
+  device : true,
   base_url: "#/",
   version : "1.2.6 C",
   token: 'DEV-WEBBASE-15fc3cec',

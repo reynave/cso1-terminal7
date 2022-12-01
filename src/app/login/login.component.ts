@@ -141,6 +141,7 @@ export class LoginComponent implements OnInit {
           self.modalService.dismissAll();
           console.log('this.myTimeout TRIGER');
         }, parseInt(this.kioskMessage['timer']) * 1000);
+
         console.log("wait for " + parseInt(this.kioskMessage['timer']));
 
       },
@@ -160,7 +161,12 @@ export class LoginComponent implements OnInit {
   }
 
   goToCart() {
-    this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
+    if(this.kioskMessage.visitorPhoto == '1' ){
+      this.router.navigate(['/login/userPhoto']);
+    }else{
+      this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
+    }
+   
   }
 
   ngOnDestroy(): void {
