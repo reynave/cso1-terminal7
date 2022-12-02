@@ -28,6 +28,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   ilock: boolean = false;
   generateQris: boolean = true;
   private _docSub: any;
+  developerMode :boolean = environment.developerMode;
   myInterval: any;
   transType : string = '0';
   hex: string = "";
@@ -53,18 +54,14 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.fnQrisCheck();
 
     this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => {
-    
-        console.log('subscribe : ', data, 'this.transType :'+this.transType);
-
-        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Silakan tekan tombol <b>OK</b> atau <b>Hijau</b> pada mesin Edisi BCA';
+      (data: { [x: string]: any; }) => { 
+        console.log('subscribe : ', data, 'this.transType :'+this.transType); 
+        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Silakan tekan tombol <b>OK</b> atau <b>Hijau</b> pada mesin Edisi BCA<br><br>Tunggu sampai mesin mencetak QRCODE';
 
         if (data['respCode'] == '00') { 
           this.fnQrisInsert(data); 
         }
-
-        
-
+ 
         if (data['respCode'] == '54') {
           this.myTimeout = setTimeout(() => {
             this.back();
@@ -126,8 +123,7 @@ export class PaymentBcaQrisComponent implements OnInit {
   }
 
 
-  fnQrisCheck() {
-   
+  fnQrisCheck() { 
     this.loading = true;
     const body = {
       kioskUuid: this.uuidKios,

@@ -22,6 +22,24 @@
                 <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="90%">
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="my-5 text-center">
+                    <h1> {{message}}</h1>
+                    <h1> {{note}}</h1>
+                </div>
+            </div>
+        </div>
+
+      
+
+
+    </div>
+   
+</div>
+
+<div class="container"  [hidden]="!developerMode">
+    <div class="row">
         <div class="col-12">
 
             <div class="d-grid m-4 text-center">
@@ -35,12 +53,8 @@
                 <button type="button" (click)="fnBcaECR('01');"
                     class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD </button>
             </div>
-            <div class="my-5 text-center">
-                <h1> {{note}}</h1>
-            </div>
+           
         </div>
-
-
     </div>
     <div class="row g-3">
         <div class="col-12 text-center">

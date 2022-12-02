@@ -20,14 +20,15 @@ export class PaymentBcaDebitComponent implements OnInit {
   paymentTypeId: number = 0;
   storeOutlesPaymentType: any = [];
   t1_thank_you_display: any;
-
-  note: string = "";
+  developerMode : boolean = environment.developerMode;
+  note: string = "Checking for ECR device..";
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
   ilock: boolean = false;
   myTimeout  : any;
   private _docSub: any;
+  message :  string = "";
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -41,9 +42,9 @@ export class PaymentBcaDebitComponent implements OnInit {
     config.keyboard = false;
   }
   finish: boolean = false;
+  ping :boolean = false;
   ngOnInit(): void {
-    this.comConn();
-
+    this.comConn(); 
     this._docSub = this.configService.getMessage().subscribe(
       (data: { [x: string]: any; }) => {
        
@@ -54,11 +55,17 @@ export class PaymentBcaDebitComponent implements OnInit {
             this.finish = true;
           }
         }
-        if (data['respCode'] == 'IPDEAD') {
+       
+        if (data['respCode'] == 'ECR01' && data['ecr'] == true) { 
+          console.log("fnBcaECR 01");
+          this.fnBcaECR('01'); 
+        } 
+
+        if (data['respCode'] == 'IPDEAD') { 
           this.myTimeout = setTimeout(() => {
             this.back();
           }, 10000);
-        }
+        } 
         if (data['respCode'] == '54') {
           this.myTimeout = setTimeout(() => {
             this.back();
@@ -71,30 +78,19 @@ export class PaymentBcaDebitComponent implements OnInit {
         }
 
         console.log(data);
-        if (data['respCode'] != '' && data['respCode']) {
-         // this.fnSaveLog(data);
+        if (data['transType'] == '01' ) {
+        
+          if(data['respCode'] != ''){
+            this.message = '';
+          }else{
+            this.message = "Please insert Customer Card in ECR/Edisi";
+          }
+        
         }
-
       }
     );
   }
-  fnSaveLog(data: any) {
-    const body = {
-      data : data,
-      kioskUuid: localStorage.getItem(this.configService.myUUID()),
-    }
-    this.http.post(environment.api + 'kioskPaymentBca/fnSaveLog/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data =>{
-        console.log(data);
-      },
-      e => {
-        console.log(e);
-      },
-    );
-  }
-
+ 
 
   comConn() {
     const msg = {

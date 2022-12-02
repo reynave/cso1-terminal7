@@ -1,15 +1,12 @@
 <app-header></app-header>
-
-<div class="container disablePrintArea">
+<app-admin-header></app-admin-header>
+<div class="container disablePrintArea mt-5">
     <div class="row g-0">
-        <div class="col-8  ">
-            <a href="javascript:void(0)" (click)="back()" class="btn btn-lg btn-warning font-btn">
-                <i class="ti ti-logout"></i> Back 
-            </a>  
-            <button type="button" [disabled]="!printable" (click)="print('browser')" class="btn btn-lg btn-block btn-info mx-2 font-btn">
+        <div class="col-8  "> 
+            <button type="button" [disabled]="!printable" (click)="print('browser')" class="btn btn-lg btn-block btn-info font-btn">
                 <img src="./assets/imgs/icons8-label-printer-100.png" height="40"> Browser
             </button> 
-            <button type="button" (click)="print('android')" class="btn btn-lg btn-block btn-success font-btn">
+            <button type="button" (click)="print('android')" class="btn btn-lg btn-block btn-success font-btn  mx-2 ">
                 <img src="./assets/imgs/icons8-label-printer-100.png" height="40" > Android
             </button> 
         </div>

@@ -1,15 +1,8 @@
 <app-header></app-header>
+
+<app-admin-header></app-admin-header>
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-6">
-            <h2> ADMIN MODE </h2>
-        </div>
-        <div class="col-6 text-end">
-            <a href="javascript:window.history.back();" class="btn btn-sm py-1 btn-warning font-btn">
-                <i class="ti ti-logout"></i> EXIT ADMIN
-            </a>
-        </div>
-    </div>
+ 
     <div class="row mt-5">
         <div class="col-12 d-grid">
             <a [routerLink]="[ '/print' ]" class="btn btn-sm btn-block btn-info my-1 py-4 mb-3 font-btn">History Bill</a>

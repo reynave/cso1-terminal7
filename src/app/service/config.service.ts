@@ -15,7 +15,7 @@ export class ConfigService {
   deviceUuidVar: string = 'deviceUuid';
   varToken: any = [];
   varHeaders: any = [];
-  deviceInfo : any = null;
+  deviceInfo: any = null;
   api: string = environment.api;
   constructor(
     private cookies: CookiesService,
@@ -105,7 +105,7 @@ export class ConfigService {
   httpAccount() {
     this.reloadToken();
     let url = this.api + 'Kiosks/index/?token=' + this.keygen();
-  
+
     return this.http.get<any>(url,
       { headers: this.headers() }
     );
@@ -135,112 +135,113 @@ export class ConfigService {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     const isMobile = this.deviceService.isMobile();
     const isTablet = this.deviceService.isTablet();
-    const isDesktopDevice = this.deviceService.isDesktop(); 
+    const isDesktopDevice = this.deviceService.isDesktop();
     const data = {
-      getDeviceInfo :  this.deviceService.getDeviceInfo(),
-      isMobile : isMobile,
-      isTablet : isTablet,
-      isDesktopDevice : isDesktopDevice,
+      getDeviceInfo: this.deviceService.getDeviceInfo(),
+      isMobile: isMobile,
+      isTablet: isTablet,
+      isDesktopDevice: isDesktopDevice,
     }
     console.log(data);
     return data;
   }
 
-  keygen(){
-    let token : any = false;
-    let data : any  = localStorage.getItem(this.deviceUuid());
-    if( data != '' &&  data != null ){
+  keygen() {
+    let token: any = false;
+    let data: any = localStorage.getItem(this.deviceUuid());
+    if (data != '' && data != null) {
       let word = this.reverseString(data);
       const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(word));
-      const md5 = hash.toString(CryptoJS.enc.Hex); 
-       token = data + "-" + md5;
-  
+      const md5 = hash.toString(CryptoJS.enc.Hex);
+      token = data + "-" + md5;
+
     }
     return token;
   }
 
-  printer(){ 
-    let data : any  = localStorage.getItem(this.printerName());
-    if( data != '' &&  data != null ){
+  printer() {
+    let data: any = localStorage.getItem(this.printerName());
+    if (data != '' && data != null) {
       return data;
-    }else{
+    } else {
       return null;
     }
-  
+
   }
 
-  ecrRespCode(code : string = ""){
+  ecrRespCode(code: string = "") {
     let note = "";
-    if (code == '00') { 
-        note = "Approve, Payment Success."; 
-    } 
-    if (code == 'Q2') { 
-      note = "Transaksi tidak ditemukan!"; 
-  } 
-    
-    if (code == '54') {   
-      note = "Decline Expired Card " + code; 
+    if (code == '00') {
+      note = "Approve, Payment Success.";
     }
-    if (code == '55') {    
+    
+    if (code == 'Q2') {
+      note = "Transaksi tidak ditemukan!";
+    }
+
+    if (code == '54') {
+      note = "Decline Expired Card " + code;
+    }
+    if (code == '55') {
       note = "Decline Incorrect PIN " + code;
     }
-    if (code == 'P2') {   
-      
+    if (code == 'P2') {
+
       note = " Read Card Error " + code;
     }
 
-    if (code == 'P3') {    
+    if (code == 'P3') {
       note = " User press Cancel on EDC " + code;
     }
-   
-    if (code == 'Z3') {   
-       
+
+    if (code == 'Z3') {
+
       note = " EMV Card Decline " + code;
     }
-   
-    if (code == 'CE') {   
-     
+
+    if (code == 'CE') {
+
       note = " Connection Error/Line Busy " + code;
     }
 
-    if (code == 'TO') {   
-       
+    if (code == 'TO') {
+
       note = " Connection Timeout " + code;
     }
 
-    if (code == 'PT') {   
-     
+    if (code == 'PT') {
+
       note = " EDC Problem " + code;
     }
 
-    if (code == 'aa' || code == 'AA') {   
-      
+    if (code == 'aa' || code == 'AA') {
+
       note = "aa Decline (aa represent two digit alphanumeric value from EDC)" + code;
     }
 
-    if (code == 'S2') {   
-       
+    if (code == 'S2') {
+
       note = " TRANSAKSI GAGAL, ULANGI TRANSAKSI DI EDC " + code;
     }
 
-    if (code == 'S3') {   
-     
+    if (code == 'S3') {
+
       note = " TXN BLM DIPROSES, MINTA SCAN QR, S4 TXN EXPIRED " + code;
-    } 
-    if (code == 'ERRCON' ) {
-      
-      note =   code+" ERROR CONNECTION, ECR is not connect!";
-    } 
-    if (code == 'ER01') {    
-      note = " Connection Timeout, Please refresh pages " + code; 
     }
-    if (code == 'IPDEAD') {    
-      note = code+" :  IP Terminal to ECR is dead or not found! "; 
+    if (code == 'ERRCON') {
+
+      note = code + " ERROR CONNECTION, ECR is not connect!";
+    }
+    if (code == 'ER01') {
+      note = " Connection Timeout, Please refresh pages " + code;
+    }
+    if (code == 'IPDEAD') {
+      note = code + " :  IP Terminal to ECR is dead or not found! ";
     }
     return note;
   }
 
-  
+
 
 
 }
