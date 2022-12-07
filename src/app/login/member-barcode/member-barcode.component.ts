@@ -110,7 +110,15 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
     this.fnSubmitMemberIdManual();
   }
 
-
+  sendReload() {
+    const msg = {
+      to: 'supervisor',
+      msg: 'request reload',
+      action: 'reload',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg); 
+  }
   fnSubmitMemberIdManual() {
     const body = {
       memberId: this.memberId,
@@ -123,6 +131,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
         this.memberId = "";
         console.log(data);
         if (data['error'] == false) {
+          this.sendReload();
           this.member = data['member'];
           this.loginSuccess = true;
           localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);

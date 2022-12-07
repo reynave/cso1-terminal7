@@ -190,8 +190,7 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
     if (this.barcode != "") {
-      this.addItem = true;
-
+      this.addItem = true; 
       this.http.post<any>(this.api + 'kioskCart/scanner/', body,
         { headers: this.configService.headers() }
       ).subscribe(
@@ -218,6 +217,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
           } else { 
             this.error = true;
+            localStorage.removeItem(this.configService.myUUID());
+            this.modalService.dismissAll();
+            this.loading = false;
+            this.router.navigate(['login'])
           }
           this.barcode = "";
           this.noteScanner = data['note'];

@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   countdown: number = 0;
   today: any = new Date();
   autoFocus: any;
-
+ 
   storeOutlesId: string = "";
   terminalId: string = "";
   constructor(
@@ -101,7 +101,6 @@ export class LoginComponent implements OnInit {
 
 
   httpGet() {
-
     let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.kioskUuid;
     console.log(url);
     this.http.get<any>(url,
@@ -130,9 +129,9 @@ export class LoginComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
+        this.sendReload();
         this.loading = false;
         localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
-
         this.modalService.open(loginVisitor, { size: 'xl' });
         this.runCountdown();
         let self = this;
@@ -141,7 +140,6 @@ export class LoginComponent implements OnInit {
           self.modalService.dismissAll();
           console.log('this.myTimeout TRIGER');
         }, parseInt(this.kioskMessage['timer']) * 1000);
-
         console.log("wait for " + parseInt(this.kioskMessage['timer']));
 
       },
@@ -160,16 +158,25 @@ export class LoginComponent implements OnInit {
     }, 1000);
   }
 
-  goToCart() {
-    if(this.kioskMessage.visitorPhoto == '1' ){
+  goToCart() { 
+    if (this.kioskMessage.visitorPhoto == '1') {
       this.router.navigate(['/login/userPhoto']);
-    }else{
+    } else {
       this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
     }
-   
+
+  }
+  sendReload() {
+    const msg = {
+      to: 'supervisor',
+      msg: 'request reload',
+      action: 'reload',
+    }
+    console.log(msg);
+    this.configService.sendMessage(msg); 
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void { 
     this.modalService.dismissAll();
     console.log('ngOnDestroy');
     clearTimeout(this.myTimeout);

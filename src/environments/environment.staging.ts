@@ -5,7 +5,7 @@ export const environment = {
   developerMode : true,
   device : true,
   base_url: "#/",
-  version : "1.2.7 UAT",
+  version : "1.2.8 UAT",
   token: 'DEV-WEBBASE-15fc3cec', 
   socket_url : "http://192.168.1.102:3000",  // VPS
   };
