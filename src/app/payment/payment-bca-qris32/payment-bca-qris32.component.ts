@@ -31,6 +31,7 @@ export class PaymentBcaQris32Component implements OnInit {
   myInterval: any;
   transType: string = '0';
   hex: string = "";
+  btnShow : boolean = false;
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -46,22 +47,41 @@ export class PaymentBcaQris32Component implements OnInit {
   ercError: boolean = false;
   finish: boolean = false;
   ongoingpaymentType: string = "31";
+  i: number = 0; 
+  n:number = 0;
+  timer : any;
+  loop: any;
   ngOnInit(): void {
     this.loading = true;
     this.comConn();
     this.fnQrisCheck();
 
+    let self = this;
+    this.loop = setInterval(function () {
+      self.i = 0;
+      console.log(self.i);
+    }, 1000);
+
+    this.timer = setTimeout(() => {
+      self.btnShow = true; 
+    }, 2000);
+
+
     this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => { 
-        console.log('subscribe : ', data, 'this.transType :' + this.transType); 
-        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Menunggu pembayaran';
+      (data: { [x: string]: any; }) => {
+
+        console.log(this.i, ' subscribe : ', data, 'this.transType :' + this.transType);
+        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Tekan tombol OK / Hijau dimesin EDISI';
 
         if (data['respCode'] == '00') {
-          this.fnQrisUpdate(data);
-        }
+          if (this.i == 0) {
+            this.fnQrisUpdate(data);
+          }
+        } 
         if (data['respCode'] != '00') {
           this.ercError = true;
-        } 
+        }
+        this.i++;
       }
     );
   }
@@ -89,7 +109,7 @@ export class PaymentBcaQris32Component implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        console.log(data);
+        console.log(data); 
         localStorage.removeItem(this.configService.myUUID());
         this.loading = false;
         /**
@@ -98,6 +118,9 @@ export class PaymentBcaQris32Component implements OnInit {
         // this.paymentStatus = 2; 
         this.router.navigate(['cart/finish/', data['id']]).then(
           () => {
+            clearInterval(this.myInterval);
+            clearInterval(this.i);
+            clearInterval(this.timer);
             this.printing.print(data['id']);
           }
         )
@@ -115,8 +138,8 @@ export class PaymentBcaQris32Component implements OnInit {
     }
     this.configService.help(msg);
   }
- 
-  fnQrisCheck() { 
+
+  fnQrisCheck() {
     this.loading = true;
     const body = {
       kioskUuid: this.uuidKios,
@@ -126,15 +149,15 @@ export class PaymentBcaQris32Component implements OnInit {
     ).subscribe(
       data => {
         this.loading = false;
-        if(data['data']['reffNo']){
+        if (data['data']['reffNo']) {
           console.log("fnQrisCheck", data);
           this.reffNo = data['data']['reffNo'];
-          this.hex = data['hex']['hex']; 
-        }else{
+          this.hex = data['hex']['hex'];
+        } else {
           console.log("ERROR");
           this.note = 'Data <b>REFF NO</b> tidak ditemukan, silakan hubungi admin!';
         }
-      
+
       },
       e => {
         console.log(e);
@@ -143,20 +166,20 @@ export class PaymentBcaQris32Component implements OnInit {
   }
 
   fnQrisUpdate(data: any = []) {
-    this.loading = true; 
+    this.loading = true;
     const body = {
       data: data,
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
-      status : 1,
-      reffNo:  this.reffNo,
+      status: 1,
+      reffNo: this.reffNo,
     }
     console.log("fnQrisUpdate ", body);
     this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisUpdate/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        console.log(data); 
-        if(data['id'] && data['update'] != false){
+        console.log(data);
+        if (data['id'] && data['update'] != false) {
           this.fnProcessPaymentReal(body['data']);
         }
         this.loading = false;
@@ -166,17 +189,18 @@ export class PaymentBcaQris32Component implements OnInit {
       },
     );
   }
- 
+
   fnBcaECR32() {
+    this.btnShow = false;
     const msg = {
       action: 'ajax',
       msg: 'transType31',
       reffNo: this.reffNo,
       hex: this.hex,
     }
-    this.configService.sendMessage(msg); 
+    this.configService.sendMessage(msg);
   }
- 
+
   com(hex: string, transType: string) {
     const msg = {
       action: 'ajax',
@@ -221,6 +245,9 @@ export class PaymentBcaQris32Component implements OnInit {
   ngOnDestroy(): void {
     console.log("ngOnDestroy");
     clearInterval(this.myInterval);
+    clearInterval(this.loop);
+    clearInterval(this.timer);
+    
     this.comClose();
     this._docSub.unsubscribe();
     this.modalService.dismissAll();

@@ -35,9 +35,15 @@
 
 
             <div class="d-grid m-4">
-                <button type="button" (click)="fnBcaECR32();" class="btn btn-lg font-btn btn-info py-3">Check manual Status Payment</button>
-
+                <button type="button" [hidden]="!btnShow" (click)="fnBcaECR32();" class="btn btn-lg font-btn btn-info py-3">Check  Status Payment</button>
             </div>
+
+            <div [hidden]="btnShow" class="mt-5 text-center" >
+               <p>Sync to ERC</p>
+            </div>
+
+
+
             <div  [hidden]="ercError">
                 <div class="d-grid  m-4"> 
                     <button type="button"   class="btn btn-lg font-btn btn-warning py-3">Cancel Payment</button> 
@@ -49,6 +55,17 @@
     </div>
 </div>
 
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 ">
+                <div class="text-center mb-5">
+                    <a [routerLink]="[ '/payment']">Ganti Metode Pembayaran!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <ng-template #modalCancel let-modal>
     <div class="modal-header">
