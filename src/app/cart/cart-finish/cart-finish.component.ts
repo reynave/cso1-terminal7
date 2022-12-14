@@ -46,10 +46,7 @@ export class CartFinishComponent implements OnInit {
         console.log(this.kioskMessage);
         let n = parseInt(this.kioskMessage['timer']) < 1 ? 1 : parseInt(this.kioskMessage['timer']);
         this.countdown = n;
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        },
-          n * 1000);
+        
 
         this.runCountdown();
       }
@@ -104,6 +101,10 @@ export class CartFinishComponent implements OnInit {
     let self = this;
     this.intervalTime = setInterval(function () {
       self.countdown--;
+      if(self.countdown < 1){
+        self.router.navigate(['/login']);
+        clearInterval(self.intervalTime);
+      }
     }, 1000);
   }
 

@@ -5,7 +5,7 @@ export const environment = {
   device : false,
   developerMode : true,
   base_url: "#/",
-  version : "1.2.9 C",
+  version : "1.2.10 S",
   token: 'DEV-WEBBASE-15fc3cec',
   socket_url : "http://192.168.202.72:3000",  // CHANDRA  
   };

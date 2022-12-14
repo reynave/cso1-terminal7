@@ -81,10 +81,12 @@ export class CartComponent implements OnInit, OnDestroy {
           this.terminalId  = data['terminalId'];
           if (data['systemOnline'] == false) {
             this.router.navigate(['offline']);
+            console.log("here offline");
           }
         }
       )
     } else {
+      console.log("here login");
       this.router.navigate(['login']);
     }
   }
@@ -195,6 +197,7 @@ export class CartComponent implements OnInit, OnDestroy {
         { headers: this.configService.headers() }
       ).subscribe(
         data => {
+          this.modalService.dismissAll();
           console.log(data);
           this.loading = false;
           if (data['error'] == false) {
@@ -216,12 +219,17 @@ export class CartComponent implements OnInit, OnDestroy {
             }
 
           } else { 
-            this.error = true;
-            localStorage.removeItem(this.configService.myUUID());
-            this.modalService.dismissAll();
-            this.loading = false;
-            this.router.navigate(['login'])
+            this.error = true; 
+            this.loading = false; 
           }
+
+          if (data['relogin'] == true) {
+             this.error = true;
+             localStorage.removeItem(this.configService.myUUID()); 
+             this.loading = false;
+             this.router.navigate(['login'])
+          }
+
           this.barcode = "";
           this.noteScanner = data['note'];
         },

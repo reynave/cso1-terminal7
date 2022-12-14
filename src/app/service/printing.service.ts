@@ -107,7 +107,7 @@ export class PrintingService {
           let message = this.template(this.bill);
           this.printerName = localStorage.getItem(this.configService.printerName());
           if (this.printerName == "" || this.printerName == null) {
-            alert("NO PRINTING SELECT");
+            console.log("NO PRINTING SELECT");
           } else {
 
             window['cordova'].plugins.UsbPrinter.connect(this.printerName, (result: any) => {

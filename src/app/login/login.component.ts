@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("myUUID : ", localStorage.getItem(this.configService.myUUID()));
+   
     if (localStorage.getItem(this.configService.deviceUuid()) === null) {
       alert("NO KEY");
       this.router.navigate(['./']);
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     this.httpGet();
     this.configService.httpAccount().subscribe(
       data => {
-        console.log(data);
+        
         if (data['systemOnline'] == false) {
           this.router.navigate(['offline']);
         }
@@ -101,13 +101,11 @@ export class LoginComponent implements OnInit {
 
 
   httpGet() {
-    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.kioskUuid;
-    console.log(url);
+    let url = this.api + 'kioskLogin/checkSession/?kioskUuid=' + this.kioskUuid; 
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
-      data => {
-        console.log(data);
+      data => { 
         this.greeting = data['greeting'];
       },
       e => {
@@ -137,10 +135,8 @@ export class LoginComponent implements OnInit {
         let self = this;
         this.myTimeout = setTimeout(function () {
           self.goToCart();
-          self.modalService.dismissAll();
-          console.log('this.myTimeout TRIGER');
-        }, parseInt(this.kioskMessage['timer']) * 1000);
-        console.log("wait for " + parseInt(this.kioskMessage['timer']));
+          self.modalService.dismissAll(); 
+        }, parseInt(this.kioskMessage['timer']) * 1000); 
 
       },
       e => {
@@ -172,13 +168,12 @@ export class LoginComponent implements OnInit {
       msg: 'request reload',
       action: 'reload',
     }
-    console.log(msg);
+  
     this.configService.sendMessage(msg); 
   }
 
   ngOnDestroy(): void { 
-    this.modalService.dismissAll();
-    console.log('ngOnDestroy');
+    this.modalService.dismissAll(); 
     clearTimeout(this.myTimeout);
     clearInterval(this.intervalTime);
     clearInterval(this.autoFocus);
