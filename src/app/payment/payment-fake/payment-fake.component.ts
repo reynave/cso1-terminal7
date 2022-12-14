@@ -115,7 +115,7 @@ export class PaymentFakeComponent implements OnInit {
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-     
+        console.log(data);
         localStorage.removeItem(this.configService.myUUID());
         this.modalService.dismissAll();
         this.loading = false;
