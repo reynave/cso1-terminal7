@@ -18,18 +18,18 @@ declare let Camera: any;
 })
 export class UserPhotoComponent implements OnInit {
   api: string = environment.api;
-  device : boolean = environment.device;
+  device: boolean = environment.device;
   kioskUuid: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
-  version: string = environment.version; 
+  version: string = environment.version;
   today: any = new Date();
-  loading: boolean = false; 
-  images : string = "./assets/imgs/user.png";
-  initPhoto : boolean = false;
-  memberId : string = "0";
-  name:string  = "";
-  notes : string = "";
+  loading: boolean = false;
+  images: string = "./assets/imgs/user.png";
+  initPhoto: boolean = false;
+  memberId: string = "0";
+  name: string = "";
+  notes: string = "";
   constructor(
     private modalService: NgbModal,
     private http: HttpClient,
@@ -53,7 +53,7 @@ export class UserPhotoComponent implements OnInit {
     this.httpGet();
   }
 
-  tnc : any = [];
+  tnc: any = [];
   httpGet() {
 
     let url = this.api + 'kioskLogin/getInfo/?kioskUuid=' + this.kioskUuid;
@@ -93,44 +93,47 @@ export class UserPhotoComponent implements OnInit {
 
   cameraSuccess = (imagesData: any) => {
     this.initPhoto = true;
-    this.loading = false; 
-    this.ngZone.run(() =>  
-      this.images = 'data:image/png;base64,'+imagesData
+    this.loading = false;
+    this.ngZone.run(() => {
+      this.images = 'data:image/png;base64,' + imagesData;
+      this.goToCart();
+    }
+
     );
 
   }
 
   cameraError = (e: any) => {
     console.log('error Camera', e);
-    this.initPhoto= false;
+    this.initPhoto = false;
   }
-  fnSkipPhoto(){
+  fnSkipPhoto() {
     this.initPhoto = true;
   }
 
   goToCart() {
-    if(this.initPhoto == true){
+    if (this.initPhoto == true) {
       const body = {
         base64Images: this.images,
         kioskUuid: this.kioskUuid,
       }
       this.http.post<any>(this.api + 'kioskLogin/takePhoto/', body,
-          { headers: this.configService.headers() }
-        ).subscribe(
-          data => {
-            // this.modalService.open(loginVisitor); 
-            console.log(data);
-            this.loading = false;
-            this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
-          },
-          e => {
-            console.log(e);
-          },
-        );
+        { headers: this.configService.headers() }
+      ).subscribe(
+        data => {
+          // this.modalService.open(loginVisitor); 
+          console.log(data);
+          this.loading = false;
+          this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
+        },
+        e => {
+          console.log(e);
+        },
+      );
 
-     
+
     }
-  
+
   }
 
   ngOnDestroy(): void {

@@ -7,18 +7,18 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  selector: 'app-cart-admin',
+  templateUrl: './cart-admin.component.html',
+  styleUrls: ['./cart-admin.component.css']
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartAdminComponent implements OnInit {
   @ViewChild('formRow') rows: ElementRef | any;
   resultbox: boolean = false;
   loading: boolean = false;
   api: string = environment.api;
   barcode: string = "";
   items: any = [];
-  adminMode: boolean = false;
+  adminMode: boolean = true;
   userId: string = "";
   addItem: boolean = false;
   // Demo 0000022
@@ -59,12 +59,13 @@ export class CartComponent implements OnInit, OnDestroy {
     private router: Router,
   ) { }
 
-
+  back(){
+    history.back();
+  }
   ngOnInit(): void {
    
     this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => {
-       
+      (data: { [x: string]: any; }) => { 
         if (data['action'] == 'reload' && data['to'] == 'terminal') {
           this.httpGet();
           console.log("SOCKET getMessage");
@@ -74,7 +75,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     if (localStorage.getItem(this.configService.myUUID())) {
       this.httpGet();
-      this.callHttpServer();
+      
       this.configService.httpAccount().subscribe(
         data=>{ 
           this.storeOutlesId = data['storeOutlesId'];
@@ -93,11 +94,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   callServer: any;
-  callHttpServer() {
-    this.callServer = setInterval(() => {
-      this.rows.nativeElement.focus();
-    }, 300);
-  }
+ 
   ngOnDestroy() {
     clearInterval(this.callServer);
     this._docSub.unsubscribe();
@@ -148,7 +145,38 @@ export class CartComponent implements OnInit, OnDestroy {
       },
     );
   }
- 
+
+  fnVoid(x: any) {
+    const body = {
+      items: x,
+      userId: this.supervisor['id'],
+    }
+    this.http.post<any>(this.api + 'kioskCart/fnVoid/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        this.sendReload();
+        this.loading = false;
+      },
+    );
+  }
+
+  fnVoidFreeItem(x: any) {
+    const body = {
+      items: x,
+      userId: this.supervisor['id'],
+    }
+    this.http.post<any>(this.api + 'kioskCart/fnVoidFreeItem/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.httpGet();
+        this.sendReload();
+        this.loading = false;
+      },
+    );
+  }
 
   scanner() {
     this.loading = true;
@@ -180,9 +208,11 @@ export class CartComponent implements OnInit, OnDestroy {
                 images: data['items']['images'],
               } 
               this.sendReload();
-            } else { 
-              this.adminMode = true; 
-              this.router.navigate(['cart/admin']);
+            } else {
+              this.noteScanner = this.barcode + " " + data['note'];
+              this.adminMode = true;
+              this.userId = data['userId'];
+              this.supervisor = data['supervisor'];
             }
 
           } else { 
@@ -216,20 +246,6 @@ export class CartComponent implements OnInit, OnDestroy {
       data => {
         this.httpGet();
         this.sendReload();
-      },
-    );
-  }
-
-  fnPromo(){
-    const body = {
-      uuid: localStorage.getItem(this.configService.myUUID()),
-    }
-    this.http.post<any>(this.api + 'kioskCart/fnCloseCart/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        console.log(data);
-        this.httpGet();
       },
     );
   }
@@ -271,4 +287,3 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
 }
-

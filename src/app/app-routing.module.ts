@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 import { BillComponent } from './bill/bill.component';
+import { CartAdminComponent } from './cart/cart-admin/cart-admin.component';
 import { CartFinishComponent } from './cart/cart-finish/cart-finish.component';
 import { CartComponent } from './cart/cart.component';
 import { ForbidenComponent } from './forbiden/forbiden.component';
@@ -38,8 +39,9 @@ const routes: Routes = [
 
 
   { path: "cart", component: CartComponent, data: { active: "cart" }, },
+  { path: "cart/admin", component: CartAdminComponent, data: { active: "cart" }, }, 
   { path: "cart/finish/:id", component: CartFinishComponent, data: { active: "cart" }, },
-  { path: "photo", component: PhotoComponent, data: { active: "photo" }, },
+   
   { path: "bill", component: BillComponent, data: { active: "bill" }, },
   { path: "print", component: PrintComponent, data: { active: "print" }, },
   { path: "print/detail/:id", component: PrintDetailComponent, data: { active: "print" }, },

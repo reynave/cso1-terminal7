@@ -4,7 +4,7 @@
     <div class="row">
         
         <div class="col-12 text-center">
-            <h1> HISTORY TRANSACTION </h1> 
+            <h1>TODAY HISTORY TRANSACTION </h1> 
         </div>
        
     </div>
@@ -15,17 +15,19 @@
                 <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th>Date Transaction</th>
-                            <th>ID Transaction</th>
-                            <th>ID member</th>
+                            <th>Time</th>
+                            <th>Transaction</th>
+                            <th>Member</th>
+                            <th>Payment</th>
                         </tr>
                     </thead>
                     <tbody>
                     
                         <tr *ngFor="let x of items"  [routerLink]="[ '/print/detail', x.id ]" style="cursor: pointer;">
-                            <td>{{x.startDate | date:'medium'}}</td>
+                            <td>{{x.startDate | date:'mediumTime'}}</td>
                             <td>{{x.id}}</td>
                             <Td>{{x.memberId}}</Td>
+                            <Td>{{x.paymentName}}</Td>
                         </tr>
                     </tbody>
                 </table>

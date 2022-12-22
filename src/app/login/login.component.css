@@ -1,6 +1,9 @@
 .intro-images{
     width: 80%;
 }
+.Oswald-Bold{
+    font-family: 'Oswald-Bold';
+}
 
 .bgn{
     position: fixed;

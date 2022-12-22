@@ -9,6 +9,6 @@ export const environment = {
   device : false,
   socket_url: 'http://localhost:3000',
   base_url: "#/",
-  version : "1.2.10 A",
+  version : "1.2.11 A",
   token: 'DEV-WEBBASE-15fc3cec', 
 };

@@ -119,6 +119,10 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
     console.log(msg);
     this.configService.sendMessage(msg); 
   }
+  addText(str : string){
+    console.log(str);
+    this.memberId += str;
+  }
   fnSubmitMemberIdManual() {
     const body = {
       memberId: this.memberId,
@@ -137,8 +141,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
           localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
           this.kioskUuid = data['insert']['kioskUuid'];
           this.notes = data['welcomeMember'];
-          this.member = data['member'];
-
+          this.member = data['member']; 
           let self = this;
           this.runCountdown();
           this.myTimeout = setTimeout(function () {
@@ -147,18 +150,21 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
             console.log('this.myTimeout TRIGER');
           }, parseInt(this.kioskMessage['timer']) * 1000);
           console.log("wait for " + parseInt(this.kioskMessage['timer']));
-
-
-
+ 
         } else {
           this.notes = this.kioskMessage['memberNotFound'];
           console.log("MEMBER ID NOT FOUND");
         }
       },
       e => {
+        this.notes = this.kioskMessage['memberNotFound'];
+        console.log("MEMBER ID NOT FOUND");
         console.log(e);
       },
     );
+  }
+  clear(){
+    this.memberId = '';
   }
   back() {
     history.back();

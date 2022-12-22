@@ -22,20 +22,40 @@
                 </div>
                 <div class="mx-5">
                     <div class="col-12 mb-4">
-                        <input type="text" class="form-control form-control-lg font-monospace inputScan border-5" #formRow [(ngModel)]="memberId" (change)="scannerMember();" placeholder="Scan Barcode" autofocus>
-
+                        <input type="text" class="form-control form-control-lg font-monospace inputScan border-5" 
+                        #formRow [(ngModel)]="memberId" placeholder="Scan Barcode" autofocus (keydown.enter)="scannerMember();">
+                        <!-- (change)="scannerMember();" -->
                     </div>
-
                     <div class="row">
-                       
-                        <div class="col-12  d-grid  my-3">
-                            <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-primary text-white rounded py-3 font-btn">SUBMIT</button>
+                        <div class="col-12 text-center mt-5">
+                            <button type="button" class="btn btn-lg rounded btn-light btn-keypad" (click)="addText('0')">0</button>
+                            <button type="button" class="btn btn-lg rounded btn-light btn-keypad" (click)="addText('1')">1</button>
+                            <button type="button" class="btn btn-lg rounded btn-light btn-keypad" (click)="addText('2')">2</button>
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('3')">3</button>
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('4')">4</button>
                         </div>
-                        <div class="col-12  d-grid">
-                            <button type="button" (click)="back()" class=" btn  btn-lg bg-white border  rounded py-3 font-btn">BACK</button>
-
+                        <div class="col-12 text-center mb-5">
+                            
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('5')">5</button> 
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('6')">6</button>
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('7')">7</button>
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('8')">8</button>
+                            <button type="button" class="btn btn-lg   rounded btn-light btn-keypad" (click)="addText('9')">9</button>
                         </div>
                     </div>
+                    <div class="row">
+                        
+                        <div class="col  d-grid">
+                            <button type="button" (click)="back()" class=" btn  btn-lg bg-white border rounded shadow-sm py-3 font-btn">BACK</button>
+                        </div> 
+                        <div class="col  d-grid">
+                            <button type="button" (click)="clear()" class=" btn  btn-lg bg-warning border rounded shadow-sm py-3 font-btn">CLEAR</button>
+                        </div> 
+                        <div class="col  d-grid">
+                            <button type="button" (click)="fnSubmitMemberIdManual()" class=" btn  btn-lg btn-primary text-white border shadow-sm rounded py-3 font-btn">SUBMIT</button>
+                        </div>
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -66,7 +86,6 @@
                 <ng-template #justNext>
                     <div  class="d-grid mt-5">
                         <button type="button" (click)="goToCart();" class=" btn  btn-lg btn-success text-white rounded py-3 font-btn">GO TO CART</button>
-         
                     </div>
                 </ng-template>
             </div>

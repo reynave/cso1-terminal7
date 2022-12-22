@@ -35,7 +35,8 @@ import { PaymentBcaQrisComponent } from './payment/payment-bca-qris/payment-bca-
 import { SettingEcrComponent } from './setting-ecr/setting-ecr.component';
 import { PaymentBcaQris32Component } from './payment/payment-bca-qris32/payment-bca-qris32.component';
 import { PaymentFakeComponent } from './payment/payment-fake/payment-fake.component';
-import { AdminHeaderComponent } from './admin/admin-header/admin-header.component'; 
+import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
+import { CartAdminComponent } from './cart/cart-admin/cart-admin.component'; 
 
 
 const config: SocketIoConfig = { url: environment.socket_url, options: { transports: ['websocket'] } };
@@ -68,6 +69,7 @@ const config: SocketIoConfig = { url: environment.socket_url, options: { transpo
     PaymentBcaQris32Component,
     PaymentFakeComponent,
     AdminHeaderComponent,
+    CartAdminComponent,
   ],
   imports: [
     BrowserModule,

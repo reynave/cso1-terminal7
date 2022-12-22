@@ -18,34 +18,7 @@
 
             </div>
         </div>
-
-        <div [hidden]="!adminMode">
-
-
-            <div class="row mt-3">
-                <div class="col-6">
-                    <a href="javascript:void(0)" (click)="adminMode = false;  noteScanner =''; addItem=false; resultbox =false;" class="btn">
-                        <img src="./assets/imgs/icons8-go-back-64.png" width="90">
-                    </a>
-                </div>
-
-                <div class="col-6 text-end">
-                    <a href="javascript:void(0)" class="btn btn-warning" (click)="httpGet()">
-                        Reload
-                    </a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12 mt-5 text-center">
-                    <h1 class="py-2">SUPERVISOR MODE</h1>
-                    <h2>Supervisor : {{supervisor.name}}</h2>
-                </div>
-            </div>
-        </div>
-
-
-
+ 
         <div class="row" [hidden]="adminMode">
             <div class="col-12 d-grid">
                 <div class="text-center">
@@ -103,7 +76,7 @@
 
 <div class="container mb-6">
     <!-- VISITOR -->
-    <div class="row" [hidden]="adminMode">
+    <div class="row" >
         <div class="col-12 ">
 
             <div class=" rounded border shadow-sm p-4 bg-light mb-3" *ngFor="let x of items">
@@ -149,71 +122,22 @@
             </div>
 
             <div class="text-center mb-4">
-                <h4>No more items</h4>
+                <h4>No more items</h4> 
+            </div>  
+            <div class="text-center my-4">
+                <button type="button" class="btn btn-lg btn-info border rounded p-3 font-btn" (click)="fnPromo();" >CHECK PROMO!</button> 
             </div>
         </div>
     </div>
-
-    <!-- ADMIN MODE -->
-    <div class="row g-1 mb-3">
-        <div class="col-12">
-
-            <div [hidden]="!adminMode" class="bg-light border shadow-sm rounded">
-                <div class="table-responsive ">
-                    <table class="table ">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Desciption</th>
-                                <th class="text-end">Price</th>
-                                <th class="text-end">Discount</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let x of itemsList ; let i = index">
-                                <td> {{i+1}} </td>
-                                <td> {{x.description}} </td>
-                                <td>
-                                    <input type="number" [readonly]="!adminMode" [(ngModel)]="x.price" class="form-control form-control-sm text-end" (change)="fnUpdate(x)">
-                                </td>
-                                <td>
-                                    <input type="number" [readonly]="!adminMode" [(ngModel)]="x.discount" class="form-control form-control-sm text-end" (change)="fnUpdate(x)">
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-danger" (click)="fnVoid(x);">DEL</a>
-                                </td>
-
-                            </tr>
-
-                            <tr *ngFor="let x of itemsListfreeItem ; let i = index">
-                                <td> {{itemsList.length +i +1}} </td>
-                                <td> {{x.description}} </td>
-                                <td>
-                                    <div class="form-control form-control-sm text-end  bg-light">Free Item</div>
-                                </td>
-                                <td>
-                                    <div class="form-control form-control-sm text-end bg-light">0</div>
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-danger" (click)="fnVoidFreeItem(x);">DEL</a>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 </div>
 
 
 
-<div class="fixFooter" [hidden]="adminMode">
+<div class="fixFooter" >
     <div class="footerweb bg-gray rounded-top-c1 py-4 shadow-sm">
         <div class="container-fluid">
-            <div class="row" [hidden]="adminMode">
+            <div class="row" >
                 <div class="col-6 text-white">
                     <div class="mx-3">
                         <h1>Gross Total</h1>
