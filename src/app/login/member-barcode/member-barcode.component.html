@@ -107,14 +107,12 @@
 
 <footer>
     <div class="container-fluid">
-        <div class="row g-1">
-
-            <div class="col-10">
-                <h2 class="p-2">{{today}}</h2>
-            </div>
-            <div class="col-2 text-end">
-                <h2 class="p-2">SCO V{{version}}</h2>
+        <div class="row g-1"> 
+            <div class="col-12 text-center">
+                <h2 class="p-1">{{today}}</h2> 
+                <h2 class="p-1">SCO V{{version}}. Login : <a [routerLink]="[ '/admin' ]">Admin Mode</a></h2>
             </div>
         </div>
     </div>
+
 </footer>

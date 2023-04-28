@@ -98,7 +98,11 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
     console.log("NGONDESTROY");
   }
   goToCart() {
-    this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
+    if (this.kioskMessage.memberPhoto == 1) { 
+      this.router.navigate(['login/userPhoto']);
+    } else {
+      this.router.navigate(['cart'], { queryParams: { kioskUuid: this.kioskUuid }, });
+    } 
   }
   runCountdown() {
     let self = this;
@@ -117,9 +121,9 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
       action: 'reload',
     }
     console.log(msg);
-    this.configService.sendMessage(msg); 
+    this.configService.sendMessage(msg);
   }
-  addText(str : string){
+  addText(str: string) {
     console.log(str);
     this.memberId += str;
   }
@@ -141,7 +145,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
           localStorage.setItem("t1_kioskUuid", data['insert']['kioskUuid']);
           this.kioskUuid = data['insert']['kioskUuid'];
           this.notes = data['welcomeMember'];
-          this.member = data['member']; 
+          this.member = data['member'];
           let self = this;
           this.runCountdown();
           this.myTimeout = setTimeout(function () {
@@ -150,7 +154,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
             console.log('this.myTimeout TRIGER');
           }, parseInt(this.kioskMessage['timer']) * 1000);
           console.log("wait for " + parseInt(this.kioskMessage['timer']));
- 
+
         } else {
           this.notes = this.kioskMessage['memberNotFound'];
           console.log("MEMBER ID NOT FOUND");
@@ -163,7 +167,7 @@ export class MemberBarcodeComponent implements OnInit, OnDestroy {
       },
     );
   }
-  clear(){
+  clear() {
     this.memberId = '';
   }
   back() {
