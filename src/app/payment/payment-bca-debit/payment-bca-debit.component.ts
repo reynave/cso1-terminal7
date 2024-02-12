@@ -51,7 +51,13 @@ export class PaymentBcaDebitComponent implements OnInit {
         this.note = this.configService.ecrRespCode(data['respCode']);
         if (data['respCode'] == '00') {
           if (this.finish == false) {
-            this.fnProcessPaymentReal(data);
+            
+            var self = this;
+            setTimeout(function(){
+              self.fnProcessPaymentReal(data);
+            },1000);
+
+           // this.fnProcessPaymentReal(data);
             this.finish = true;
           }
         }
@@ -121,11 +127,9 @@ export class PaymentBcaDebitComponent implements OnInit {
          * status payment disini
          */
         // this.paymentStatus = 2; 
-        this.router.navigate(['cart/finish/', data['id']]).then(
-          () => {
-            this.printing.print(data['id']);
-          }
-        )
+        this.printing.print(data['id']);
+        this.router.navigate(['cart/finish/', data['id']]);
+        
       },
       e => {
         console.log(e);

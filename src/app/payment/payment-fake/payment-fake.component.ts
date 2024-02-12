@@ -119,12 +119,11 @@ export class PaymentFakeComponent implements OnInit {
         localStorage.removeItem(this.configService.myUUID());
         this.modalService.dismissAll();
         this.loading = false;
-        this.router.navigate(['cart/finish/', data['id']]).then(
-          () => {
-            this.printing.print(data['id']);
-          }
-        ) 
-
+        var self = this;
+        setTimeout(function(){
+          self.printing.print(data['id']);
+          self.router.navigate(['cart/finish/', data['id']]);
+        });
       },
       e => {
         console.log(e);

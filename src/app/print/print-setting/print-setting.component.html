@@ -12,10 +12,22 @@
         <div class="col-12">
             <h4>Select USB ID/Address for Printer : </h4>
         </div>
-        <div class="col-12">
+        <!-- <div class="col-12">
             <select class="form-control form-control-lg" [(ngModel)]="printerName">
                 <option *ngFor="let x of selectPrinter" [value]="x.printername">{{x.printername}}</option>
             </select>
+        </div> -->
+
+        <div class="col-12">
+            <!-- <span>
+                For Terminal9 = 1155_2010
+                For Terminal7 = 1155_2009
+                
+            </span> -->
+            <input type="text" class="form-control form-control-lg" [(ngModel)]="printerName"> 
+            <!-- <select class="form-control form-control-lg" [(ngModel)]="printerName">
+                <option *ngFor="let x of selectPrinter" [value]="x.printername">{{x.printername}}</option>
+            </select> -->
         </div>
          
         <div class="col-6">

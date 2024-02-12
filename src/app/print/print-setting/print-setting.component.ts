@@ -103,6 +103,7 @@ ${date}
         window['cordova'].plugins.UsbPrinter.print(this.printerName, message, (result: any) => {
           console.log("result of usb print action", result);
           this.logs("! successful callback execution");
+          window['cordova'].plugins.UsbPrinter.cutPaper(this.printerName);
         }, (err: any) => {
           console.error('Error in usb print action', err)
           this.logs("! Error in usb print action");
@@ -115,5 +116,7 @@ ${date}
         this.logs("! failure callback execution");
       });
     }
+
+    
   }
 }

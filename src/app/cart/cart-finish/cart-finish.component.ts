@@ -22,6 +22,7 @@ export class CartFinishComponent implements OnInit {
   printerName : any;
   intervalTime: any;
   bill : any = [];
+  id : string= "";
   countdown: number = 0;
   constructor(
     private router: Router,
@@ -32,7 +33,7 @@ export class CartFinishComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.id = this.activatedRoute.snapshot.params['id'];
     this.httpGet();
   }
   httpGet() {
@@ -53,7 +54,7 @@ export class CartFinishComponent implements OnInit {
 
     );
 
-    let url = this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'];
+    let url = this.api + 'KioskPrint/printDetail/?id=' + this.id;
     console.log(url);
     this.http.get<any>(url,
       { headers: this.configService.headers() }

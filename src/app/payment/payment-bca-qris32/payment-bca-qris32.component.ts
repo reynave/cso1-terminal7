@@ -116,12 +116,13 @@ export class PaymentBcaQris32Component implements OnInit {
          * status payment disini
          */
         // this.paymentStatus = 2; 
+        this.printing.print(data['id']);
         this.router.navigate(['cart/finish/', data['id']]).then(
           () => {
             clearInterval(this.myInterval);
             clearInterval(this.i);
             clearInterval(this.timer);
-            this.printing.print(data['id']);
+          
           }
         )
       },
@@ -180,7 +181,13 @@ export class PaymentBcaQris32Component implements OnInit {
       data => {
         console.log(data);
         if (data['id'] && data['update'] != false) {
-          this.fnProcessPaymentReal(body['data']);
+          
+       //   this.fnProcessPaymentReal(body['data']);
+          var self = this;
+          setTimeout(function(){
+            self.fnProcessPaymentReal(body['data']);
+          },1000);
+
         }
         this.loading = false;
       },

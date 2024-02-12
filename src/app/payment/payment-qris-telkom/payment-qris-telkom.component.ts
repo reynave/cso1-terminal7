@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -12,7 +12,7 @@ declare var window: any;
   templateUrl: './payment-qris-telkom.component.html',
   styleUrls: ['./payment-qris-telkom.component.css']
 })
-export class PaymentQrisTelkomComponent implements OnInit {
+export class PaymentQrisTelkomComponent implements OnInit , OnDestroy {
   loading: boolean = false;
   api: string = environment.api;
   items: any = [];
@@ -29,6 +29,8 @@ export class PaymentQrisTelkomComponent implements OnInit {
   name: string = "";
   nmid: string = "";
   exp: string = "";
+  timeInterval : any ; 
+  note: string = "";
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -48,6 +50,10 @@ export class PaymentQrisTelkomComponent implements OnInit {
       }
     );
   }
+
+  ngOnDestroy() { 
+      clearInterval(this.timeInterval); 
+  }
   httpGet() {
     this.loading = true;
     let url = environment.api + "kioskPayment/fnQrisTelkom/?kioskUuid=" + this.uuidKios;
@@ -58,12 +64,18 @@ export class PaymentQrisTelkomComponent implements OnInit {
         this.status = data['status'];
         this.image = data['image'];
         this.loading = false;
-        console.log(data);
+        console.log('httpGet',data);
         this.summary = data['summary'];
         this.qrcode = data['qris'];
         this.name = data['name'];
         this.nmid = data['nmid'];
         this.exp = data['exp'];
+
+        this.timeInterval = setInterval(() => {
+           this.fnQrisTelkomStatus();
+          console.log('Check Status ',this.timeInterval)
+        }, 30000);
+
 
       },
       e => {
@@ -71,6 +83,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
       },
     );
   }
+
   fnGenerate() {
     let url = environment.api + "kioskPayment/fnQrisTelkomRegenerate/";
     const body = {
@@ -88,9 +101,7 @@ export class PaymentQrisTelkomComponent implements OnInit {
       },
     );
   }
-
-
-  note: string = "";
+ 
   fnQrisTelkomStatus() {
     this.note = "";
     this.loadingStatus = true;
@@ -102,7 +113,11 @@ export class PaymentQrisTelkomComponent implements OnInit {
         if (data['qris']['data']['qris_status'] == 'paid') {
           console.log('paid');
           this.note = data['qris']['data']['qris_status'];
-          this.fnProcessPaymentReal(data['qris']);
+          var self = this;
+          setTimeout(function(){
+            self.fnProcessPaymentReal(data['qris']);
+          },1000);
+        
         } else if (data['qris']['data']['qris_status'] == 'unpaid') {
           this.loadingStatus = false;
           console.log('unpaid');
@@ -150,11 +165,8 @@ export class PaymentQrisTelkomComponent implements OnInit {
          * status payment disini
          */
         // this.paymentStatus = 2; 
-        this.router.navigate(['cart/finish/', data['id']]).then(
-          () => {
-            this.printing.print(data['id']); 
-          }
-        )
+        this.printing.print(data['id']); 
+        this.router.navigate(['cart/finish/', data['id']]);
       },
       e => {
         console.log(e);
