@@ -20,15 +20,15 @@ export class PaymentBcaDebitComponent implements OnInit {
   paymentTypeId: number = 0;
   storeOutlesPaymentType: any = [];
   t1_thank_you_display: any;
-  developerMode : boolean = environment.developerMode;
-  note: string = "Checking for ECR device..";
+  developerMode: boolean = environment.developerMode;
+  note: string = "Connection ECR BCA";
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
   ilock: boolean = false;
-  myTimeout  : any;
-  private _docSub: any;
-  message :  string = "";
+  myTimeout: any;
+  running : boolean = true; 
+  message: string = "";
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -41,81 +41,128 @@ export class PaymentBcaDebitComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
+  env_ecr: any = "";
   finish: boolean = false;
-  ping :boolean = false;
+  ping: boolean = false;
+  n: number = 40;
+  bill : any = "";
   ngOnInit(): void {
-    this.comConn(); 
-    this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => {
-       
-        this.note = this.configService.ecrRespCode(data['respCode']);
-        if (data['respCode'] == '00') {
-          if (this.finish == false) {
-            
-            var self = this;
-            setTimeout(function(){
-              self.fnProcessPaymentReal(data);
-            },1000);
-
-           // this.fnProcessPaymentReal(data);
-            this.finish = true;
-          }
-        }
-       
-        if (data['respCode'] == 'ECR01' && data['ecr'] == true) { 
-          console.log("fnBcaECR 01");
-          this.fnBcaECR('01'); 
-        } 
-
-        if (data['respCode'] == 'IPDEAD') { 
-          this.myTimeout = setTimeout(() => {
-            this.back();
-          }, 10000);
-        } 
-        if (data['respCode'] == '54') {
-          this.myTimeout = setTimeout(() => {
-            this.back();
-          }, 10000);
-        }
-        if (data['respCode'] == 'ER01') {
-          this.myTimeout = setTimeout(() => {
-            this.back();
-          }, 10000);
-        }
-
+    this.setInit();
+    this.httpGet();
+    this.bill = localStorage.getItem(this.configService.myUUID()); 
+  }
+  setInit() {
+    this.env_ecr = localStorage.getItem("env_ecr");
+  }
+  httpGet() {
+    this.n = 60;
+    this.loading = true;
+    this.http.get<any>(this.api + 'kioskBill/grandTotal/?uuid=' + localStorage.getItem(this.configService.myUUID()),
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
         console.log(data);
-        if (data['transType'] == '01' ) {
-        
-          if(data['respCode'] != ''){
-            this.message = '';
-          }else{
-            this.message = "Please insert Customer Card in ECR/Edisi";
+         this.fnPayment(data['grandTotal']);
+        this.myTimeout = setInterval(() => {
+          this.n--;
+          if(this.n <= 0 ){
+            clearTimeout(this.myTimeout);
           }
-        
-        }
-      }
+        }, 1000);
+
+      },
+      e => {
+        console.log(e);
+      },
     );
   }
- 
-
-  comConn() {
-    const msg = {
-      port: 80,
-      host: localStorage.getItem("env_ecr"),
-      action: 'ajax',
-      msg: 'comConn',
+  cancel(){
+    const body = {
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
     }
-   
-    this.configService.sendMessage(msg);
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
+      },
+    );
+  }
+  reload(){
+    this.running = true;
+    this.httpGet();
+  }
+  fnPayment(grandTotal: number) {
+    this.loading = true;
+    this.note = "Waiting payment..";
+    const body = {
+      amount: grandTotal,
+      transType: "01",
+      ip: this.env_ecr
+    }
+    this.http.post<any>(environment.apiBCA + "payment", body).subscribe(
+      data => {
+        this.loading = false;
+        console.log(data);
+        this.note = data['resp']['response'];
+        if(data['resp']['RespCode'] != '00'){
+          this.running = false;
+        }
+
+
+        let TransAmount = parseInt(data['resp']['TransAmount'])/100;
+
+        if(data['resp']['RespCode'] == '00' && data['resp']['ApprovalCode'] != '' &&  TransAmount ==  grandTotal){
+          this.fnPaid(data)
+        }
+        clearTimeout(this.myTimeout);  
+         
+      },
+      error => {
+        this.loading = false;
+        console.log(error);
+      }
+    )
   }
 
-  fnProcessPaymentReal(data: any) {
+
+  fnPaid(data: any) {
     const body = {
-      paymentTypeId: 'BCA' + data['transType'],
+      paymentTypeId: 'BCA01',
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
       data: data,
     }
-    this.loading = true; 
+    this.loading = true;
+    this.http.post<any>(this.api + 'kioskPayment/fnPaid/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+        localStorage.removeItem(this.configService.myUUID());
+        this.loading = false; 
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.printing.print(data['id']);
+          }
+        )
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+  }
+
+  fnProcessPaymentReal_DEL(data: any) {
+    const body = {
+      paymentTypeId: 'BCA01',
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      data: data,
+    }
+    this.loading = true;
     this.http.post<any>(this.api + 'kioskPayment/fnProcessPaymentReal/', body,
       { headers: this.configService.headers() }
     ).subscribe(
@@ -127,9 +174,11 @@ export class PaymentBcaDebitComponent implements OnInit {
          * status payment disini
          */
         // this.paymentStatus = 2; 
-        this.printing.print(data['id']);
-        this.router.navigate(['cart/finish/', data['id']]);
-        
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.printing.print(data['id']);
+          }
+        )
       },
       e => {
         console.log(e);
@@ -145,7 +194,7 @@ export class PaymentBcaDebitComponent implements OnInit {
     this.configService.help(msg);
   }
 
-  fnBcaECR(transType: string = "", dummyCC: boolean = false) {
+  fnBcaECR_DEL(transType: string = "", dummyCC: boolean = false) {
 
     const body = {
       paymentTypeId: 'bca01',
@@ -160,7 +209,6 @@ export class PaymentBcaDebitComponent implements OnInit {
     ).subscribe(
       data => {
         console.log(data);
-        this.com(data['data']['hex'], transType);
         this.loading = false;
       },
       e => {
@@ -169,53 +217,13 @@ export class PaymentBcaDebitComponent implements OnInit {
     );
   }
 
-  com(hex: string, transType: string) {
-    const msg = {
-      action: 'ajax',
-      msg: 'bcaEcrCom',
-      transType: transType,
-      uuidKios: this.uuidKios,
-      txt: hex,
-    }
-    
-    this.configService.sendMessage(msg);
-  }
-
-  comClear() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comClear',
-    }
-   
-    this.configService.sendMessage(msg);
-  }
-
-  comTest() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comTest',
-    }
-   
-    this.configService.sendMessage(msg);
-  }
-
-  comClose() {
-    const msg = {
-      msg: 'comClose',
-      action: 'ajax',
-    }
-    this.configService.sendMessage(msg);
-  }
-
 
   back() {
     history.back();
   }
 
   ngOnDestroy(): void {
-    console.log("ngOnDestroy");
-    this.comClose();
-    this._docSub.unsubscribe();
+    console.log("ngOnDestroy"); 
     this.modalService.dismissAll();
     clearTimeout(this.myTimeout);
   }

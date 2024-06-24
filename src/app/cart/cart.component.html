@@ -35,10 +35,10 @@
 
 
                     <div class="row" [hidden]="!addItem">
-                        <div class="col-3" [hidden]="error == true">
+                        <!-- <div class="col-3" [hidden]="error == true">
                             <img [src]="item.images ? item.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
-                        </div>
-                        <div class="col-9" [hidden]="error == true">
+                        </div> -->
+                        <div class="col-12" [hidden]="error == true">
 
                             <h1 class="mb-2">{{item.barcode}}</h1>
                             <h1 class="display-5">{{item.name}}</h1>
@@ -81,10 +81,10 @@
 
             <div class=" rounded border shadow-sm p-4 bg-light mb-3" *ngFor="let x of items">
                 <div class="row  ">
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                         <img [src]="x.images ? x.images : 'https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=No+Images'" class="shadow-sm rounded" width="100%">
-                    </div>
-                    <div class="col-6 col-lg-6">
+                    </div> -->
+                    <div class="col-8 col-lg-8">
                         <h3>{{x.barcode}}</h3>
                         <h2>{{x.description}}</h2>
                         <h2>
@@ -102,17 +102,17 @@
 
             <div class=" rounded border shadow-sm p-4 bg-light mb-3" *ngFor="let x of freeItem">
                 <div class="row g-3">
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                         <img src="https://dummyimage.com/400x400/ebebeb/07a6b8.png&text=Sample+Images" class="shadow-sm rounded" width="100%">
-                    </div>
-                    <div class="col-6 col-lg-7">
+                    </div> -->
+                    <div class="col-12 col-lg-12">
                         <h2>{{x.description}}</h2>
                         <h2>
                             <span class="box-qty bg-light">{{x.qty}}</span> Free Item
                         </h2>
 
                     </div>
-                    <div class="col-4 col-lg-3 text-end  ">
+                    <div class="col-4 col-lg-4 text-end  ">
                         <div class="  me-2">
                             <h1>Rp 0</h1>
                         </div>

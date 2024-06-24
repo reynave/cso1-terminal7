@@ -1,83 +1,53 @@
 <app-header></app-header>
 <div class="container  py-4">
-    <div class="row">
-        <div class="col-6">
-            <a href="javascript:void(0)" (click)="back()" class="btn p-1  mx-1">
-                <img src="./assets/imgs/icons8-back-67.png" width="90">
-            </a>
+  <div class="row">
 
-        </div>
-        <div class="col-6 text-end">
-            <a href="javascript:void(0)" (click)="modal(modalCancel);" class="btn bg-danger rounded p-1   mx-1">
-                <img src="./assets/imgs/icons8-close-64.png" width="90">
-            </a>
-            <a href="javascript:void(0)" (click)="help()" class="btn bg-warning p-1 border rounded mx-1">
-                <img src="./assets/imgs/icons8-bell-64.png" width="90">
-            </a>
-        </div>
+    <div class="col-12 text-end">
+
+      <a href="javascript:void(0)" (click)="help()" class="btn bg-warning p-1 border rounded mx-1">
+        <img src="./assets/imgs/icons8-bell-64.png" width="90">
+      </a>
     </div>
+  </div>
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="text-center py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center py-5">
 
-                <img src="./assets/imgs/qrscan.jpg" width="90%">
-                <h1 class="mt-2"> REFF NO : {{reffNo}} </h1>
+        <img src="./assets/imgs/qrscan.jpg" width="90%">
+        <h1 class="mt-4"> REFF NO : {{RRN}} </h1>
+        <h1 class="mt-4"> BILL NO : {{kioskUuid}} </h1>
+        <h1 class="mt-4"> TOTAL : IDR {{grandTotal | number}} </h1>
+      </div>
+      <div class="my-5 text-center">
+        <h1 [innerHTML]="note"></h1>
+      </div>
+    </div>
+    <div class="col-12">
 
-            </div>
-            <div class="my-5 text-center">
-                <h1 [innerHTML]="note"></h1>
-            </div>
-        </div>
-        <div class="col-12">
-
-
-            <div class="d-grid m-4">
-                <button type="button" [hidden]="!btnShow" (click)="fnBcaECR32();" class="btn btn-lg font-btn btn-info py-3">Check  Status Payment</button>
-            </div>
-
-            <div [hidden]="btnShow" class="mt-5 text-center" >
-               <p>Sync to ERC</p>
-            </div>
-
-
-
-            <div  [hidden]="ercError">
-                <div class="d-grid  m-4"> 
-                    <button type="button"   class="btn btn-lg font-btn btn-warning py-3">Cancel Payment</button> 
-                </div> 
-            </div>
-          
-        </div>
+      <div class="d-grid m-4">
+        <button type="button" (click)="fnRequestQrisPaid();" class="btn btn-lg font-btn text-white btn-info py-3">Check
+          Status Payment</button>
+      </div>
 
     </div>
+
+  </div>
 </div>
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 ">
-                <div class="text-center mb-5">
-                    <a [routerLink]="[ '/payment']">Ganti Metode Pembayaran!</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
 <ng-template #modalCancel let-modal>
-    <div class="modal-header">
+  <div class="modal-header">
 
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-        <h1 class="text-center m-5">Do You Want Cancel Transaction ? </h1>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <h1 class="text-center m-5">Do You Want Cancel Transaction ? </h1>
 
-        <div class="text-center m-5 d-grid">
-            <button type="submit" class="btn btn-danger btn-lg rounded font-btn" (click)="fnLogoutVisitor();">Yes</button>
-        </div>
+    <div class="text-center m-5 d-grid">
+      <button type="submit" class="btn btn-danger btn-lg rounded font-btn" (click)="fnLogoutVisitor();">Yes</button>
     </div>
+  </div>
 
 </ng-template>

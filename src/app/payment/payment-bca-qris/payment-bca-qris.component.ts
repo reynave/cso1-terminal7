@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from 'src/app/service/config.service';
-import { PrintingService } from 'src/app/service/printing.service'; 
+import { PrintingService } from 'src/app/service/printing.service';
 @Component({
   selector: 'app-payment-bca-qris',
   templateUrl: './payment-bca-qris.component.html',
@@ -20,19 +20,21 @@ export class PaymentBcaQrisComponent implements OnInit {
   paymentTypeId: number = 0;
   storeOutlesPaymentType: any = [];
   t1_thank_you_display: any;
-  reffNo: string = ""; 
+  reffNo: string = "";
   note: string = "Generate QRIS, please wait...";
   uuidKios: any = localStorage.getItem(this.configService.myUUID());
   storeOutlesId: string = "";
   terminalId: string = "";
   ilock: boolean = false;
-  generateQris: boolean = true;
-  private _docSub: any;
-  developerMode :boolean = environment.developerMode;
+  generateQris: boolean = true; 
+  developerMode: boolean = environment.developerMode;
   myInterval: any;
-  transType : string = '0';
+  transType: string = '0';
   hex: string = "";
-  myTimeout  : any;
+  myTimeout: any;
+  running: boolean = true;
+  bill : any = "";
+  message : string = "";
   constructor(
     private http: HttpClient,
     config: NgbModalConfig,
@@ -45,50 +47,144 @@ export class PaymentBcaQrisComponent implements OnInit {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-
+  n: number = 40;
+  env_ecr: any = "";
   finish: boolean = false;
-  ongoingpaymentType: string = "31";
-  ngOnInit(): void { 
+
+  ngOnInit(): void {
+    this.message = "Wait...";
     this.loading = true;
-    this.comConn();
-    this.fnQrisCheck();
+    this.setInit();
+    this.httpGet();
+    this.bill = localStorage.getItem(this.configService.myUUID());
+    
+  }
+  setInit() {
+    this.env_ecr = localStorage.getItem("env_ecr");
+  }
+  httpGet() {
+    this.message = `<h1>Silakan tekan tombol <b>OK</b> atau <b><span class="bg-success px-2 text-white">Hijau</span>
+                    <br></b> pada mesin Edisi BCA<br><br>Tunggu sampai Edisi mencetak QRCODE</h1>`;
+    this.n = 60;
+    this.loading = true;
+    this.http.get<any>(this.api + 'kioskBill/grandTotal/?uuid=' + localStorage.getItem(this.configService.myUUID()),
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+        this.fnPayment(data['grandTotal']);
+        this.myTimeout = setInterval(() => {
+          this.n--;
+          if (this.n <= 0) {
+            clearTimeout(this.myTimeout);
+          }
+        }, 1000);
 
-    this._docSub = this.configService.getMessage().subscribe(
-      (data: { [x: string]: any; }) => { 
-        console.log('subscribe : ', data, 'this.transType :'+this.transType); 
-        this.note = data['respCode'] ? this.configService.ecrRespCode(data['respCode']) : 'Silakan tekan tombol <b>OK</b> atau <b>Hijau</b> pada mesin Edisi BCA<br><br>Tunggu sampai mesin mencetak QRCODE';
-
-        if (data['respCode'] == '00') { 
-          this.fnQrisInsert(data); 
-        }
- 
-        if (data['respCode'] == '54') {
-          this.myTimeout = setTimeout(() => {
-            this.back();
-          }, 10000);
-        }
-        if (data['respCode'] == 'ER01') {
-          this.myTimeout = setTimeout(() => {
-            this.back();
-          }, 10000);
-        }
-
-      }
+      },
+      e => {
+        console.log(e);
+      },
     );
-  }
-
-  comConn() {
-    const msg = {
-      port: 80,
-      host: localStorage.getItem("env_ecr"),
-      action: 'ajax',
-      msg: 'comConn',
+  } 
+  fnPayment(grandTotal: number) {
+    this.loading = true;
+    this.note = "Waiting payment..";
+    const body = {
+      amount: grandTotal,
+      transType: "31",
+      ip: this.env_ecr
     }
-    console.log(msg);
-    this.configService.sendMessage(msg);
+    this.http.post<any>(environment.apiBCA + "payment", body).subscribe(
+      data => {
+        this.loading = false;
+        console.log(data);
+        this.note = data['resp']['response'];
+        if (data['resp']['RespCode'] != '00') {
+          this.running = false;
+        } 
+        let TransAmount = parseInt(data['resp']['TransAmount']) / 100;
+
+        if (data['resp']['RespCode'] == '00' && data['resp']['ApprovalCode'] != '' && TransAmount == grandTotal) {
+          this.fnPaid(data)
+        }
+
+        if (data['resp']['RespCode'] == '00' && data['resp']['ApprovalCode'] == '' && data['resp']['RRN'] != '') {
+         setTimeout(() => {
+            this.fnRequestQrisPaid(data['resp']['RRN'], grandTotal); 
+           
+         }, 10000);
+        }
+
+        clearTimeout(this.myTimeout);
+
+      },
+      error => {
+        this.loading = false;
+        console.log(error);
+      }
+    )
   }
 
-  
+  fnRequestQrisPaid(RNN : string, grandTotal: number){
+    this.note = "<h1>Menunggu pembayaran dengan QRIS</h1>";
+    console.log("CALL 32");
+    const body = {
+      amount: 0,
+      RNN : RNN,
+      transType: "32",
+      ip: this.env_ecr
+    }
+    this.http.post<any>(environment.apiBCA + "payment", body).subscribe(
+      data => {
+        this.loading = false;
+        console.log(data);
+        this.note = data['resp']['response'];
+        if (data['resp']['RespCode'] != '00') {
+          this.running = false;
+          this.router.navigate(['payment/bcaQris/32'], { queryParams : {RRN : RNN}});
+        } 
+
+        let TransAmount = parseInt(data['resp']['TransAmount']) / 100;
+        if (data['resp']['RespCode'] == '00' && data['resp']['ApprovalCode'] != '' && TransAmount == grandTotal) {
+          this.fnPaid(data)
+        }
+         
+        clearTimeout(this.myTimeout);
+
+      },
+      error => {
+        this.loading = false;
+        console.log(error);
+      }
+    )
+  }
+
+  fnPaid(data: any) {
+    const body = {
+      paymentTypeId: 'BCA31',
+      kioskUuid: localStorage.getItem(this.configService.myUUID()),
+      data: data,
+    }
+    this.loading = true;
+    this.http.post<any>(this.api + 'kioskPayment/fnPaid/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data);
+        localStorage.removeItem(this.configService.myUUID());
+        this.loading = false;
+        this.router.navigate(['cart/finish/', data['id']]).then(
+          () => {
+            this.printing.print(data['id']);
+          }
+        )
+      },
+      e => {
+        console.log(e);
+      },
+    );
+
+  }
 
   help() {
     const msg = {
@@ -97,132 +193,33 @@ export class PaymentBcaQrisComponent implements OnInit {
     this.configService.help(msg);
   }
 
-  fnBcaECR(transType: string = "") {
-
+  cancel() {
     const body = {
-      paymentTypeId: 'bca31',
       kioskUuid: localStorage.getItem(this.configService.myUUID()),
-      transType: transType,
-      dummyCC: false,
     }
-    this.loading = true;
-
-    this.http.post<any>(this.api + 'kioskPaymentBca/fnBcaEcr/', body,
+    console.log(body);
+    this.http.post<any>(this.api + 'kioskCart/fnLogoutVisitor/', body,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-
-        console.log(data);
-        this.com(data['data']['hex'], transType);
-        this.loading = false;
-      },
-      e => {
-        console.log(e);
+        this.modalService.dismissAll();
+        localStorage.removeItem(this.configService.myUUID());
+        this.router.navigate(['login']);
       },
     );
   }
-
-
-  fnQrisCheck() { 
-    this.loading = true;
-    const body = {
-      kioskUuid: this.uuidKios,
-    }
-    this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisCheck/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => { 
-        this.loading = false;
-        console.log("fnQrisCheck", data);
-        if (data['data'] == false) { 
-        //  this.reffNo = data['data']['reffNo'];
-       //   this.hex = data['hex']['hex'];
-          this.generateQris = false;
-           this.fnBcaECR('31');
-        }else{ 
-          this.router.navigate(["payment/bcaQris/32"], { queryParams: { reffNo: data['data']['reffNo'] } });
-        }
-      
-      },
-      e => {
-        console.log(e);
-      },
-    );
+  reload() {
+    this.running = true;
+    this.httpGet();
   }
-
-  fnQrisInsert(data: any = []) {
-    this.loading = true;
-    this.ongoingpaymentType = '32';
-  //  this.note = "";
-    console.log("ongoingpaymentType  : ", this.ongoingpaymentType);
-    const body = {
-      data: data,
-      kioskUuid: localStorage.getItem(this.configService.myUUID()),
-    }
-    this.http.post<any>(this.api + 'kioskPaymentBca/fnQrisInsert/', body,
-      { headers: this.configService.headers() }
-    ).subscribe(
-      data => {
-        console.log(data);
-        this.reffNo = data['reffNo'];
-        if(data['reffNo']){
-          this.fnQrisCheck(); 
-        }
-        this.loading = false;
-      },
-      e => {
-        console.log(e);
-      },
-    );
-  }
- 
-  com(hex: string, transType: string) {
-    const msg = {
-      action: 'ajax',
-      msg: 'bcaEcrCom',
-      transType: transType,
-      uuidKios: this.uuidKios,
-      txt: hex,
-    }
-    console.log(msg);
-    this.configService.sendMessage(msg);
-  }
-
-  comClear() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comClear',
-    }
-    console.log(msg);
-    this.configService.sendMessage(msg);
-  }
-
-  comTest() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comTest',
-    }
-    console.log(msg);
-    this.configService.sendMessage(msg);
-  }
-
-  comClose() {
-    const msg = {
-      msg: 'comClose',
-      action: 'ajax',
-    }
-    this.configService.sendMessage(msg);
-  }
-  back() { 
-     history.back();
+  back() {
+    history.back();
   }
 
   ngOnDestroy(): void {
     console.log("ngOnDestroy");
-    clearInterval(this.myInterval);
-    this.comClose();
-    this._docSub.unsubscribe();
-    this.modalService.dismissAll(); 
+    clearInterval(this.myInterval); 
+    this.modalService.dismissAll();
     clearTimeout(this.myTimeout);
   }
 }

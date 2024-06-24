@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../service/config.service';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-setting-ecr',
@@ -10,9 +13,14 @@ export class SettingEcrComponent implements OnInit {
   env_ecr: any;
   note: string = ""; 
   private _docSub: any;
-  logs : any = [];
+  logs : any = []; 
+  loading : boolean = false;
+  serverBcaERC : string= environment.apiBCA
+  bg: string = 'primary';
   constructor(
     private configService: ConfigService,
+    private http: HttpClient,
+    
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +38,7 @@ export class SettingEcrComponent implements OnInit {
   }
 
   fnSave() {
+    this.bg = "primary";
     localStorage.setItem("env_ecr", this.env_ecr);
     this.setInit();
     this.note = "Save Done";
@@ -38,45 +47,58 @@ export class SettingEcrComponent implements OnInit {
   back() {
     history.back();
   }
+  
 
-  comConn() {
-    const msg = {
-      port: 80,
-      host: localStorage.getItem("env_ecr"),
-      action: 'ajax',
-      msg: 'comConn',
-    }
-    console.log(msg);
-    this.configService.sendMessage(msg);
+  fnEchotest(){
+    this.note = "";
+    this.bg = "primary";
+    this.loading = true;
+    this.http.get<any>( this.serverBcaERC+"echoTest",{
+      params : {
+        ip :  this.env_ecr
+      }
+    }).subscribe(
+      data=>{
+        this.loading = false;
+        console.log(data);
+        this.logs = data['resp'];
+        this.note = data['message'];
+      },
+      error=>{
+        this.loading = false;
+        console.log(error);
+        this.bg = "danger";
+        this.logs = error['error'];
+        this.note = error['error']['message'];
+      }
+    )
   }
-
-  comClose() {
-    const msg = {
-      msg: 'comClose',
-      action: 'ajax',
-    }
-    this.configService.sendMessage(msg);
+  randomIntFromInterval(min: number, max: number) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  comClear() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comClear',
+  fnPayment(){
+    this.loading = true;
+    const body = {
+      amount : this.randomIntFromInterval(10, 99),
+      transType : "01",
+      ip : this.env_ecr
     }
-    console.log(msg);
-    this.configService.sendMessage(msg);
+    this.http.post<any>( this.serverBcaERC+"payment",body).subscribe(
+      data=>{
+        this.loading = false;
+        console.log(data);
+        this.logs = data['resp'];
+        this.note = data['message'];
+      },
+      error=>{
+        this.loading = false;
+        console.log(error);
+      }
+    )
   }
-
-  comTest() {
-    const msg = {
-      action: 'ajax',
-      msg: 'comTest',
-    }
-    console.log(msg);
-    this.configService.sendMessage(msg);
-  }
+   
   ngOnDestroy(): void {
-    console.log("ngOnDestroy");
-    this.comClose();
+    console.log("ngOnDestroy"); 
     this._docSub.unsubscribe();
   }
 }

@@ -2,9 +2,9 @@
 <div class="container  py-4">
     <div class="row">
         <div class="col-6">
-            <a href="javascript:void(0)" (click)="back()" class="btn p-1  mx-1">
-                <img src="./assets/imgs/icons8-back-67.png" width="90">
-            </a>
+            <!-- <a href="javascript:void(0)" (click)="cancel()" class="btn p-1  mx-1">
+                <img src="./assets/imgs/icons8-close-64.png" width="90">
+            </a>   -->
 
         </div>
         <div class="col-6 text-end">
@@ -18,72 +18,43 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="text-center py-5">
+            <div class="text-center">
+                <h1>{{bill}}</h1>
+            </div>
+            <div class="text-center py-1 mb-2">
                 <img src="./assets/gif/image_processing20190812-2176-vehbsi.gif" width="90%">
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="my-5 text-center">
+                <div class="text-center">
+                    <h2>Timeout {{n}}</h2>
+                </div>
+                <div class="my-1 text-center">
                     <h1> {{message}}</h1>
                     <h1> {{note}}</h1>
-                </div>
+                </div> 
             </div>
+
         </div>
 
-      
+        <div class="row" *ngIf="!running">
+            <div class="col-6 d-grid">
+                <a href="javascript:void(0)" (click)="cancel()" class="btn btn-lg font-btn btn-danger py-2 px-4  mx-1">
+                    Cancel Shop
+                </a>
+            </div>
+
+            <div class="col-6 d-grid">
+                <button type="button" (click)="reload()" class="btn btn-lg font-btn btn-success py-2 px-4 mx-1">Try
+                    Again</button>
+            </div>
+
+        </div>
+
+
 
 
     </div>
-   
-</div>
 
-<div class="container"  [hidden]="!developerMode">
-    <div class="row">
-        <div class="col-12">
-
-            <div class="d-grid m-4 text-center">
-                <button type="button" (click)="fnBcaECR('01',true);"
-                    class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD DEV MODE</button>
-                <p>With Dummy CC</p>
-            </div>
-
-
-            <div class="d-grid m-4">
-                <button type="button" (click)="fnBcaECR('01');"
-                    class="btn btn-lg font-btn btn-success py-3">DEBIT/CREDIT CARD </button>
-            </div>
-           
-        </div>
-    </div>
-    <div class="row g-3">
-        <div class="col-12 text-center">
-            <h2 class="mt-5">Developer mode</h2>
-        </div>
-        <div class="col-6">
-            <div class="d-grid  ">
-                <button type="button" (click)="comClear();" class="btn btn-lg font-btn btn-warning py-2">ERC
-                    CLEAR</button>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="d-grid ">
-                <button type="button" (click)="comTest();" class="btn btn-lg font-btn btn-danger py-2">Test
-                    Connection</button>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="d-grid ">
-                <button type="button" (click)="comConn();" class="btn btn-lg font-btn btn-primary py-2">com
-                    Connection</button>
-            </div>
-
-        </div>
-        <div class="col-6">
-            <div class="d-grid ">
-                <button type="button" (click)="comClose();"
-                    class="btn btn-lg font-btn btn-danger py-2">comClose</button>
-            </div>
-        </div>
-    </div>
-</div>
+</div> 
