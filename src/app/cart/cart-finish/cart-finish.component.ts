@@ -13,7 +13,8 @@ declare var window: any;
   styleUrls: ['./cart-finish.component.css']
 })
 export class CartFinishComponent implements OnInit {
-
+  rate : number = 0;
+  itemRate : any  = [];
   kioskMessage: any = {
     thanks: '',
     timer: 10,
@@ -22,8 +23,10 @@ export class CartFinishComponent implements OnInit {
   printerName : any;
   intervalTime: any;
   bill : any = [];
-  id : string= "";
   countdown: number = 0;
+  terminalId : string = "";
+  storeOutlesId : string = "";
+  
   constructor(
     private router: Router,
     private configService: ConfigService,
@@ -33,20 +36,24 @@ export class CartFinishComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.params['id'];
+
     this.httpGet();
   }
   httpGet() {
     this.configService.httpAccount().subscribe(
       data => {
-        console.log(data['account']);
+        console.log(data);
+        this.terminalId  = data['terminalId'];
+        this.storeOutlesId   = data['storeOutlesId'];
+        
         this.kioskMessage = {
           thanks: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1004))]['value'],
           timer: data['account'][data['account'].findIndex(((obj: { id: number; }) => obj.id == 1008))]['value'],
+          
         }
         console.log(this.kioskMessage);
-        let n = parseInt(this.kioskMessage['timer']) < 1 ? 1 : parseInt(this.kioskMessage['timer']);
-        this.countdown = n;
+        let n = parseInt(this.kioskMessage['timer']) < 1 ? 1 : parseInt(this.kioskMessage['timer']) ;
+        this.countdown = n * 1000;
         
 
         this.runCountdown();
@@ -54,20 +61,42 @@ export class CartFinishComponent implements OnInit {
 
     );
 
-    let url = this.api + 'KioskPrint/printDetail/?id=' + this.id;
+    let url = this.api + 'KioskPrint/printDetail/?id=' + this.activatedRoute.snapshot.params['id'];
     console.log(url);
     this.http.get<any>(url,
       { headers: this.configService.headers() }
     ).subscribe(
       data => {
-        this.bill = data;   
+        this.bill = data;  
+        this.itemRate =  data['rate']  != false  ?  data['rate'][0] : false;
       },
       e => {
         console.log(e);
       },
     );
   }
- 
+
+  fnUpdateRate(rate : number){
+    const body = {
+      transactionId: this.activatedRoute.snapshot.params['id'],  
+      terminalId :this.terminalId,
+      storeOutlesId : this.storeOutlesId,
+      rate : rate,
+    }
+    this.http.post<any>(this.api + 'kioskPrint/fnUpdateRate/', body,
+      { headers: this.configService.headers() }
+    ).subscribe(
+      data => {
+        console.log(data); 
+        this.httpGet();
+      },
+      error =>{
+        console.log(error);
+      }
+    );
+  }
+
+
   home() {
     this.router.navigate(['/login']);
   }
